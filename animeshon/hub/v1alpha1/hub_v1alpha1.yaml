@@ -1,0 +1,8 @@
+type: google.api.Service
+config_version: 3
+name: hub.animeapis.com
+title: Hub API
+
+apis:
+- name: animeshon.hub.v1alpha1.Git
+- name: animeshon.hub.v1alpha1.Repository

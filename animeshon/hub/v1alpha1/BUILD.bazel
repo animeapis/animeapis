@@ -1,0 +1,86 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load(
+    "@com_google_googleapis_imports//:imports.bzl",
+    "go_gapic_assembly_pkg",
+    "go_gapic_library",
+    "go_proto_library",
+    "go_test",
+    "proto_library_with_info",
+)
+
+# This is an API workspace, having public visibility by default makes perfect sense.
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob(["*.json"]))
+
+proto_library(
+    name = "hub_proto",
+    srcs = [
+        "hub.proto",
+    ],
+    deps = [
+        "@com_google_googleapis//google/api:annotations_proto",
+        "@com_google_googleapis//google/api:client_proto",
+        "@com_google_googleapis//google/api:field_behavior_proto",
+        "@com_google_googleapis//google/api:httpbody_proto",
+        "@com_google_googleapis//google/api:resource_proto",
+        "@com_google_googleapis//google/longrunning:operations_proto",
+        "@com_google_googleapis//google/rpc:error_details_proto",
+        "@com_google_googleapis//google/rpc:status_proto",
+        "@com_google_protobuf//:duration_proto",
+        "@com_google_protobuf//:empty_proto",
+        "@com_google_protobuf//:field_mask_proto",
+        "@com_google_protobuf//:timestamp_proto",
+    ],
+)
+
+proto_library_with_info(
+    name = "hub_proto_with_info",
+    deps = [
+        ":hub_proto",
+    ],
+)
+
+##############################################################################
+# Go
+##############################################################################
+go_proto_library(
+    name = "hub_go_proto",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "github.com/animeapis/go-genproto/hub/v1alpha1",
+    protos = [":hub_proto"],
+    deps = [
+        "@com_google_googleapis//google/api:annotations_go_proto",
+        "@com_google_googleapis//google/api:httpbody_go_proto",
+    ],
+)
+
+go_gapic_library(
+    name = "hub_go_gapic",
+    srcs = [":hub_proto_with_info"],
+    grpc_service_config = "hub_grpc_service_config.json",
+    importpath = "github.com/animeapis/api-go-client/hub/v1alpha1;hub",
+    service_yaml = "hub_v1alpha1.yaml",
+    metadata = True,
+    deps = [
+        ":hub_go_proto",
+        "@com_google_googleapis//google/api:httpbody_go_proto",
+    ],
+)
+
+go_test(
+    name = "hub_go_gapic_test",
+    srcs = [":hub_go_gapic_srcjar_test"],
+    embed = [":hub_go_gapic"],
+    importpath = "github.com/animeapis/api-go-client/hub/v1alpha1",
+)
+
+# Open Source Packages
+go_gapic_assembly_pkg(
+    name = "gapi-cloud-hub-v1alpha1-go",
+    deps = [
+        ":hub_go_gapic",
+        ":hub_go_gapic_srcjar-test.srcjar",
+        ":hub_go_proto",
+    ],
+)

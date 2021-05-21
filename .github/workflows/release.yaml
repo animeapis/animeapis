@@ -1,0 +1,88 @@
+name: Animeshon APIs
+
+on:
+  push:
+    branches: [ "*" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone animeapis/animeapis
+      uses: actions/checkout@v2
+
+    - name: Clone animeapis/proto-binary
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/proto-binary
+        path: animeapis/proto-binary
+
+    - name: Clone animeapis/api-go-client
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/api-go-client
+        path: animeapis/api-go-client
+
+    - name: Clone animeapis/go-genproto
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/go-genproto
+        path: animeapis/go-genproto
+
+    - run: |-
+        bazelisk build //...
+
+    - run: |-
+        # animeapis/proto-binary
+        cp bazel-bin/animeshon/hub/v1alpha1/hub_proto_with_info-set.proto.bin animeapis/proto-binary/hub/v1alpha1/hub_with_info.proto.bin
+        cp bazel-bin/animeshon/hub/v1alpha1/hub_proto-descriptor-set.proto.bin animeapis/proto-binary/hub/v1alpha1/hub.proto.bin
+
+    - run: |-
+        # animeapis/api-go-client
+        cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_metadata.json/github.com/animeapis .
+        cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_main.go/github.com/animeapis .
+        cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_test.go/github.com/animeapis .
+
+    - run: |-
+        # animeapis/go-genproto
+        cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_proto_/github.com/animeapis .
+
+    - working-directory: animeapis/proto-binary
+      run: |-
+        git config --local user.email "${{ secrets.WORKFLOW_GITHUB_EMAIL }}"
+        git config --local user.name "${{ secrets.WORKFLOW_GITHUB_USERNAME }}"
+        git commit -m "chore(all): auto-regenerate .bin files" -a
+
+    - working-directory: animeapis/api-go-client
+      run: |-
+        git config --local user.email "${{ secrets.WORKFLOW_GITHUB_EMAIL }}"
+        git config --local user.name "${{ secrets.WORKFLOW_GITHUB_USERNAME }}"
+        git commit -m "chore(all): auto-regenerate .pb.go files" -a
+
+    - working-directory: animeapis/go-genproto
+      run: |-
+        git config --local user.email "${{ secrets.WORKFLOW_GITHUB_EMAIL }}"
+        git config --local user.name "${{ secrets.WORKFLOW_GITHUB_USERNAME }}"
+        git commit -m "chore(all): auto-regenerate gapics" -a
+
+    - name: Push animeapis/proto-binary
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        directory: animeapis/proto-binary
+
+    - name: Push animeapis/api-go-client
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        directory: animeapis/api-go-client
+
+    - name: Push animeapis/go-genproto
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        directory: animeapis/go-genproto

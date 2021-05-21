@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/httpbody.proto";
+
+package animeshon.hub.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/hub/v1alpha1;hub";
+option java_package = "com.animeshon.hub.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Hub::v1Alpha1";
+
+service Git {
+  option (google.api.default_host) = "hub.animeapis.com";
+
+  rpc AdvertiseReferences(AdvertiseReferencesRequest) returns (google.api.HttpBody) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=*/*}.git/info/refs"
+    };
+  }
+
+  rpc ReceivePack(ReceivePackRequest) returns (google.api.HttpBody) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=*/*}.git/git-receive-pack"
+      body: "*"
+    };
+  }
+
+  rpc UploadPack(UploadPackRequest) returns (google.api.HttpBody) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=*/*}.git/git-upload-pack"
+      body: "*"
+    };
+  }
+}
+
+message AdvertiseReferencesRequest {
+  string name = 1;
+  string service = 2;
+  
+  google.api.HttpBody http_body = 3;
+}
+
+message ReceivePackRequest {
+  string name = 1;
+  
+  google.api.HttpBody http_body = 2;
+}
+
+message UploadPackRequest {
+  string name = 1;
+  
+  google.api.HttpBody http_body = 2;
+}
