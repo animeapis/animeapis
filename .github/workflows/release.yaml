@@ -36,11 +36,10 @@ jobs:
         path: |
           ~/.cache/bazelisk
           ~/.cache/bazel
-        key: ${{ runner.os }}-bazel-${{ github.ref }}
-        restore-keys: |
-          ${{ runner.os }}-bazel-${{ github.ref }}
+        key: ${{ runner.os }}-bazel
 
-    - run: |-
+    - name: Build all client libraries
+      run: |-
         bazelisk build //...
 
     - run: |-
