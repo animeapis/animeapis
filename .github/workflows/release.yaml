@@ -30,21 +30,37 @@ jobs:
         repository: animeapis/go-genproto
         path: animeapis/go-genproto
 
+    - name: Cache bazel and bazelisk
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cache/bazelisk
+          ~/.cache/bazel
+        key: ${{ runner.os }}-bazel-${{ github.ref }}
+        restore-keys: |
+          ${{ runner.os }}-bazel-${{ github.ref }}
+
     - run: |-
         bazelisk build //...
 
     - run: |-
+        mkdir -p animeapis/proto-binary/hub/v1alpha1
+
         # animeapis/proto-binary
         cp bazel-bin/animeshon/hub/v1alpha1/hub_proto_with_info-set.proto.bin animeapis/proto-binary/hub/v1alpha1/hub_with_info.proto.bin
         cp bazel-bin/animeshon/hub/v1alpha1/hub_proto-descriptor-set.proto.bin animeapis/proto-binary/hub/v1alpha1/hub.proto.bin
 
     - run: |-
+        mkdir -p animeapis/api-go-client/hub/v1alpha1
+
         # animeapis/api-go-client
         cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_metadata.json/github.com/animeapis .
         cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_main.go/github.com/animeapis .
         cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_test.go/github.com/animeapis .
 
     - run: |-
+        mkdir -p animeapis/go-genproto/hub/v1alpha1
+        
         # animeapis/go-genproto
         cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_proto_/github.com/animeapis .
 
