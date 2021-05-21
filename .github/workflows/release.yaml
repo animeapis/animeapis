@@ -47,14 +47,16 @@ jobs:
       run: |-
         bazelisk build //...
 
-    - run: |-
+    - name: Copy protobuf binaries to animeapis/proto-binary
+      run: |-
         mkdir -p animeapis/proto-binary/hub/v1alpha1
 
         # animeapis/proto-binary
         cp bazel-bin/animeshon/hub/v1alpha1/hub_proto_with_info-set.proto.bin animeapis/proto-binary/hub/v1alpha1/hub_with_info.proto.bin
         cp bazel-bin/animeshon/hub/v1alpha1/hub_proto-descriptor-set.proto.bin animeapis/proto-binary/hub/v1alpha1/hub.proto.bin
 
-    - run: |-
+    - name: Copy gapics to animeapis/api-go-client
+      run: |-
         mkdir -p animeapis/api-go-client/hub/v1alpha1
 
         # animeapis/api-go-client
@@ -62,7 +64,8 @@ jobs:
         cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_main.go/github.com/animeapis .
         cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_gapic_srcjar_test.go/github.com/animeapis .
 
-    - run: |-
+    - name: Copy *.pb.go files to animeapis/go-genproto
+      run: |-
         mkdir -p animeapis/go-genproto/hub/v1alpha1
         
         # animeapis/go-genproto
@@ -79,25 +82,25 @@ jobs:
       working-directory: animeapis/proto-binary
       run: |-
         git add -A
-        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .bin files"
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate protobuf binaries"
 
-        git remote set-url upstream https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
-        git push upstream ${{ github.ref }}
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
+        git push origin ${{ github.ref }}
 
     - name: Generate new commit for animeapis/api-go-client
       working-directory: animeapis/api-go-client
       run: |-
         git add -A
-        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
 
-        git remote set-url upstream https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
-        git push upstream ${{ github.ref }}
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
+        git push origin ${{ github.ref }}
 
     - name: Generate new commit for animeapis/go-genproto
       working-directory: animeapis/go-genproto
       run: |-
         git add -A
-        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
 
-        git remote set-url upstream https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
-        git push upstream ${{ github.ref }}
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
+        git push origin ${{ github.ref }}
