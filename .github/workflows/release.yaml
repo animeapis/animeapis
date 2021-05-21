@@ -22,18 +22,24 @@ jobs:
       with:
         repository: animeapis/proto-binary
         path: animeapis/proto-binary
+        token: ${{ env.TOKEN }}
+        ref: ${{ github.ref }}
 
     - name: Clone animeapis/api-go-client
       uses: actions/checkout@v2
       with:
         repository: animeapis/api-go-client
         path: animeapis/api-go-client
+        token: ${{ env.TOKEN }}
+        ref: ${{ github.ref }}
 
     - name: Clone animeapis/go-genproto
       uses: actions/checkout@v2
       with:
         repository: animeapis/go-genproto
         path: animeapis/go-genproto
+        token: ${{ env.TOKEN }}
+        ref: ${{ github.ref }}
 
     - name: Cache bazel and bazelisk
       uses: actions/cache@v2
@@ -71,36 +77,44 @@ jobs:
         # animeapis/go-genproto
         cp -r bazel-bin/animeshon/hub/v1alpha1/hub_go_proto_/github.com/animeapis .
 
-    # - name: Setup git environment
-    #   run: |-
-    #     git config --global user.email "${{ env.EMAIL }}"
-    #     git config --global user.name "${{ env.USERNAME }}"
+    - name: Generate new commit for animeapis/proto-binary
+      working-directory: animeapis/proto-binary
+      run: |-
+        git config --local user.email "${{ env.EMAIL }}"
+        git config --local user.name "${{ env.USERNAME }}"
 
-    #     git config --global core.filemode false
+        git config --local core.filemode false
 
-    # - name: Generate new commit for animeapis/proto-binary
-    #   working-directory: animeapis/proto-binary
-    #   run: |-
-    #     git add -A
-    #     git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate protobuf binaries"
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate protobuf binaries"
 
-    #     git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
-    #     git push origin ${{ github.ref }}
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
+        git push origin ${{ github.ref }}
 
-    # - name: Generate new commit for animeapis/api-go-client
-    #   working-directory: animeapis/api-go-client
-    #   run: |-
-    #     git add -A
-    #     git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
+    - name: Generate new commit for animeapis/api-go-client
+      working-directory: animeapis/api-go-client
+      run: |-
+        git config --local user.email "${{ env.EMAIL }}"
+        git config --local user.name "${{ env.USERNAME }}"
 
-    #     git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
-    #     git push origin ${{ github.ref }}
+        git config --local core.filemode false
 
-    # - name: Generate new commit for animeapis/go-genproto
-    #   working-directory: animeapis/go-genproto
-    #   run: |-
-    #     git add -A
-    #     git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
 
-    #     git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
-    #     git push origin ${{ github.ref }}
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
+        git push origin ${{ github.ref }}
+
+    - name: Generate new commit for animeapis/go-genproto
+      working-directory: animeapis/go-genproto
+      run: |-
+        git config --local user.email "${{ env.EMAIL }}"
+        git config --local user.name "${{ env.USERNAME }}"
+
+        git config --local core.filemode false
+
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
+
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
+        git push origin ${{ github.ref }}
