@@ -3,6 +3,7 @@ syntax = "proto3";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/httpbody.proto";
+import "google/protobuf/empty.proto";
 
 package animeshon.hub.v1alpha1;
 
@@ -35,6 +36,27 @@ service Git {
   }
 }
 
+service Hub {
+  option (google.api.default_host) = "hub.animeapis.com";
+
+  rpc CreateRepository(CreateRepositoryRequest) returns (Repository) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=*/*}:create"
+      body: "*"
+    };
+  }
+
+  rpc DeleteRepository(DeleteRepositoryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=*/*}:delete"
+    };
+  }
+}
+
+message Repository {
+  string name = 1;
+}
+
 message AdvertiseReferencesRequest {
   string name = 1;
   string service = 2;
@@ -52,4 +74,12 @@ message UploadPackRequest {
   string name = 1;
   
   google.api.HttpBody http_body = 2;
+}
+
+message CreateRepositoryRequest {
+  string name = 1;
+}
+
+message DeleteRepositoryRequest {
+  string name = 1;
 }
