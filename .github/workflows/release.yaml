@@ -55,6 +55,7 @@ jobs:
 
     - name: Copy protobuf binaries to animeapis/proto-binary
       run: |-
+        rm -rf animeapis/proto-binary/hub/v1alpha1
         mkdir -p animeapis/proto-binary/hub/v1alpha1
 
         # animeapis/proto-binary
@@ -63,6 +64,7 @@ jobs:
 
     - name: Copy gapics to animeapis/api-go-client
       run: |-
+        rm -rf animeapis/api-go-client/hub/v1alpha1
         mkdir -p animeapis/api-go-client/hub/v1alpha1
 
         # animeapis/api-go-client
@@ -72,6 +74,7 @@ jobs:
 
     - name: Copy *.pb.go files to animeapis/go-genproto
       run: |-
+        rm -rf animeapis/go-genproto/hub/v1alpha1
         mkdir -p animeapis/go-genproto/hub/v1alpha1
         
         # animeapis/go-genproto

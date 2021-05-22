@@ -5,4 +5,4 @@ title: Hub API
 
 apis:
 - name: animeshon.hub.v1alpha1.Git
-- name: animeshon.hub.v1alpha1.Hub
+- name: animeshon.hub.v1alpha1.Isekai
