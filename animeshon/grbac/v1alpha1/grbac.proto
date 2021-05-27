@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/iam/v1/policy.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/empty.proto";
+
+package animeshon.grbac.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/grbac/v1alpha1;grbac";
+option java_package = "com.animeshon.grbac.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::GRBAC::v1Alpha1";
+
+// Authorizer is the internal service used by Animeshon to enforce RBAC rules.
+service Authorizer {
+  option (google.api.default_host) = "127.0.0.1:9080";
+
+  // Authorize returns whether a subject is allowed it perform an action on an
+  // object. If allowed the response will be OK (200), otherwise the response
+  // will be Unauthorized (403).
+  rpc Authorize(AuthorizeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/authorize"
+      body: "*"
+    };
+  }
+
+  // GetResource returns a resource.
+  rpc GetResource(GetResourceRequest) returns (Resource) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=resources/*}"
+    };
+  }
+
+  // CreateResource creates a new resource.
+  rpc CreateResource(CreateResourceRequest) returns (Resource) {
+    option (google.api.http) = {
+      post: "/v1alpha1/resources"
+      body: "*"
+    };
+  }
+
+  // UpdateResource updates a resource with a field mask.
+  rpc UpdateResource(UpdateResourceRequest) returns (Resource) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{resource.name=resources/*}"
+      body: "*"
+    };
+  }
+
+  // DeleteResource deletes a resource.
+  rpc DeleteResource(DeleteResourceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=resources/*}"
+      body: "*"
+    };
+  }
+
+  // GetRole returns a role.
+  rpc GetRole(GetRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=roles/*}"
+    };
+  }
+
+  // CreateRole creates a new role.
+  rpc CreateRole(CreateRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      post: "/v1alpha1/roles"
+      body: "*"
+    };
+  }
+
+  // UpdateRole updates a role with a field mask.
+  rpc UpdateRole(UpdateRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{role.name=roles/*}"
+      body: "*"
+    };
+  }
+
+  // DeleteRole deletes a role.
+  rpc DeleteRole(DeleteRoleRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=roles/*}"
+      body: "*"
+    };
+  }
+}
+
+message AuthorizeRequest {
+  string subject = 1 [(google.api.field_behavior) = REQUIRED];
+  string relation = 2 [(google.api.field_behavior) = REQUIRED];
+  string object = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message Role {
+  string name = 1;
+  string display_name = 2;
+  string description = 3;
+  repeated string permissions = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message Resource {
+  string name = 1;
+  string parent = 2;
+  google.iam.v1.Policy policy = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetResourceRequest {
+  string name = 1;
+}
+
+message CreateResourceRequest {
+  Resource resource = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateResourceRequest {
+  Resource resource = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteResourceRequest {
+  string name = 1;
+}
+
+message GetRoleRequest {
+  string name = 1;
+}
+
+message CreateRoleRequest {
+  Role role = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateRoleRequest {
+  Role role = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteRoleRequest {
+  string name = 1;
+}

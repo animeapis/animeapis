@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: grbac.animeapis.com
+title: gRBAC API
+
+apis:
+- name: animeshon.grbac.v1alpha1.Authorizer

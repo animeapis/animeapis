@@ -1,0 +1,79 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load(
+    "@com_google_googleapis_imports//:imports.bzl",
+    "go_gapic_assembly_pkg",
+    "go_gapic_library",
+    "go_proto_library",
+    "go_test",
+    "proto_library_with_info",
+)
+
+# This is an API workspace, having public visibility by default makes perfect sense.
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob(["*.json"]))
+
+proto_library(
+    name = "grbac_proto",
+    srcs = [
+        "grbac.proto",
+    ],
+    deps = [
+        "@com_google_googleapis//google/api:annotations_proto",
+        "@com_google_googleapis//google/api:client_proto",
+        "@com_google_googleapis//google/api:field_behavior_proto",
+        "@com_google_googleapis//google/iam/v1:policy_proto",
+        "@com_google_protobuf//:field_mask_proto",
+        "@com_google_protobuf//:empty_proto",
+    ],
+)
+
+proto_library_with_info(
+    name = "grbac_proto_with_info",
+    deps = [
+        ":grbac_proto",
+    ],
+)
+
+##############################################################################
+# Go
+##############################################################################
+go_proto_library(
+    name = "grbac_go_proto",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "github.com/animeapis/go-genproto/grbac/v1alpha1",
+    protos = [":grbac_proto"],
+    deps = [
+        "@com_google_googleapis//google/api:annotations_go_proto",
+        "@com_google_googleapis//google/iam/v1:iam_go_proto",
+    ],
+)
+
+go_gapic_library(
+    name = "grbac_go_gapic",
+    srcs = [":grbac_proto_with_info"],
+    grpc_service_config = "grbac_grpc_service_config.json",
+    importpath = "github.com/animeapis/api-go-client/grbac/v1alpha1;grbac",
+    service_yaml = "grbac_v1alpha1.yaml",
+    metadata = True,
+    deps = [
+        ":grbac_go_proto",
+    ],
+)
+
+go_test(
+    name = "grbac_go_gapic_test",
+    srcs = [":grbac_go_gapic_srcjar_test"],
+    embed = [":grbac_go_gapic"],
+    importpath = "github.com/animeapis/api-go-client/grbac/v1alpha1",
+)
+
+# Open Source Packages
+go_gapic_assembly_pkg(
+    name = "gapi-cloud-grbac-v1alpha1-go",
+    deps = [
+        ":grbac_go_gapic",
+        ":grbac_go_gapic_srcjar-test.srcjar",
+        ":grbac_go_proto",
+    ],
+)

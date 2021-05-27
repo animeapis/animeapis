@@ -41,14 +41,14 @@ service Isekai {
 
   rpc CreateRepository(CreateRepositoryRequest) returns (Repository) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=*/*}:create"
+      post: "/v1alpha1/{name=namespaces/*/repositories/*}"
       body: "*"
     };
   }
 
   rpc DeleteRepository(DeleteRepositoryRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=*/*}:delete"
+      delete: "/v1alpha1/{name=namespaces/*/repositories/*}"
     };
   }
 }
