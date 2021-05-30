@@ -14,8 +14,8 @@ option java_package = "com.animeshon.grbac.v1alpha1";
 option java_multiple_files = true;
 option ruby_package = "Animeshon::GRBAC::v1Alpha1";
 
-// Authorizer is the internal service used by Animeshon to enforce RBAC rules.
-service Authorizer {
+// AccessControl is the internal service used by Animeshon to enforce RBAC rules.
+service AccessControl {
   option (google.api.default_host) = "127.0.0.1:9080";
 
   // Authorize returns whether a subject is allowed it perform an action on an
@@ -63,6 +63,14 @@ service Authorizer {
   rpc CreateSubject(CreateSubjectRequest) returns (Subject) {
     option (google.api.http) = {
       post: "/v1alpha1/subjects"
+      body: "*"
+    };
+  }
+
+  // DeleteSubject deletes a subject.
+  rpc DeleteSubject(DeleteSubjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=subjects/*}"
       body: "*"
     };
   }
@@ -181,6 +189,10 @@ message DeleteResourceRequest {
 }
 
 message CreateSubjectRequest {
+  string name = 1;
+}
+
+message DeleteSubjectRequest {
   string name = 1;
 }
 
