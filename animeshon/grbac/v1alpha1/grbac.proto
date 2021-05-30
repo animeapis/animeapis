@@ -31,7 +31,7 @@ service Authorizer {
   // GetResource returns a resource.
   rpc GetResource(GetResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=resources/*}"
+      get: "/v1alpha1/{name=resources/**}"
     };
   }
 
@@ -46,7 +46,7 @@ service Authorizer {
   // UpdateResource updates a resource with a field mask.
   rpc UpdateResource(UpdateResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{resource.name=resources/*}"
+      patch: "/v1alpha1/{resource.name=resources/**}"
       body: "*"
     };
   }
@@ -54,7 +54,46 @@ service Authorizer {
   // DeleteResource deletes a resource.
   rpc DeleteResource(DeleteResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=resources/*}"
+      delete: "/v1alpha1/{name=resources/**}"
+      body: "*"
+    };
+  }
+
+  // CreateSubject creates a new subject.
+  rpc CreateSubject(CreateSubjectRequest) returns (Subject) {
+    option (google.api.http) = {
+      post: "/v1alpha1/subjects"
+      body: "*"
+    };
+  }
+
+  // GetGroup returns a group.
+  rpc GetGroup(GetGroupRequest) returns (Group) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=groups/*}"
+    };
+  }
+
+  // CreateGroup creates a new group.
+  rpc CreateGroup(CreateGroupRequest) returns (Group) {
+    option (google.api.http) = {
+      post: "/v1alpha1/groups"
+      body: "*"
+    };
+  }
+
+  // UpdateGroup updates a group with a field mask.
+  rpc UpdateGroup(UpdateGroupRequest) returns (Group) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{group.name=groups/*}"
+      body: "*"
+    };
+  }
+
+  // DeleteGroup deletes a group.
+  rpc DeleteGroup(DeleteGroupRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=groups/*}"
       body: "*"
     };
   }
@@ -97,17 +136,28 @@ message AuthorizeRequest {
   string object = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
+message Resource {
+  string name = 1;
+  string parent = 2;
+  google.iam.v1.Policy policy = 3;
+}
+
+message Subject {
+  string name = 1;
+}
+
+message Group {
+  string name = 1;
+  repeated string members = 2;
+  bytes etag = 3;
+}
+
 message Role {
   string name = 1;
   string display_name = 2;
   string description = 3;
   repeated string permissions = 4 [(google.api.field_behavior) = REQUIRED];
-}
-
-message Resource {
-  string name = 1;
-  string parent = 2;
-  google.iam.v1.Policy policy = 3 [(google.api.field_behavior) = REQUIRED];
+  bytes etag = 5;
 }
 
 message GetResourceRequest {
@@ -127,6 +177,30 @@ message UpdateResourceRequest {
 }
 
 message DeleteResourceRequest {
+  string name = 1;
+}
+
+message CreateSubjectRequest {
+  string name = 1;
+}
+
+message GetGroupRequest {
+  string name = 1;
+}
+
+message CreateGroupRequest {
+  Group group = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateGroupRequest {
+  Group group = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteGroupRequest {
   string name = 1;
 }
 
