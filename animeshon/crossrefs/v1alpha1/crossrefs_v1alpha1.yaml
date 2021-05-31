@@ -1,0 +1,9 @@
+type: google.api.Service
+config_version: 3
+name: crossrefs.animeapis.com
+title: CrossRefs API
+
+apis:
+- name: animeshon.crossrefs.v1alpha1.CrossRefs
+# Mix-in services
+- name: google.longrunning.Operations
