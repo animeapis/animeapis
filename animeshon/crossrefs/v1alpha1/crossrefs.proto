@@ -23,6 +23,63 @@ option ruby_package = "Animeshon::CrossRefs::v1Alpha1";
 service Referrer {
   option (google.api.default_host) = "crossrefs.animeapis.com";
 
+  rpc GetCrossRef(GetCrossRefRequest) returns (CrossRef) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=crossrefs/*}"
+    };
+  }
+
+  rpc UpdateCrossRef(UpdateCrossRefRequest) returns (CrossRef) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{crossref.name=crossrefs/*}"
+      body: "*"
+    };
+  }
+
+  rpc ListCrossRefs(ListCrossRefsRequest) returns (ListCrossRefsResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/crossrefs"
+      body: "*"
+    };
+  }
+
+  // Analyzes and proposes new cross-references according to their similarity.
+  rpc AnalyzeCrossRefs(google.protobuf.Empty) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/crossrefs:analyze"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "AnalyzeCrossRefsResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
+  // Imports already existing cross-references from third-parties.
+  rpc ImportCrossRefs(google.protobuf.Empty) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/crossrefs:import"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ImportCrossRefsResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
+  // Exports the cross-references to Cloud Pub/Sub for a full synchronization.
+  // This operation is usually called after a new import with a clean database.
+  rpc ExportCrossRefs(google.protobuf.Empty) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/crossrefs:export"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ExportCrossRefsResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
   rpc AnalyzeParodies(google.protobuf.Empty) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/parodies:analyze"
@@ -44,6 +101,47 @@ service Referrer {
       metadata_type: "OperationMetadata"
     };
   }
+
+  rpc GetUniverse(GetUniverseRequest) returns (Universe) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=universes/*}"
+    };
+  }
+
+  rpc UpdateUniverse(UpdateUniverseRequest) returns (Universe) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{universe.name=universes/*}"
+      body: "*"
+    };
+  }
+
+  rpc ExpandUniverse(ExpandUniverseRequest) returns (Universe) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=universes/*}:expand"
+      body: "*"
+    };
+  }
+}
+
+message CrossRef {
+  option (google.api.resource) = {
+    type: "crossrefs.animeapis.com/CrossRef"
+    pattern: "crossrefs/{crossref}"
+  };
+
+  // The resource name of the crossref.
+  string name = 1;
+}
+
+// TODO(christian-roggia): move the universe together with all other resources.
+message Universe {
+  option (google.api.resource) = {
+    type: "crossrefs.animeapis.com/Universe"
+    pattern: "universes/{universe}"
+  };
+
+  // The resource name of the universe.
+  string name = 1;
 }
 
 // Represents the metadata of the long-running operation.
@@ -73,11 +171,67 @@ message OperationMetadata {
   string api_version = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
-// TODO(christian-roggia): This is a workaround to solve the problem of GAPIC
-// CLI being generated with broken code if google.protobuf.Empty is used
-// in the response_type of longrunning operations.
-message AnalyzeParodiesResponse {
+message GetCrossRefRequest {
+  // The resource name of the requested crossref.
+  string name = 1 [
+    (google.api.resource_reference).type = "crossrefs.animeapis.com/CrossRef",
+    (google.api.field_behavior) = REQUIRED
+  ];
 }
 
-message ExportParodiesResponse {
+message UpdateCrossRefRequest {
+  // The crossref to update.
+  CrossRef crossref = 1;
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
 }
+
+message ListCrossRefsRequest {
+  // The maximum number of users to return. Server may return fewer users
+  // than requested. If unspecified, server will pick an appropriate default.
+  int32 page_size = 1;
+
+  // The value returned from the previous call.
+  string page_token = 2;
+}
+
+message ListCrossRefsResponse {
+  // The list of crossrefs.
+  repeated CrossRef crossrefs = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message GetUniverseRequest {
+  // The resource name of the requested universe.
+  string name = 1 [
+    (google.api.resource_reference).type = "crossrefs.animeapis.com/Universe",
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+message UpdateUniverseRequest {
+  // The universe to update.
+  Universe universe = 1;
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message ExpandUniverseRequest {
+  // The universe to expand.
+  string name = 1;
+}
+
+// TODO(christian-roggia): this is a workaround to solve the issue of GAPIC
+// CLI where broken code is generated if google.protobuf.Empty is used in the
+// response_type of longrunning operations.
+message AnalyzeCrossRefsResponse {}
+message ImportCrossRefsResponse {}
+message ExportCrossRefsResponse {}
+message AnalyzeParodiesResponse {}
+message ExportParodiesResponse {}
