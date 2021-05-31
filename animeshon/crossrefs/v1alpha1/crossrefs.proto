@@ -79,5 +79,5 @@ message OperationMetadata {
 message AnalyzeParodiesResponse {
 }
 
-message ExportParodies {
+message ExportParodiesResponse {
 }
