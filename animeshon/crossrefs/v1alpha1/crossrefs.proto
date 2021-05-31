@@ -29,7 +29,7 @@ service Referrer {
       body: "*"
     };
     option (google.longrunning.operation_info) = {
-      response_type: "google.protobuf.Empty"
+      response_type: "AnalyzeParodiesResponse"
       metadata_type: "OperationMetadata"
     };
   }
@@ -40,7 +40,7 @@ service Referrer {
       body: "*"
     };
     option (google.longrunning.operation_info) = {
-      response_type: "google.protobuf.Empty"
+      response_type: "ExportParodiesResponse"
       metadata_type: "OperationMetadata"
     };
   }
@@ -71,4 +71,13 @@ message OperationMetadata {
 
   // Output only. API version used to start the operation.
   string api_version = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// TODO(christian-roggia): This is a workaround to solve the problem of GAPIC
+// CLI being generated with broken code if google.protobuf.Empty is used
+// in the response_type of longrunning operations.
+message AnalyzeParodiesResponse {
+}
+
+message ExportParodies {
 }
