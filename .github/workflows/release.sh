@@ -7,7 +7,7 @@ set -o pipefail
 declare -a services=(
   "grbac"
   "hub"
-  # "crossrefs"
+  "crossrefs"
   # "knowledge"
   # "vision"
 )
