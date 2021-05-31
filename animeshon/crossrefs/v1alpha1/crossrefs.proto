@@ -20,7 +20,7 @@ option ruby_package = "Animeshon::CrossRefs::v1Alpha1";
 // services, each one responsible for a subgroup of resources such as
 // universes, crossrefs, and parodies.
 
-service CrossRefs {
+service Referrer {
   option (google.api.default_host) = "crossrefs.animeapis.com";
 
   rpc AnalyzeParodies(google.protobuf.Empty) returns (google.longrunning.Operation) {
