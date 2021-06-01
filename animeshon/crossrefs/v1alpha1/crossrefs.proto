@@ -115,7 +115,7 @@ service Referrer {
     };
   }
 
-  rpc ExpandUniverse(ExpandUniverseRequest) returns (Universe) {
+  rpc ExpandUniverse(ExpandUniverseRequest) returns (ExpandUniverseResponse) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=universes/*}:expand"
       body: "*"
@@ -131,6 +131,10 @@ message CrossRef {
 
   // The resource name of the crossref.
   string name = 1;
+
+  // TODO(christian-roggia): resources should be available through protobuf
+  // messages.
+  bytes payload = 2;
 }
 
 // TODO(christian-roggia): move the universe together with all other resources.
@@ -142,7 +146,14 @@ message Universe {
 
   // The resource name of the universe.
   string name = 1;
+
+  // TODO(christian-roggia): resources should be available through protobuf
+  // messages.
+  bytes payload = 2;
 }
+
+// message CanonicalContent {
+// }
 
 // Represents the metadata of the long-running operation.
 message OperationMetadata {
@@ -225,6 +236,24 @@ message UpdateUniverseRequest {
 message ExpandUniverseRequest {
   // The universe to expand.
   string name = 1;
+
+  // The maximum depth to expand.
+  int32 depth_limit = 2;
+
+  // The filter to use. Accepted values are CONTENT and CHARACTER.
+  string filter = 3;
+}
+
+message ExpandUniverseResponse {
+  // The resource name of the requested universe.
+  string name = 1;
+
+  // The list of content nodes to attach to the universe.
+  // repeated CanonicalContent contents = 2;
+
+  // TODO(christian-roggia): resources should be available through protobuf
+  // messages.
+  bytes payload = 2;
 }
 
 // TODO(christian-roggia): this is a workaround to solve the issue of GAPIC
