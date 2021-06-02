@@ -8,7 +8,7 @@ declare -a services=(
   "grbac"
   "hub"
   "crossrefs"
-  # "knowledge"
+  "knowledge"
   # "vision"
 )
 

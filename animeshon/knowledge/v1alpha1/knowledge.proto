@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+
+package animeshon.knowledge.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/knowledge/v1alpha1;knowledge";
+option java_package = "com.animeshon.knowledge.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Knowledge::v1Alpha1";
+
+service Knowledge {
+  option (google.api.default_host) = "knowledge.animeapis.com";
+
+  rpc CreateContribution(CreateContributionRequest) returns (Contribution) {
+    option (google.api.http) = {
+      post: "/v1alpha1/contributions"
+      body: "*"
+    };
+  }
+
+  rpc ListContributions(ListContributionsRequest) returns (ListContributionsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/contributions"
+    };
+  }
+
+  rpc GetContribution(GetContributionRequest) returns (Contribution) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=contributions/*}"
+    };
+  }
+
+  rpc ApproveContribution(ApproveContributionRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=contributions/*}:approve"
+      body: "*"
+    };
+  }
+
+  rpc RejectContribution(RejectContributionRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=contributions/*}:reject"
+      body: "*"
+    };
+  }
+}
+
+message Contribution {
+  option (google.api.resource) = {
+    type: "knowledge.animeapis.com/Contribution"
+    pattern: "contributions/{contribution}"
+  };
+
+  // The resource name of the universe.
+  string name = 1;
+}
+
+message CreateContributionRequest {
+  // The resource name.
+  string name = 1;
+
+  // The resurce payload.
+  bytes payload = 2;
+}
+
+message ListContributionsRequest {
+  // The maximum number of users to return. Server may return fewer users
+  // than requested. If unspecified, server will pick an appropriate default.
+  int32 page_size = 1;
+
+  // The value returned from the previous call.
+  string page_token = 2;
+
+  // A filter to be applied to results.
+  string filter = 3;
+}
+
+message ListContributionsResponse {
+  // The list of contributions.
+  repeated Contribution contributions = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message GetContributionRequest {
+  // The resource name of the requested contribution.
+  string name = 1 [
+    (google.api.resource_reference).type = "knowledge.animeapis.com/Contribution",
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+message ApproveContributionRequest {
+  string name = 1;
+}
+
+message RejectContributionRequest {
+  string name = 1;
+}

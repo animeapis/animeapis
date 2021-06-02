@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: knowledge.animeapis.com
+title: Knowledge API
+
+apis:
+- name: animeshon.knowledge.v1alpha1.Knowledge
