@@ -38,8 +38,7 @@ service Referrer {
 
   rpc ListCrossRefs(ListCrossRefsRequest) returns (ListCrossRefsResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/crossrefs"
-      body: "*"
+      get: "/v1alpha1/crossrefs"
     };
   }
 
@@ -206,6 +205,9 @@ message ListCrossRefsRequest {
 
   // The value returned from the previous call.
   string page_token = 2;
+
+  // A filter to be applied to results.
+  string filter = 3;
 }
 
 message ListCrossRefsResponse {
