@@ -23,9 +23,18 @@ option ruby_package = "Animeshon::CrossRefs::v1Alpha1";
 service Referrer {
   option (google.api.default_host) = "crossrefs.animeapis.com";
 
+  // GetCrossRef returns a crossref.
   rpc GetCrossRef(GetCrossRefRequest) returns (CrossRef) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=crossrefs/*}"
+    };
+  }
+
+  // CreateCrossRef creates a new crossref.
+  rpc CreateCrossRef(CreateCrossRefRequest) returns (CrossRef) {
+    option (google.api.http) = {
+      post: "/v1alpha1/crossrefs"
+      body: "*"
     };
   }
 
@@ -179,6 +188,18 @@ message OperationMetadata {
 
   // Output only. API version used to start the operation.
   string api_version = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 step_count = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 step_progress = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 item_count = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 item_progress = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 message GetCrossRefRequest {
@@ -187,6 +208,10 @@ message GetCrossRefRequest {
     (google.api.resource_reference).type = "crossrefs.animeapis.com/CrossRef",
     (google.api.field_behavior) = REQUIRED
   ];
+}
+
+message CreateCrossRefRequest {
+  CrossRef crossref = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateCrossRefRequest {
