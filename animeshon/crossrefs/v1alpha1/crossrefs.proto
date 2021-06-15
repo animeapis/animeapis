@@ -52,7 +52,7 @@ service Referrer {
   }
 
   // Analyzes and proposes new cross-references according to their similarity.
-  rpc AnalyzeCrossRefs(google.protobuf.Empty) returns (google.longrunning.Operation) {
+  rpc AnalyzeCrossRefs(AnalyzeCrossRefRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/crossrefs:analyze"
       body: "*"
@@ -129,6 +129,20 @@ service Referrer {
       body: "*"
     };
   }
+}
+
+message AnalyzeCrossRefRequest {
+  // Tollerance of the match in pct
+  int32 tollerance = 1;
+
+  // Map of all options for the analysis
+  map<string, bool> opts = 2;
+
+  // Namespaces to analyze
+  repeated string namespaces = 3;
+
+  // Kinds to analyze
+  repeated string target_kinds = 4;
 }
 
 message CrossRef {
