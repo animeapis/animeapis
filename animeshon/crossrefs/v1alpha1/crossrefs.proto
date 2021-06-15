@@ -64,7 +64,7 @@ service Referrer {
   }
 
   // Imports already existing cross-references from third-parties.
-  rpc ImportCrossRefs(google.protobuf.Empty) returns (google.longrunning.Operation) {
+  rpc ImportCrossRefs(ImportCrossRefRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/crossrefs:import"
       body: "*"
@@ -130,6 +130,12 @@ service Referrer {
     };
   }
 }
+
+message ImportCrossRefRequest {
+  // Map of all options for the import
+  map<string, bool> opts = 1;
+}
+
 
 message AnalyzeCrossRefRequest {
   // Tollerance of the match in pct
