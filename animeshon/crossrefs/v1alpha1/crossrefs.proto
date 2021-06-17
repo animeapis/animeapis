@@ -38,7 +38,7 @@ service Referrer {
     };
   }
 
-  rpc UpdateCrossRef(UpdateCrossRefRequest) returns (CrossRef) {
+  rpc UpdateCrossRef(UpdateCrossRefRequest) returns (stream CrossRef) {
     option (google.api.http) = {
       patch: "/v1alpha1/{crossref.name=crossrefs/*}"
       body: "*"
