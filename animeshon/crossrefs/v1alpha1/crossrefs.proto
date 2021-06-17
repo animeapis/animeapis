@@ -136,9 +136,9 @@ service Referrer {
     };
   }
 
-  rpc GetContent(GetContentRequest) returns (GetContentResponse) {
+  rpc GetWormholeInformation(GetWormholeInformationRequest) returns (WormholeInformation) {
     option (google.api.http) = {
-      get: "/v1alpha1/contents"
+      get: "/v1alpha1/wormholeinformation"
     };
   }
 }
@@ -339,12 +339,12 @@ message ExpandUniverseResponse {
   bytes payload = 2;
 }
 
-message GetContentRequest {
+message GetWormholeInformationRequest {
   // The content to retreive.
   string name = 1;
 }
 
-message GetContentResponse {
+message WormholeInformation {
   message Text {
     string text = 1;
   
