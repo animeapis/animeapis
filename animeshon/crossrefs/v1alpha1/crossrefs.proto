@@ -138,8 +138,7 @@ service Referrer {
 
   rpc GetContent(GetContentRequest) returns (GetContentResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/contents"
-      body: "*"
+      get: "/v1alpha1/contents"
     };
   }
 }
