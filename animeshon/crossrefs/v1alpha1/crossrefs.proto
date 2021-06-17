@@ -361,19 +361,31 @@ message GetContentResponse {
   repeated Text aliases = 3;
 
   // raw bytes of image
-  bytes image = 2;
+  bytes image = 4;
   
   // url of the image
-  string image_url = 3;
+  string image_url = 5;
 
   // type of the content
-  string type = 2;
+  string type = 6;
 
   // subtype of the content
-  string subtype = 1;
+  string subtype = 7;
+
+  // external url of the content
+  string external_url = 8;
+  
+  // type of publication
+  string publishing_type = 9;
+
+  // the content is parody of another content
+  bool is_parody = 10;
+
+  // identifier
+  string identifier = 11;
 
   // most significant date
-  google.protobuf.Timestamp date = 3;
+  google.protobuf.Timestamp date = 12;
 }
 
 
