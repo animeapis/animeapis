@@ -51,6 +51,12 @@ service Referrer {
     };
   }
 
+  rpc CountCrossRefs(CountCrossRefsRequest) returns (CountCrossRefsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/crossrefs"
+    };
+  }
+
   // Analyzes and proposes new cross-references according to their similarity.
   rpc AnalyzeCrossRefs(AnalyzeCrossRefRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
@@ -243,16 +249,36 @@ message UpdateCrossRefRequest {
   google.protobuf.FieldMask update_mask = 2;
 }
 
+message CrossRefsFilterRequest {
+  // specifies the prefix to search in 
+  string prefix = 1;
+  
+  // if true only crossreferences with pendings are returned
+  bool pendingOnly = 2;
+}
+
 message ListCrossRefsRequest {
   // The maximum number of users to return. Server may return fewer users
   // than requested. If unspecified, server will pick an appropriate default.
-  int32 page_size = 1;
+  int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The value returned from the previous call.
   string page_token = 2;
 
   // A filter to be applied to results.
-  string filter = 3;
+  string CrossRefsFilterRequest = 3;
+}
+
+message CountCrossRefsRequest {
+  // The maximum number of users to return. Server may return fewer users
+  // than requested. If unspecified, server will pick an appropriate default.
+  int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The value returned from the previous call.
+  string page_token = 2;
+
+  // A filter to be applied to results.
+  string CrossRefsFilterRequest = 3;
 }
 
 message ListCrossRefsResponse {
@@ -261,6 +287,10 @@ message ListCrossRefsResponse {
 
   // A token to retrieve next page of results.
   string next_page_token = 2;
+}
+
+message CountCrossRefsResponse {
+  int32 count = 1;
 }
 
 message GetUniverseRequest {
