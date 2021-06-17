@@ -53,7 +53,7 @@ service Referrer {
 
   rpc CountCrossRefs(CountCrossRefsRequest) returns (CountCrossRefsResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/crossrefs"
+      get: "/v1alpha1/crossrefs:count"
     };
   }
 
@@ -132,6 +132,13 @@ service Referrer {
   rpc ExpandUniverse(ExpandUniverseRequest) returns (ExpandUniverseResponse) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=universes/*}:expand"
+      body: "*"
+    };
+  }
+
+  rpc GetContent(GetContentRequest) returns (GetContentResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/contents"
       body: "*"
     };
   }
@@ -332,6 +339,43 @@ message ExpandUniverseResponse {
   // messages.
   bytes payload = 2;
 }
+
+message GetContentRequest {
+  // The content to retreive.
+  string name = 1;
+}
+
+message GetContentResponse {
+  message Text {
+    string text = 1;
+  
+    string localization = 2;
+  }
+
+  string name = 1;
+
+  // The names of te content
+  repeated Text names = 2;
+
+  // The aliases of te content
+  repeated Text aliases = 3;
+
+  // raw bytes of image
+  bytes image = 2;
+  
+  // url of the image
+  string image_url = 3;
+
+  // type of the content
+  string type = 2;
+
+  // subtype of the content
+  string subtype = 1;
+
+  // most significant date
+  google.protobuf.Timestamp date = 3;
+}
+
 
 // TODO(christian-roggia): this is a workaround to solve the issue of GAPIC
 // CLI where broken code is generated if google.protobuf.Empty is used in the
