@@ -257,7 +257,7 @@ message UpdateCrossRefRequest {
 
 message UpdateCrossRefResponse {
   // All CrossRef involved in the update
-  repeated CrossRef crossref = 1;
+  repeated CrossRef crossrefs = 1;
 }
 
 message CrossRefsFilterRequest {
