@@ -3,9 +3,11 @@ syntax = "proto3";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/iam/v1/iam_policy.proto";
 import "google/iam/v1/policy.proto";
-import "google/protobuf/field_mask.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
 
 package animeshon.grbac.v1alpha1;
 
@@ -24,6 +26,21 @@ service AccessControl {
   rpc Authorize(AuthorizeRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1alpha1/authorize"
+      body: "*"
+    };
+  }
+
+  // Gets the IAM policy that is attached to a generic resource.
+  rpc GetIamPolicy(google.iam.v1.GetIamPolicyRequest) returns (google.iam.v1.Policy) {
+    option (google.api.http) = {
+      post: "/v1/{resource=resources/**}:getIamPolicy"
+    };
+  }
+
+  // Sets the IAM policy that is attached to a generic resource.
+  rpc SetIamPolicy(google.iam.v1.SetIamPolicyRequest) returns (google.iam.v1.Policy) {
+    option (google.api.http) = {
+      post: "/v1/{resource=resources/**}:setIamPolicy"
       body: "*"
     };
   }
@@ -98,6 +115,22 @@ service AccessControl {
     };
   }
 
+  // AddGroupMember adds a member to a group.
+  rpc AddGroupMember(AddGroupMemberRequest) returns (Group) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{group=groups/*}:addMember"
+      body: "*"
+    };
+  }
+
+  // RemoveGroupMember removes a member from a group.
+  rpc RemoveGroupMember(RemoveGroupMemberRequest) returns (Group) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{group=groups/*}:removeMember"
+      body: "*"
+    };
+  }
+
   // DeleteGroup deletes a group.
   rpc DeleteGroup(DeleteGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -147,7 +180,7 @@ message AuthorizeRequest {
 message Resource {
   string name = 1;
   string parent = 2;
-  google.iam.v1.Policy policy = 3;
+  bytes etag = 3;
 }
 
 message Subject {
@@ -210,6 +243,26 @@ message UpdateGroupRequest {
   // The field mask to determine which fields are to be updated. If empty, the
   // server will assume all fields are to be updated.
   google.protobuf.FieldMask update_mask = 2;
+}
+
+message AddGroupMemberRequest {
+  // The name of the group to add a member to.
+  string group = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "grbac.animeapis.com/Group"
+  ];
+
+  string member = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RemoveGroupMemberRequest {
+  // The name of the group to remove an member from.
+  string group = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "grbac.animeapis.com/Group"
+  ];
+
+  string member = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteGroupRequest {
