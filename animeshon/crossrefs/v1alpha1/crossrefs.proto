@@ -266,7 +266,7 @@ message ListCrossRefsRequest {
   string page_token = 2;
 
   // A filter to be applied to results.
-  string CrossRefsFilterRequest = 3;
+  CrossRefsFilterRequest filter = 3;
 }
 
 message CountCrossRefsRequest {
@@ -278,7 +278,7 @@ message CountCrossRefsRequest {
   string page_token = 2;
 
   // A filter to be applied to results.
-  string CrossRefsFilterRequest = 3;
+  CrossRefsFilterRequest filter = 3;
 }
 
 message ListCrossRefsResponse {
