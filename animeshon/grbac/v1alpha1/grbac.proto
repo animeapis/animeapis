@@ -91,10 +91,10 @@ service AccessControl {
   // DeleteSubject deletes a subject.
   rpc DeleteSubject(DeleteSubjectRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{subject.name=users/*}"
+      delete: "/v1alpha1/{name=users/*}"
       body: "*"
       additional_bindings {
-        patch: "/v1alpha1/{subject.name=serviceAccounts/*}"
+        patch: "/v1alpha1/{name=serviceAccounts/*}"
         body: "*"
       }
     };
