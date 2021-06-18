@@ -38,7 +38,7 @@ service Referrer {
     };
   }
 
-  rpc UpdateCrossRef(UpdateCrossRefRequest) returns (CrossRef) {
+  rpc UpdateCrossRef(UpdateCrossRefRequest) returns (UpdateCrossRefResponse) {
     option (google.api.http) = {
       patch: "/v1alpha1/{crossref.name=crossrefs/*}"
       body: "*"
@@ -253,6 +253,11 @@ message UpdateCrossRefRequest {
   // The field mask to determine which fields are to be updated. If empty, the
   // server will assume all fields are to be updated.
   google.protobuf.FieldMask update_mask = 2;
+}
+
+message UpdateCrossRefResponse {
+  // All CrossRef involved in the update
+  repeated CrossRef crossrefs = 1;
 }
 
 message CrossRefsFilterRequest {
