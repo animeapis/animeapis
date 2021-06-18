@@ -234,7 +234,7 @@ message CreateSubjectRequest {
 }
 
 message DeleteSubjectRequest {
-  Subject subject = 1 [(google.api.field_behavior) = REQUIRED];
+  string name = 1;
 }
 
 message GetGroupRequest {
