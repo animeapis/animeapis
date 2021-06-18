@@ -79,16 +79,24 @@ service AccessControl {
   // CreateSubject creates a new subject.
   rpc CreateSubject(CreateSubjectRequest) returns (Subject) {
     option (google.api.http) = {
-      post: "/v1alpha1/subjects"
+      post: "/v1alpha1/users"
       body: "*"
+      additional_bindings {
+        patch: "/v1alpha1/serviceAccounts"
+        body: "*"
+      }
     };
   }
 
   // DeleteSubject deletes a subject.
   rpc DeleteSubject(DeleteSubjectRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=subjects/*}"
+      delete: "/v1alpha1/{name=users/*}"
       body: "*"
+      additional_bindings {
+        patch: "/v1alpha1/{name=serviceAccounts/*}"
+        body: "*"
+      }
     };
   }
 
@@ -222,11 +230,11 @@ message DeleteResourceRequest {
 }
 
 message CreateSubjectRequest {
-  string name = 1;
+  Subject subject = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteSubjectRequest {
-  string name = 1;
+  Subject subject = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message GetGroupRequest {
