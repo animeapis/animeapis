@@ -147,6 +147,22 @@ service AccessControl {
     };
   }
 
+  // CreatePermission creates a new permission.
+  rpc CreatePermission(CreatePermissionRequest) returns (Permission) {
+    option (google.api.http) = {
+      post: "/v1alpha1/permissions"
+      body: "*"
+    };
+  }
+
+  // DeletePermission deletes a permission.
+  rpc DeletePermission(DeletePermissionRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=permissions/*}"
+      body: "*"
+    };
+  }
+
   // GetRole returns a role.
   rpc GetRole(GetRoleRequest) returns (Role) {
     option (google.api.http) = {
@@ -199,6 +215,10 @@ message Group {
   string name = 1;
   repeated string members = 2;
   bytes etag = 3;
+}
+
+message Permission {
+  string name = 1;
 }
 
 message Role {
@@ -274,6 +294,14 @@ message RemoveGroupMemberRequest {
 }
 
 message DeleteGroupRequest {
+  string name = 1;
+}
+
+message CreatePermissionRequest {
+  Permission permission = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeletePermissionRequest {
   string name = 1;
 }
 
