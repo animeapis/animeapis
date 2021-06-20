@@ -223,10 +223,8 @@ message Permission {
 
 message Role {
   string name = 1;
-  string display_name = 2;
-  string description = 3;
-  repeated string permissions = 4 [(google.api.field_behavior) = REQUIRED];
-  bytes etag = 5;
+  repeated string permissions = 2 [(google.api.field_behavior) = REQUIRED];
+  bytes etag = 3;
 }
 
 message GetResourceRequest {
