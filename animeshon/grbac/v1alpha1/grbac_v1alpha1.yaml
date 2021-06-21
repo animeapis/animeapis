@@ -4,4 +4,4 @@ name: grbac.animeapis.com
 title: gRBAC API
 
 apis:
-- name: animeshon.grbac.v1alpha1.Authorizer
+- name: animeshon.grbac.v1alpha1.AccessControl

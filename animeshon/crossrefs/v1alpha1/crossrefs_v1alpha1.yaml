@@ -5,5 +5,3 @@ title: CrossRefs API
 
 apis:
 - name: animeshon.crossrefs.v1alpha1.CrossRefs
-# Mix-in services
-- name: google.longrunning.Operations
