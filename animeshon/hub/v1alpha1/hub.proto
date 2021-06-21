@@ -36,7 +36,7 @@ service Git {
   }
 }
 
-service Isekai {
+service Hub {
   option (google.api.default_host) = "hub.animeapis.com";
 
   rpc CreateRepository(CreateRepositoryRequest) returns (Repository) {
