@@ -12,9 +12,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "com_google_googleapis",
-    sha256 = "6cf42ee46b3d7d5b8c30ffc82c0fbce0eaf0738b5bdd9bc58d7134cbf2b8870f",
-    strip_prefix = "googleapis-51fe6432d4076a4c101f561967df4bf1f27818e1",
-    urls = ["https://github.com/googleapis/googleapis/archive/51fe6432d4076a4c101f561967df4bf1f27818e1.zip"],
+    sha256 = "ec8a60b58198dbce3e17b81b79531bace290cdd6e27f3fffef10d960092e30e2",
+    strip_prefix = "googleapis-01bad53fe00ac2435ff550047770e88f87c969cb",
+    urls = ["https://github.com/googleapis/googleapis/archive/01bad53fe00ac2435ff550047770e88f87c969cb.zip"],
 )
 
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
@@ -43,11 +43,11 @@ protobuf_deps()
 
 http_archive(
     name = "rules_proto",
-    sha256 = "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
-    strip_prefix = "rules_proto-97d8af4dc474595af3900dd85cb3a29ad28cc313",
+    sha256 = "e0cab008a9cdc2400a1d6572167bf9c5afc72e19ee2b862d18581051efab42c9",
+    strip_prefix = "rules_proto-c0b62f2f46c85c16cb3b5e9e921f0d00e3101934",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
-        "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/c0b62f2f46c85c16cb3b5e9e921f0d00e3101934.tar.gz",
+        "https://github.com/bazelbuild/rules_proto/archive/c0b62f2f46c85c16cb3b5e9e921f0d00e3101934.tar.gz",
     ],
 )
 
@@ -89,10 +89,26 @@ go_register_toolchains(version = "1.16")
 gazelle_dependencies()
 
 ##############################################################################
+# GAPIC Generator Bazel Integration
+##############################################################################
+
+_rules_gapic_version = "0.5.5"
+
+http_archive(
+    name = "rules_gapic",
+    strip_prefix = "rules_gapic-%s" % _rules_gapic_version,
+    urls = ["https://github.com/googleapis/rules_gapic/archive/v%s.tar.gz" % _rules_gapic_version],
+)
+
+load("@rules_gapic//:repositories.bzl", "rules_gapic_repositories")
+
+rules_gapic_repositories()
+
+##############################################################################
 # API Client Generator for Go (GAPIC)
 ##############################################################################
 
-_gapic_generator_go_version = "0.20.5"
+_gapic_generator_go_version = "0.20.3"
 
 http_archive(
     name = "com_googleapis_gapic_generator_go",
