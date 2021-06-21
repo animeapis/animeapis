@@ -92,7 +92,7 @@ gazelle_dependencies()
 # API Client Generator for Go (GAPIC)
 ##############################################################################
 
-_gapic_generator_go_version = "0.20.0"
+_gapic_generator_go_version = "0.20.5"
 
 http_archive(
     name = "com_googleapis_gapic_generator_go",
