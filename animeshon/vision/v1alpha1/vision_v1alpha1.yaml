@@ -4,4 +4,4 @@ name: vision.animeapis.com
 title: Vision API
 
 apis:
-- name: animeshon.vision.v1alpha1.Image
+- name: animeshon.vision.v1alpha1.Vision
