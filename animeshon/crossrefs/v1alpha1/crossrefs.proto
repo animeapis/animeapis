@@ -324,13 +324,6 @@ message ListCrossRefsRequest {
 }
 
 message CountCrossRefsRequest {
-  // The maximum number of users to return. Server may return fewer users
-  // than requested. If unspecified, server will pick an appropriate default.
-  int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // The value returned from the previous call.
-  string page_token = 2;
-
   // A filter to be applied to results.
   CrossRefsFilterRequest filter = 3;
 }
