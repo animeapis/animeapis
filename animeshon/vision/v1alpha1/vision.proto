@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+package animeshon.vision.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/vision/v1alpha1;vision";
+option java_package = "com.animeshon.vision.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Vision::v1Alpha1";
+
+service Vision {
+  option (google.api.default_host) = "vision.animeapis.com";
+}

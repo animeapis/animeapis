@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: image.animeapis.com
+title: Image API
+
+apis:
+- name: animeshon.image.v1alpha1.Image
