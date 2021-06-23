@@ -26,7 +26,7 @@ service Referrer {
   // GetCrossRef returns a crossref.
   rpc GetCrossRef(GetCrossRefRequest) returns (CrossRef) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=crossrefs/*}"
+      get: "/v1alpha1/{name=crossrefs/**}"
     };
   }
 
@@ -40,7 +40,7 @@ service Referrer {
 
   rpc UpdateCrossRef(UpdateCrossRefRequest) returns (UpdateCrossRefResponse) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{crossref.name=crossrefs/*}"
+      patch: "/v1alpha1/{crossref.name=crossrefs/**}"
       body: "*"
     };
   }
@@ -152,7 +152,7 @@ service Referrer {
 
   rpc GetWormholeInformation(GetWormholeInformationRequest) returns (WormholeInformation) {
     option (google.api.http) = {
-      get: "/v1alpha1/wormhole/{name=information/*}"
+      get: "/v1alpha1/wormhole/{name=information/**}"
     };
   }
 }
@@ -313,7 +313,9 @@ message CrossRefsFilterRequest {
 
 message ListCrossRefsRequest {
   // The maximum number of users to return. Server may return fewer users
-  // than requested. If unspecified, server will pick an appropriate default.
+  // than requested. 
+  // The maximum page_size is 100
+  // If unspecified, server will pick an appropriate default.
   int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The value returned from the previous call.
