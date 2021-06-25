@@ -34,6 +34,7 @@ proto_library_with_info(
     name = "tracker_proto_with_info",
     deps = [
         ":tracker_proto",
+        "@com_google_googleapis//google/cloud:common_resources_proto",
     ],
 )
 
@@ -75,7 +76,7 @@ go_test(
 
 # Open Source Packages
 go_gapic_assembly_pkg(
-    name = "gapi-cloud-tracker-v1alpha1-go",
+    name = "gapi-tracker-v1alpha1-go",
     deps = [
         ":tracker_go_gapic",
         ":tracker_go_gapic_srcjar-test.srcjar",

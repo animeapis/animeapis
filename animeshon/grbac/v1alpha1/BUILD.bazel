@@ -34,6 +34,7 @@ proto_library_with_info(
     name = "grbac_proto_with_info",
     deps = [
         ":grbac_proto",
+        "@com_google_googleapis//google/cloud:common_resources_proto",
     ],
 )
 
@@ -73,7 +74,7 @@ go_test(
 
 # Open Source Packages
 go_gapic_assembly_pkg(
-    name = "gapi-cloud-grbac-v1alpha1-go",
+    name = "gapi-grbac-v1alpha1-go",
     deps = [
         ":grbac_go_gapic",
         ":grbac_go_gapic_srcjar-test.srcjar",

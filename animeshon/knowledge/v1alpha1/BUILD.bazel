@@ -31,6 +31,7 @@ proto_library_with_info(
     name = "knowledge_proto_with_info",
     deps = [
         ":knowledge_proto",
+        "@com_google_googleapis//google/cloud:common_resources_proto",
     ],
 )
 
@@ -68,7 +69,7 @@ go_test(
 
 # Open Source Packages
 go_gapic_assembly_pkg(
-    name = "gapi-cloud-knowledge-v1alpha1-go",
+    name = "gapi-knowledge-v1alpha1-go",
     deps = [
         ":knowledge_go_gapic",
         ":knowledge_go_gapic_srcjar-test.srcjar",
