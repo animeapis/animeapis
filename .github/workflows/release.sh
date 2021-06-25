@@ -9,6 +9,9 @@ declare -a services=(
   "hub"
   "crossrefs"
   "knowledge"
+  "tracker"
+  # "iam"
+  # "image"
   # "vision"
 )
 
