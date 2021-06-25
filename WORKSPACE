@@ -2,7 +2,13 @@
 # Workspace
 ##############################################################################
 
-workspace(name = "animeapis")
+workspace(
+    name = "com_google_animeapis",
+    # This tells Bazel that the node_modules directory is special and
+    # is managed by the package manager.
+    # https://bazelbuild.github.io/rules_nodejs/install.html
+    managed_directories = {"@npm": ["@gapic_generator_typescript//:node_modules"]},
+)
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
@@ -12,9 +18,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "com_google_googleapis",
-    sha256 = "ec8a60b58198dbce3e17b81b79531bace290cdd6e27f3fffef10d960092e30e2",
-    strip_prefix = "googleapis-01bad53fe00ac2435ff550047770e88f87c969cb",
-    urls = ["https://github.com/googleapis/googleapis/archive/01bad53fe00ac2435ff550047770e88f87c969cb.zip"],
+    sha256 = "37106dc31e6b427d8f3b5a1837cb6e275357fa1b6bb526c49b47fd16acbf1d34",
+    strip_prefix = "googleapis-dba65e3c28aa8e26c4d5b8ec9c80fbd0d0f29864",
+    urls = ["https://github.com/googleapis/googleapis/archive/dba65e3c28aa8e26c4d5b8ec9c80fbd0d0f29864.zip"],
 )
 
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
@@ -24,6 +30,7 @@ switched_rules_by_language(
     gapic = True,
     go = True,
     grpc = True,
+    nodejs = True,
 )
 
 ##############################################################################
@@ -94,8 +101,11 @@ gazelle_dependencies()
 
 _rules_gapic_version = "0.5.5"
 
+_rules_gapic_sha256 = "d2e03360921cfb27faed91593332cd173be805e492fab9074453e89e83ded69f"
+
 http_archive(
     name = "rules_gapic",
+    sha256 = _rules_gapic_sha256,
     strip_prefix = "rules_gapic-%s" % _rules_gapic_version,
     urls = ["https://github.com/googleapis/rules_gapic/archive/v%s.tar.gz" % _rules_gapic_version],
 )
@@ -108,10 +118,13 @@ rules_gapic_repositories()
 # API Client Generator for Go (GAPIC)
 ##############################################################################
 
-_gapic_generator_go_version = "0.20.3"
+_gapic_generator_go_version = "0.20.5"
+
+_gapic_generator_go_sha256 = "18de5869435f14b3213a7f08079f18fd93e07cd9140199f2ec675deb3687bb1c"
 
 http_archive(
     name = "com_googleapis_gapic_generator_go",
+    sha256 = _gapic_generator_go_sha256,
     strip_prefix = "gapic-generator-go-%s" % _gapic_generator_go_version,
     urls = ["https://github.com/googleapis/gapic-generator-go/archive/v%s.tar.gz" % _gapic_generator_go_version],
 )
@@ -123,3 +136,35 @@ com_googleapis_gapic_generator_go_repositories()
 load("@com_googleapis_gapic_generator_go//rules_go_gapic:go_gapic_repositories.bzl", "go_gapic_repositories")
 
 go_gapic_repositories()
+
+##############################################################################
+# API Client Generator for TypeScript (GAPIC)
+##############################################################################
+
+_gapic_generator_typescript_version = "1.5.0"
+
+_gapic_generator_typescript_sha256 = "17e9387f3d6da8e5382b4e138ccc401137d2938b394040984ef2ca11ff9f8aea"
+
+### TypeScript generator
+http_archive(
+    name = "gapic_generator_typescript",
+    sha256 = _gapic_generator_typescript_sha256,
+    strip_prefix = "gapic-generator-typescript-%s" % _gapic_generator_typescript_version,
+    urls = ["https://github.com/googleapis/gapic-generator-typescript/archive/v%s.tar.gz" % _gapic_generator_typescript_version],
+)
+
+load("@gapic_generator_typescript//:repositories.bzl", "gapic_generator_typescript_repositories")
+
+gapic_generator_typescript_repositories()
+
+load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
+
+node_repositories(
+    package_json = ["@gapic_generator_typescript//:package.json"],
+)
+
+yarn_install(
+    name = "npm",
+    package_json = "@gapic_generator_typescript//:package.json",
+    yarn_lock = "@gapic_generator_typescript//:yarn.lock",
+)
