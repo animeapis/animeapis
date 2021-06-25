@@ -16,7 +16,7 @@ option java_package = "com.animeshon.tracker.v1alpha1";
 option java_multiple_files = true;
 option ruby_package = "Animeshon::Tracker::v1Alpha1";
 
-service Tracker {
+service TrackerService {
   option (google.api.default_host) = "tracker.animeapis.com";
 
   rpc CreateTracker(CreateTrackerRequest) returns (Tracker) {
