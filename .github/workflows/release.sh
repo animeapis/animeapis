@@ -5,11 +5,12 @@ set -o nounset
 set -o pipefail
 
 declare -a services=(
+  "crossrefs"
   "grbac"
   "hub"
-  "crossrefs"
   "knowledge"
   "tracker"
+  "webcache"
   # "iam"
   # "image"
   # "vision"
