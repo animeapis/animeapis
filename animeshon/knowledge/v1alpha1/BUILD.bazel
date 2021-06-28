@@ -44,7 +44,7 @@ go_proto_library(
     importpath = "github.com/animeapis/go-genproto/knowledge/v1alpha1",
     protos = [":knowledge_proto"],
     deps = [
-        "@com_google_googleapis//google/api:annotations_go_proto",
+        "@go_googleapis//google/api:annotations_go_proto",
     ],
 )
 
