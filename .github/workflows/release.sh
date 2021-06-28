@@ -8,11 +8,11 @@ declare -a services=(
   "crossrefs"
   "grbac"
   "hub"
+  "image"
   "knowledge"
   "tracker"
   "webcache"
   # "iam"
-  # "image"
   # "vision"
 )
 
