@@ -20,14 +20,14 @@ option ruby_package = "Animeshon::Image::v1Alpha1";
 service Image {
   option (google.api.default_host) = "image.animeapis.com";
 
-  rpc UploadImage(UploadImageRequest) returns (google.protobuf.Empty) {
+  rpc UploadImage(UploadImageRequest) returns (UploadImageResponse) {
     option (google.api.http) = {
       post: "/v1alpha1/image:upload"
       body: "*"
     };
   }
 
-  rpc ImportImage(ImportImageRequest) returns (google.protobuf.Empty) {
+  rpc ImportImage(ImportImageRequest) returns (ImportImageResponse) {
     option (google.api.http) = {
       post: "/v1alpha1/image:import"
       body: "*"
@@ -104,6 +104,11 @@ message UploadImageRequest {
   string scope = 2;
 }
 
+message UploadImageResponse {
+  // The image resource name.
+  string name = 1;
+}
+
 message ImportImageRequest {
   // The WebCache options to be used when importing an image from a public
   // website address.
@@ -134,4 +139,9 @@ message ImportImageRequest {
 
   // The web cache options to apply to the import request.
   WebCacheOptions cache_options = 3;
+}
+
+message ImportImageResponse {
+  // The image resource name.
+  string name = 1;
 }
