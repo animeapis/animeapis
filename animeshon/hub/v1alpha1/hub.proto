@@ -24,14 +24,14 @@ service Git {
   rpc ReceivePack(ReceivePackRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=*/*}/git-receive-pack"
-      body: "http.body"
+      body: "*"
     };
   }
 
   rpc UploadPack(UploadPackRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=*/*}/git-upload-pack"
-      body: "http.body"
+      body: "*"
     };
   }
 }
@@ -63,21 +63,13 @@ message AdvertiseReferencesRequest {
 }
 
 message ReceivePackRequest {
-  message Http {
-    google.api.HttpBody body = 1;
-  }
-
   string name = 1;
-  Http http = 2;
+  google.api.HttpBody body = 2;
 }
 
 message UploadPackRequest {
-  message Http {
-    google.api.HttpBody body = 1;
-  }
-
   string name = 1;
-  Http http = 2;
+  google.api.HttpBody body = 2;
 }
 
 message CreateRepositoryRequest {
