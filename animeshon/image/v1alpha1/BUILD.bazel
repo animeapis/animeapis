@@ -22,6 +22,7 @@ proto_library(
         "@com_google_googleapis//google/api:annotations_proto",
         "@com_google_googleapis//google/api:client_proto",
         "@com_google_googleapis//google/api:field_behavior_proto",
+        "@com_google_googleapis//google/api:httpbody_proto",
         "@com_google_googleapis//google/api:resource_proto",
         "@com_google_googleapis//google/longrunning:operations_proto",
         "@com_google_protobuf//:empty_proto",
@@ -48,6 +49,7 @@ go_proto_library(
     protos = [":image_proto"],
     deps = [
         "@go_googleapis//google/api:annotations_go_proto",
+        "@go_googleapis//google/api:httpbody_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
     ],
 )
@@ -61,9 +63,10 @@ go_gapic_library(
     metadata = True,
     deps = [
         ":image_go_proto",
-        "@go_googleapis//google/longrunning:longrunning_go_proto",
         "@com_google_cloud_go//longrunning:go_default_library",
         "@com_google_cloud_go//longrunning/autogen:go_default_library",
+        "@go_googleapis//google/api:httpbody_go_proto",
+        "@go_googleapis//google/longrunning:longrunning_go_proto",
     ],
 )
 

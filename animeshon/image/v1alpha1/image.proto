@@ -3,6 +3,7 @@ syntax = "proto3";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
+import "google/api/httpbody.proto";
 import "google/api/resource.proto";
 import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
@@ -18,4 +19,119 @@ option ruby_package = "Animeshon::Image::v1Alpha1";
 
 service Image {
   option (google.api.default_host) = "image.animeapis.com";
+
+  rpc UploadImage(UploadImageRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/image:upload"
+      body: "*"
+    };
+  }
+
+  rpc ImportImage(ImportImageRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/image:import"
+      body: "*"
+    };
+  }
+
+  rpc GetImage(GetImageRequest) returns (google.api.HttpBody) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=scopes/*/images/*}"
+    };
+  }
+
+  rpc GetCdnImage(GetImageRequest) returns (google.api.HttpBody) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=subdomains/*/parameters/**}"
+    };
+  }
+}
+
+// This is a private internal structure used to store metadata information
+// about a specific image file. This structure is never exposed to the public.
+message ImageFile {
+  // The resource id of the image.
+  string id = 1;
+
+  // The scope id of the image.
+  string scope = 2;
+
+  // The owner of the image.
+  string owner = 3;
+
+  // The uri of the image file.
+  string uri = 4;
+}
+
+message GetImageRequest {
+  // The image resize bounds.
+  message ResizeBounds {
+    // The image width.
+    int32 width = 1;
+  
+    // The image height.
+    int32 height = 2;
+  }
+
+  // The image resource name.
+  string name = 1;
+  
+  // If content type is set and differs from the original content type the image
+  // will be converted to match the specified content type.
+  //
+  // Note: only "image/png", "image/webp", "image/jpeg" are supported values.
+  string content_type = 2;
+
+  // The image bounding box to use for resizing. This value is normally used
+  // to request image thumbnails. If both width and height are defined then the
+  // value with smaller ratio will be used to resize the image. The resized
+  // image has the closest standard ratio to the requested width or height.
+  // If the requested ratio is larger than the original image it is ignored.
+  ResizeBounds resize = 3;
+
+  // If include sensitive is set to true then images that contains racy, adult,
+  // violent or medical content will be returned, otherwise a "not found" error
+  // will be returned instead.
+  bool include_sensitive = 4;
+}
+
+message UploadImageRequest {
+  // Image content, represented as an HttpBody.
+  google.api.HttpBody body = 1;
+
+  // The image scope that determines where the image will be stored and whether
+  // the image will be indexed in the search engine.
+  string scope = 2;
+}
+
+message ImportImageRequest {
+  // The WebCache options to be used when importing an image from a public
+  // website address.
+  message WebCacheOptions {
+    // If refresh is set to true the image is imported from the remote address
+    // regardless of an existing local cache, if the fetched image does not
+    // match the existing cache the new image is stored and a new resource is
+    // created, otherwise the existing (cached) resource is returned.
+    bool refresh = 1;
+  
+    // If ignore is set to true no cache lookup is performed and the image is
+    // imported into a new resource. If both "ignore" and "refresh" are set to
+    // true then "refresh" has no effect.
+    bool ignore = 2;
+  }
+  
+  // A publicly-accessible image HTTP/HTTPS URL. When fetching images from
+  // HTTP/HTTPS URLs, Animeshon cannot guarantee that the request will be
+  // completed. Your request may fail if the specified host denies the
+  // request (e.g. due to request throttling or DoS prevention), or if
+  // Animeshon throttles requests to the site for abuse prevention. You should
+  // not depend on externally-hosted images for production applications.
+  string uri = 1;
+
+  // The image scope that determines where the image will be stored and whether
+  // the image will be indexed in the search engine.
+  string scope = 2;
+
+  // The web cache options to apply to the import request.
+  WebCacheOptions cache_options = 3;
 }
