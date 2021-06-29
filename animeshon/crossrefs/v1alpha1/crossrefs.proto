@@ -26,7 +26,7 @@ service Referrer {
   // GetCrossRef returns a crossref.
   rpc GetCrossRef(GetCrossRefRequest) returns (CrossRef) {
     option (google.api.http) = {
-      get: "/v1alpha1/crossrefs/{name=**}"
+      get: "/v1alpha1/crossrefs/{name=kinds/*/crossrefs/*}"
     };
   }
 
@@ -40,7 +40,7 @@ service Referrer {
 
   rpc UpdateCrossRef(UpdateCrossRefRequest) returns (UpdateCrossRefResponse) {
     option (google.api.http) = {
-      patch: "/v1alpha1/crossrefs/{crossref.name=**}"
+      patch: "/v1alpha1/crossrefs/{crossref.name=kinds/*/crossrefs/*}"
       body: "*"
     };
   }
@@ -152,7 +152,7 @@ service Referrer {
 
   rpc GetWormhole(GetWormholeRequest) returns (Wormhole) {
     option (google.api.http) = {
-      get: "/v1alpha1/wormhole/{name=**}"
+    get: "/v1alpha1/wormhole/{name=namespaces/*/*/*}"
     };
   }
 }
@@ -180,9 +180,7 @@ message AnalyzeCrossRefRequest {
 message CrossRef {
   option (google.api.resource) = {
     type: "crossrefs.animeapis.com/CrossRef"
-    // TODO fix names
-    //pattern: "crossrefs/{crossref}"
-    pattern: "{crossref}"
+    pattern: "kinds/{kind}/crossrefs/{crossref}"
   };
 
   // The resource name of the crossref.
@@ -394,7 +392,7 @@ message GetWormholeRequest {
 message Wormhole {
   option (google.api.resource) = {
     type: "crossrefs.animeapis.com/Wormhole"
-    pattern: "{wormhole}"
+    pattern: "namespaces/{namespace}/{kind}/{id}"
   };
 
   message Text {
