@@ -21,33 +21,33 @@ service TrackerService {
 
   rpc CreateTracker(CreateTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
-      post: "/v1alpha1/trackers"
+      post: "/v1alpha1/{parent=users/*}/trackers"
       body: "*"
     };
   }
 
   rpc ListTrackers(ListTrackersRequest) returns (ListTrackersResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/trackers"
+      get: "/v1alpha1/{parent=users/*}/trackers"
     };
   }
 
   rpc GetTracker(GetTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=trackers/*}"
+      get: "/v1alpha1/{name=users/*/trackers/*}"
     };
   }
   
   rpc UpdateTracker(UpdateTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{tracker.name=trackers/*}"
+      patch: "/v1alpha1/{tracker.name=users/*/trackers/*}"
       body: "*"
     };
   }
 
   rpc DeleteTracker(DeleteTrackerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=trackers/*}"
+      delete: "/v1alpha1/{name=users/*/trackers/*}"
       body: "*"
     };
   }
@@ -70,14 +70,42 @@ message Tracker {
   // The id of the tracker.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The User this tracker belongs to.
-  string owner_id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
-
   // The content whose progress is being tracked.
-  string item_id = 3 [(google.api.field_behavior) = REQUIRED];
+  int64 item_id = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The items that belong to the content, if any.
-  repeated string subitem_ids = 4;
+  repeated int64 subitem_ids = 3;
+
+  // When the progress started.
+  google.protobuf.Timestamp start_time = 4;
+
+  // When the progress ended.
+  google.protobuf.Timestamp end_time = 5;
+
+  // The percentage of progress from 1 to 100.
+  float progress_percentage = 6;
+
+  // The progress state of the tracker.
+  State state = 7;
+}
+
+// This is a private internal structure used to store metadata information
+// about a specific Tracker. This structure is never exposed to the public.
+message TrackerEntry {
+  // The tracker resource id.
+  int64 id = 1;
+
+  // A reference to a parent resource.
+  oneof parent {
+    // The user resource id. Example: `users/789`.
+    int64 user_id = 2;
+  }
+
+  // The content whose progress is being tracked.
+  int64 item_id = 3;
+
+  // The items that belong to the content, if any.
+  repeated int64 subitem_ids = 4;
 
   // When the progress started.
   google.protobuf.Timestamp start_time = 5;
@@ -90,10 +118,20 @@ message Tracker {
 
   // The progress state of the tracker.
   State state = 8;
+
+  // When the tracker was created.
+  google.protobuf.Timestamp create_time = 5;
+
+  // When the tracker was last updated.
+  google.protobuf.Timestamp update_time = 6;
 }
 
 message CreateTrackerRequest {
-  Tracker tracker = 1 [(google.api.field_behavior) = REQUIRED];
+  // The user this tracker belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The tracker to create.
+  Tracker tracker = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ListTrackersRequest {
