@@ -120,10 +120,10 @@ message TrackerEntry {
   State state = 8;
 
   // When the tracker was created.
-  google.protobuf.Timestamp create_time = 5;
+  google.protobuf.Timestamp create_time = 9;
 
   // When the tracker was last updated.
-  google.protobuf.Timestamp update_time = 6;
+  google.protobuf.Timestamp update_time = 10;
 }
 
 message CreateTrackerRequest {
@@ -135,14 +135,17 @@ message CreateTrackerRequest {
 }
 
 message ListTrackersRequest {
+  // The user this tracker belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
   // If unspecified, server will pick an appropriate default.
-  int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 page_size = 2;
 
   // The value returned from the previous call.
-  string page_token = 2;
+  string page_token = 3;
 
   // A filter to be applied to results.
-  string filter = 3;
+  string filter = 4;
 }
 
 message ListTrackersResponse {
