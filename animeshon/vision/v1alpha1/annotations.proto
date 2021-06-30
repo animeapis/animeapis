@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package animeshon.vision.v1alpha1;
+
+import "google/api/annotations.proto";
+import "google/cloud/vision/v1/geometry.proto";
+
+option go_package = "github.com/animeapis/go-genproto/vision/v1alpha1;vision";
+option java_package = "com.animeshon.vision.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Vision::v1Alpha1";
+
+message ImageAnnotations {
+  // The texts detected in the image.
+  repeated TextAnnotation text_annotations = 1;
+
+  // The labels detected in the image.
+  repeated LabelAnnotation label_annotations = 2;
+
+  // The entites detected in the image.
+  repeated EntityAnnotation entity_annotations = 3;
+
+  // The Animeshon Graph Knowledge-Base resources detected in the image.
+  repeated KnowledgeGraphAnnotation knowledge_graph_annotations = 4;
+
+  // The WebSearch resources (pages and images) detected in the image.
+  repeated WebSearchAnnotation web_search_annotations = 5;
+
+  // The SafeSearch ratings detected in the image.
+  repeated SafeSearchAnnotation safe_search_annotations = 6;
+}
+
+message TextAnnotation {
+  // Detected language for a structural component.
+  message Language {
+    // The BCP-47 language code, such as "en-US" or "sr-Latn".
+    string language_code = 1;
+
+    // Confidence of detected language. Range [0, 1].
+    float confidence = 2;
+  }
+
+  // Additional information detected on the structural component.
+  message TextProperty {
+    // A list of detected languages together with confidence.
+    repeated Language languages = 1;
+  }
+
+  // Additional information detected for the paragraph.
+  TextProperty property = 1;
+
+  // The bounding box for the paragraph.
+  google.cloud.vision.v1.BoundingPoly bounding_box = 2;
+
+  // UTF-8 text detected by the OCR.
+  repeated string texts = 3;
+
+  // Confidence of the OCR results for the paragraph. Range [0, 1].
+  float confidence = 4;
+}
+
+message LabelAnnotation {
+  // The label resource name.
+  string name = 1;
+
+  // Overall score of the result. Range [0, 1].
+  float score = 2;
+
+  // The relevancy of the annotation. Range [0, 1].
+  float topicality = 3;
+}
+
+message EntityAnnotation {
+  // The entity resource name.
+  string name = 1;
+
+  // Overall score of the result. Range [0, 1].
+  float score = 4;
+
+  // Image region to which this entity belongs.
+  google.cloud.vision.v1.BoundingPoly bounding_box = 7;
+}
+
+message KnowledgeGraphAnnotation {
+  // The Animeshon Graph Knowledge-Base resource name.
+  string resource = 1;
+
+  // Overall score of the result. Range [0, 1].
+  float score = 2;
+
+  // Image region to which this entity belongs.
+  google.cloud.vision.v1.BoundingPoly bounding_box = 3;
+}
+
+message WebSearchAnnotation {
+  // The result image URL.
+  string url = 1;
+
+  // Overall relevancy score for the image.
+  float score = 2;
+}
+
+// A bucketized representation of likelihood, which is intended to give clients
+// highly stable results across model upgrades.
+enum Likelihood {
+  // Unknown likelihood.
+  UNKNOWN = 0;
+
+  // It is very unlikely.
+  VERY_UNLIKELY = 1;
+
+  // It is unlikely.
+  UNLIKELY = 2;
+
+  // It is possible.
+  POSSIBLE = 3;
+
+  // It is likely.
+  LIKELY = 4;
+
+  // It is very likely.
+  VERY_LIKELY = 5;
+}
+
+message SafeSearchAnnotation {
+  // Represents the adult content likelihood for the image. Adult content may
+  // contain elements such as nudity, pornographic images or cartoons, or
+  // sexual activities.
+  Likelihood adult = 1;
+
+  // Likelihood that the request image contains racy content. Racy content may
+  // include (but is not limited to) skimpy or sheer clothing, strategically
+  // covered nudity, lewd or provocative poses, or close-ups of sensitive
+  // body areas.
+  Likelihood racy = 2;
+
+  // Likelihood that this image contains violent content.
+  Likelihood violence = 3;
+
+  // Likelihood that this is a medical image.
+  Likelihood medical = 4;
+
+  // Likelihood that the request image contains one or more individuals
+  // decipted as juveniles. Juvenile content may contain elements such as
+  // school-aged children, preschoolers, toddlers, infants, and newborns.
+  // The target age considered as juvenile is from 0 to 14~16 years old.
+  Likelihood juvenile = 5;
+}

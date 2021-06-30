@@ -16,6 +16,8 @@ exports_files(glob(["*.json"]))
 proto_library(
     name = "vision_proto",
     srcs = [
+        "annotations.proto",
+        "properties.proto",
         "vision.proto",
     ],
     deps = [
@@ -24,6 +26,8 @@ proto_library(
         "@com_google_googleapis//google/api:field_behavior_proto",
         "@com_google_googleapis//google/api:resource_proto",
         "@com_google_googleapis//google/longrunning:operations_proto",
+        "@com_google_googleapis//google/cloud/vision/v1:vision_proto",
+        "@com_google_googleapis//google/type:color_proto",
         "@com_google_protobuf//:empty_proto",
         "@com_google_protobuf//:field_mask_proto",
         "@com_google_protobuf//:timestamp_proto",
@@ -48,7 +52,9 @@ go_proto_library(
     protos = [":vision_proto"],
     deps = [
         "@go_googleapis//google/api:annotations_go_proto",
+        "@go_googleapis//google/cloud/vision/v1:vision_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
+        "@go_googleapis//google/type:color_go_proto",
     ],
 )
 

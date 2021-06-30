@@ -11,9 +11,9 @@ declare -a services=(
   "image"
   "knowledge"
   "tracker"
+  "vision"
   "webcache"
   # "iam"
-  # "vision"
 )
 
 for i in "${services[@]}"
