@@ -24,14 +24,6 @@ service Image {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=galleries/*}/images:upload"
       body: "*"
-      additional_bindings {
-        post: "/v1alpha1/{parent=users/*}/images:upload"
-        body: "*"
-      }
-      additional_bindings {
-        post: "/v1alpha1/{parent=organizations/*}/images:upload"
-        body: "*"
-      }
     };
   }
 
@@ -39,45 +31,27 @@ service Image {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=galleries/*}/images:import"
       body: "*"
-      additional_bindings {
-        post: "/v1alpha1/{parent=users/*}/images:import"
-        body: "*"
-      }
-      additional_bindings {
-        post: "/v1alpha1/{parent=organizations/*}/images:import"
-        body: "*"
-      }
     };
   }
 
   rpc GetImage(GetImageRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=galleries/*/images/*}"
-      additional_bindings {
-        get: "/v1alpha1/{name=users/*/images/*}"
-      }
-      additional_bindings {
-        get: "/v1alpha1/{name=organizations/*/images/*}"
-      }
     };
   }
 
-  rpc GetCdnImage(GetImageRequest) returns (google.api.HttpBody) {
+  rpc GetCdnImage(GetCdnImageRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=hosts/*/parameters/**}"
+      get: "/v1alpha1/{get=subdomains/*/parameters/**}"
     };
   }
 
   rpc CreateGallery(CreateGalleryRequest) returns (Gallery) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=galleries/*}"
+      post: "/v1alpha1/{parent=users/*}/galleries"
       body: "*"
       additional_bindings {
-        post: "/v1alpha1/{name=users/*/galleries/*}"
-        body: "*"
-      }
-      additional_bindings {
-        post: "/v1alpha1/{name=organizations/*/galleries/*}"
+        post: "/v1alpha1/{parent=organizations/*}/galleries"
         body: "*"
       }
     };
@@ -85,10 +59,7 @@ service Image {
 
   rpc DeleteGallery(DeleteGalleryRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=galleries/*}"
-      additional_bindings {
-        delete: "/v1alpha1/{name=users/*/galleries/*}"
-      }
+      delete: "/v1alpha1/{name=users/*/galleries/*}"
       additional_bindings {
         delete: "/v1alpha1/{name=organizations/*/galleries/*}"
       }
@@ -101,21 +72,21 @@ message Gallery {
 }
 
 // This is a private internal structure used to store metadata information
-// about a specific image file. This structure is never exposed to the public.
-message ImageRecord {
+// about a specific Image. This structure is never exposed to the public.
+message ImageEntry {
   // The image resource id.
   int64 id = 1;
 
   // A reference to a parent resource.
   oneof parent {
     // The gallery resource id. Example: `galleries/123`.
-    int64 gallery = 2;
+    int64 gallery_id = 2;
 
     // The organization resource id. Example: `organizations/456`.
-    int64 organization = 3;
+    int64 organization_id = 3;
 
     // The user resource id. Example: `users/789`.
-    int64 user = 4;
+    int64 user_id = 4;
   }
 
   // The uri of the image file.
@@ -124,22 +95,19 @@ message ImageRecord {
 }
 
 // This is a private internal structure used to store metadata information
-// about a specific gallery file. This structure is never exposed to the public.
-message GalleryRecord {
+// about a specific Gallery. This structure is never exposed to the public.
+message GalleryEntry {
   // The gallery resource id.
   int64 id = 1;
 
   // A reference to a parent resource.
   oneof parent {
     // The organization resource id. Example: `organizations/456`.
-    int64 organization = 2;
+    int64 organization_id = 2;
 
     // The user resource id. Example: `users/789`.
-    int64 user = 3;
+    int64 user_id = 3;
   }
-
-  // The database partition responsible for storing the images.
-  int32 partition_index = 4;
 
   // Whether images should be available through the image search.
   bool enable_search_discovery = 6;
@@ -148,40 +116,8 @@ message GalleryRecord {
   bool enable_client_encryption = 7;
 }
 
-message GetImageRequest {
-  // The image resize bounds.
-  message ResizeBounds {
-    // The image width.
-    int32 width = 1;
-  
-    // The image height.
-    int32 height = 2;
-  }
-
-  // The image resource name.
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  
-  // If content type is set and differs from the original content type the image
-  // will be converted to match the specified content type.
-  //
-  // Note: only "image/png", "image/webp", "image/jpeg" are supported values.
-  string content_type = 2 [(google.api.field_behavior) = OPTIONAL];
-
-  // The image bounding box to use for resizing. This value is normally used
-  // to request image thumbnails. If both width and height are defined then the
-  // value with smaller ratio will be used to resize the image. The resized
-  // image has the closest standard ratio to the requested width or height.
-  // If the requested ratio is larger than the original image it is ignored.
-  ResizeBounds resize = 3 [(google.api.field_behavior) = OPTIONAL];
-
-  // If require sensitive is set to true then images that contains only racy,
-  // adult, violent or medical content will be returned, otherwise a "not found"
-  // error will be returned instead.
-  bool require_sensitive = 4 [(google.api.field_behavior) = OPTIONAL];
-}
-
 message UploadImageRequest {
-  // Image content, represented as an HttpBody.
+  // The image content, represented as an HttpBody.
   google.api.HttpBody body = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The image parent of the image. This value defaults to the user performing
@@ -231,10 +167,47 @@ message ImportImageResponse {
   string name = 1;
 }
 
+message GetImageRequest {
+  // The image resize bounds.
+  message ResizeBounds {
+    // The image width.
+    int32 width = 1;
+  
+    // The image height.
+    int32 height = 2;
+  }
+
+  // The image resource name.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  
+  // If content type is set and differs from the original content type the image
+  // will be converted to match the specified content type.
+  //
+  // Note: only "image/png", "image/webp", "image/jpeg" are supported values.
+  string content_type = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // The image bounding box to use for resizing. This value is normally used
+  // to request image thumbnails. If both width and height are defined then the
+  // value with smaller ratio will be used to resize the image. The resized
+  // image has the closest standard ratio to the requested width or height.
+  // If the requested ratio is larger than the original image it is ignored.
+  ResizeBounds resize = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // If require sensitive is set to true then images that contains only racy,
+  // adult, violent or medical content will be returned, otherwise a "not found"
+  // error will be returned instead.
+  bool require_sensitive = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message GetCdnImageRequest {
+  // Get contains an opaque path that must be parsed and validated server-side.
+  string get = 1;
+}
+
 message CreateGalleryRequest {
-  string name = 1;
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteGalleryRequest {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
