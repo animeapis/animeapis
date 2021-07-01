@@ -35,14 +35,14 @@ service Knowledge {
     };
   }
 
-  rpc ApproveContribution(ApproveContributionRequest) returns (google.protobuf.Empty) {
+  rpc ApproveContribution(ApproveContributionRequest) returns (Contribution) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=contributions/*}:approve"
       body: "*"
     };
   }
 
-  rpc RejectContribution(RejectContributionRequest) returns (google.protobuf.Empty) {
+  rpc RejectContribution(RejectContributionRequest) returns (Contribution) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=contributions/*}:reject"
       body: "*"
@@ -56,7 +56,7 @@ message Contribution {
     pattern: "contributions/{contribution}"
   };
 
-  // The resource name of the universe.
+  // The resource name of the contribution.
   string name = 1;
 }
 
