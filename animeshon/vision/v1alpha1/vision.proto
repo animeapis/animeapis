@@ -101,12 +101,8 @@ message ImageReport {
   // The annotations of the image.
   ImageAnnotations annotations = 7;
 
-  // The timestamp at which the image was created.
+  // The timestamp at which the report was created.
   google.protobuf.Timestamp create_time = 8
-      [(google.api.field_behavior) = OUTPUT_ONLY];
-
-  // The latest timestamp at which the image was updated.
-  google.protobuf.Timestamp update_time = 9
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
