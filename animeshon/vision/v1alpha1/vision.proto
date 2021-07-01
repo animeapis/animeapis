@@ -18,7 +18,7 @@ option java_package = "com.animeshon.vision.v1alpha1";
 option java_multiple_files = true;
 option ruby_package = "Animeshon::Vision::v1Alpha1";
 
-service Vision {
+service ImageAnnotator {
   option (google.api.default_host) = "vision.animeapis.com";
 
   rpc CreateImageReport(CreateImageReportRequest) returns (ImageReport) {
