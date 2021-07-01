@@ -92,54 +92,6 @@ message Gallery {
   string name = 1;
 }
 
-// This is a private internal structure used to store metadata information
-// about a specific Image. This structure is never exposed to the public.
-message ImageEntry {
-  // The image resource id.
-  int64 id = 1;
-
-  // A reference to a parent resource.
-  oneof parent {
-    // The gallery resource id. Example: `galleries/123`.
-    int64 gallery_id = 2;
-
-    // The organization resource id. Example: `organizations/456`.
-    int64 organization_id = 3;
-
-    // The user resource id. Example: `users/789`.
-    int64 user_id = 4;
-  }
-
-  // The uri of the image file.
-  // Example: gs://my-bucket/my-folder/my-image.jpeg
-  string uri = 5;
-}
-
-// This is a private internal structure used to store metadata information
-// about a specific Gallery. This structure is never exposed to the public.
-message GalleryEntry {
-  // The gallery resource id.
-  int64 id = 1;
-
-  // A reference to a parent resource.
-  oneof parent {
-    // The organization resource id. Example: `organizations/456`.
-    int64 organization_id = 2;
-
-    // The user resource id. Example: `users/789`.
-    int64 user_id = 3;
-  }
-
-  // Whether the gallery is system managed.
-  bool system_managed = 4;
-
-  // Whether images should be available through the image search.
-  bool enable_search_discovery = 5;
-
-  // Whether images should be client-side encrypted.
-  bool enable_client_encryption = 6;
-}
-
 message UploadImageRequest {
   // The image content, represented as an HttpBody.
   google.api.HttpBody body = 1 [(google.api.field_behavior) = REQUIRED];

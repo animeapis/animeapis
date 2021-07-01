@@ -17,6 +17,7 @@ proto_library(
     name = "image_proto",
     srcs = [
         "image.proto",
+        "internal.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",
