@@ -20,27 +20,28 @@ option ruby_package = "Animeshon::GRBAC::v1Alpha1";
 service AccessControl {
   option (google.api.default_host) = "127.0.0.1:9080";
 
-  // Authorize returns whether a subject is allowed it perform an action on an
-  // object. If allowed the response will be OK (200), otherwise the response
-  // will be Unauthorized (403).
-  rpc Authorize(AuthorizeRequest) returns (google.protobuf.Empty) {
+  // Checks whether a member has a specific permission for a specific resource.
+  // If not allowed an Unauthorized (403) error will be returned.
+  rpc TestIamPolicy(TestIamPolicyRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1alpha1/authorize"
+      post: "/v1alpha1/iam:testIamPolicy"
       body: "*"
     };
   }
 
   // Gets the IAM policy that is attached to a generic resource.
+  // Note: the full resource name that identifies the resource must be provided.
   rpc GetIamPolicy(google.iam.v1.GetIamPolicyRequest) returns (google.iam.v1.Policy) {
     option (google.api.http) = {
-      post: "/v1/{resource=resources/**}:getIamPolicy"
+      post: "/v1alpha1/iam:getIamPolicy"
     };
   }
 
   // Sets the IAM policy that is attached to a generic resource.
+  // Note: the full resource name that identifies the resource must be provided.
   rpc SetIamPolicy(google.iam.v1.SetIamPolicyRequest) returns (google.iam.v1.Policy) {
     option (google.api.http) = {
-      post: "/v1/{resource=resources/**}:setIamPolicy"
+      post: "/v1alpha1/iam:setIamPolicy"
       body: "*"
     };
   }
@@ -48,14 +49,14 @@ service AccessControl {
   // GetResource returns a resource.
   rpc GetResource(GetResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=resources/**}"
+      get: "/v1alpha1/{service=services/*}/resources/{name=**}"
     };
   }
 
   // CreateResource creates a new resource.
   rpc CreateResource(CreateResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      post: "/v1alpha1/resources"
+      post: "/v1alpha1/{resource.service=services/*}/resources/{resource.name=**}"
       body: "*"
     };
   }
@@ -63,7 +64,7 @@ service AccessControl {
   // UpdateResource updates a resource with a field mask.
   rpc UpdateResource(UpdateResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{resource.name=resources/**}"
+      patch: "/v1alpha1/{resource.service=services/*}/resources/{resource.name=**}"
       body: "*"
     };
   }
@@ -71,18 +72,32 @@ service AccessControl {
   // DeleteResource deletes a resource.
   rpc DeleteResource(DeleteResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=resources/**}"
+      delete: "/v1alpha1/{service=services/*}/resources/{name=**}"
+    };
+  }
+
+  // CreateService creates a new service.
+  rpc CreateService(CreateServiceRequest) returns (Service) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{service.name=services/*}"
       body: "*"
+    };
+  }
+
+  // DeleteService deletes a service.
+  rpc DeleteService(DeleteServiceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=services/*}"
     };
   }
 
   // CreateSubject creates a new subject.
   rpc CreateSubject(CreateSubjectRequest) returns (Subject) {
     option (google.api.http) = {
-      post: "/v1alpha1/users"
+      post: "/v1alpha1/{subject.name=users/*}"
       body: "*"
       additional_bindings {
-        patch: "/v1alpha1/serviceAccounts"
+        patch: "/v1alpha1/{subject.name=serviceAccounts/*}"
         body: "*"
       }
     };
@@ -92,10 +107,8 @@ service AccessControl {
   rpc DeleteSubject(DeleteSubjectRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*}"
-      body: "*"
       additional_bindings {
-        patch: "/v1alpha1/{name=serviceAccounts/*}"
-        body: "*"
+        delete: "/v1alpha1/{name=serviceAccounts/*}"
       }
     };
   }
@@ -110,7 +123,7 @@ service AccessControl {
   // CreateGroup creates a new group.
   rpc CreateGroup(CreateGroupRequest) returns (Group) {
     option (google.api.http) = {
-      post: "/v1alpha1/groups"
+      post: "/v1alpha1/{group.name=groups/*}"
       body: "*"
     };
   }
@@ -143,14 +156,13 @@ service AccessControl {
   rpc DeleteGroup(DeleteGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=groups/*}"
-      body: "*"
     };
   }
 
   // CreatePermission creates a new permission.
   rpc CreatePermission(CreatePermissionRequest) returns (Permission) {
     option (google.api.http) = {
-      post: "/v1alpha1/permissions"
+      post: "/v1alpha1/{permission.name=permissions/*}"
       body: "*"
     };
   }
@@ -159,7 +171,6 @@ service AccessControl {
   rpc DeletePermission(DeletePermissionRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=permissions/*}"
-      body: "*"
     };
   }
 
@@ -173,7 +184,7 @@ service AccessControl {
   // CreateRole creates a new role.
   rpc CreateRole(CreateRoleRequest) returns (Role) {
     option (google.api.http) = {
-      post: "/v1alpha1/roles"
+      post: "/v1alpha1/{role.name=roles/*}"
       body: "*"
     };
   }
@@ -190,52 +201,100 @@ service AccessControl {
   rpc DeleteRole(DeleteRoleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=roles/*}"
-      body: "*"
     };
   }
 }
 
-message AuthorizeRequest {
-  string subject = 1 [(google.api.field_behavior) = REQUIRED];
-  string relation = 2 [(google.api.field_behavior) = REQUIRED];
-  string object = 3 [(google.api.field_behavior) = REQUIRED];
+// Information about the member, resource, and permission to check.
+message AccessTuple {
+  // The member, or principal, whose access you want to check.
+  string principal = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The full resource name that identifies the resource.
+  string full_resource_name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The IAM permission to check for the specified member and resource.
+  string permission = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Resource {
-  string name = 1;
-  string parent = 2;
-  bytes etag = 3;
+  // The resource name that identifies the resource.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The API service name the resource belongs to.
+  string service = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The full resource name that identifies the parent resource.
+  string parent = 3;
+
+  // An etag for concurrency control, ignored during creation.
+  bytes etag = 4;
+}
+
+message Service {
+  // The API service name.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Subject {
-  string name = 1;
+  // The resource name of the subject.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Group {
-  string name = 1;
+  // The resource name of the group.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of members of the group. Groups might include other groups.
   repeated string members = 2;
+
+  // An etag for concurrency control, ignored during creation.
   bytes etag = 3;
 }
 
 message Permission {
-  string name = 1;
+  // The resource name of the permission.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Role {
-  string name = 1;
+  // The resource name of the role.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of permissions granted by the role.
   repeated string permissions = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // An etag for concurrency control, ignored during creation.
   bytes etag = 3;
 }
 
+message TestIamPolicyRequest {
+  // The information to use for checking whether a member has a permission for a
+  // resource.
+  AccessTuple access_tuple = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
 message GetResourceRequest {
-  string name = 1;
+  // The name of the resource to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "*" }
+  ];
+
+  // The API service name the resource belongs to.
+  string service = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Service" }
+  ];
 }
 
 message CreateResourceRequest {
+  // The resource to create.
   Resource resource = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateResourceRequest {
+  // The resource to update.
   Resource resource = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The field mask to determine which fields are to be updated. If empty, the
@@ -244,26 +303,60 @@ message UpdateResourceRequest {
 }
 
 message DeleteResourceRequest {
-  string name = 1;
+  // The resource name that identifies the resource.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "*" }
+  ];
+
+  // The API service name the resource belongs to.
+  string service = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Service" }
+  ];
+}
+
+message CreateServiceRequest {
+  // The service to create.
+  Service service = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteServiceRequest {
+  // The service to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Service" }
+  ];
 }
 
 message CreateSubjectRequest {
+  // The subject to create.
   Subject subject = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteSubjectRequest {
-  string name = 1;
+  // The subject to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Subject" }
+  ];
 }
 
 message GetGroupRequest {
-  string name = 1;
+  // The name of the group to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+  ];
 }
 
 message CreateGroupRequest {
+  // The group to create.
   Group group = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateGroupRequest {
+  // The group to update.
   Group group = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The field mask to determine which fields are to be updated. If empty, the
@@ -275,43 +368,66 @@ message AddGroupMemberRequest {
   // The name of the group to add a member to.
   string group = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "grbac.animeapis.com/Group"
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
   ];
 
-  string member = 2 [(google.api.field_behavior) = REQUIRED];
+  // The member to be added.
+  string member = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "*" }
+  ];
 }
 
 message RemoveGroupMemberRequest {
   // The name of the group to remove an member from.
   string group = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "grbac.animeapis.com/Group"
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
   ];
 
-  string member = 2 [(google.api.field_behavior) = REQUIRED];
+  // The member to be removed.
+  string member = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "*" }
+  ];
 }
 
 message DeleteGroupRequest {
-  string name = 1;
+  // The resource name of the group to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+  ];
 }
 
 message CreatePermissionRequest {
+  // The permission to create.
   Permission permission = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeletePermissionRequest {
-  string name = 1;
+  // The resource name of the permission to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Permission" }
+  ];
 }
 
 message GetRoleRequest {
-  string name = 1;
+  // The name of the role to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Role" }
+  ];
 }
 
 message CreateRoleRequest {
+  // The role to create.
   Role role = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateRoleRequest {
+  // The role to update.
   Role role = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The field mask to determine which fields are to be updated. If empty, the
@@ -320,5 +436,9 @@ message UpdateRoleRequest {
 }
 
 message DeleteRoleRequest {
-  string name = 1;
+  // The resource name of the role to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Role" }
+  ];
 }
