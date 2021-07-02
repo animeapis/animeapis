@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+import "animeshon/tracker/v1alpha1/tracker.proto";
+import "google/protobuf/timestamp.proto";
+
+package animeshon.tracker.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/tracker/v1alpha1;tracker";
+option java_package = "com.animeshon.tracker.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Tracker::v1Alpha1";
+
+// This is a private internal structure used to store metadata information
+// about a specific Tracker. This structure is never exposed to the public.
+message TrackerEntry {
+  // The tracker resource id.
+  int64 id = 1;
+
+  // A reference to a parent resource.
+  oneof parent {
+    // The user resource id. Example: `users/789`.
+    int64 user_id = 2;
+  }
+
+  // The content whose progress is being tracked.
+  int64 item_id = 3;
+
+  // The items that belong to the content, if any.
+  repeated int64 subitem_ids = 4;
+
+  // When the progress started.
+  google.protobuf.Timestamp start_time = 5;
+
+  // When the progress ended.
+  google.protobuf.Timestamp end_time = 6;
+
+  // The percentage of progress from 1 to 100.
+  float progress_percentage = 7;
+
+  // The progress state of the tracker.
+  State state = 8;
+
+  // When the tracker was created.
+  google.protobuf.Timestamp create_time = 9;
+
+  // When the tracker was last updated.
+  google.protobuf.Timestamp update_time = 10;
+}

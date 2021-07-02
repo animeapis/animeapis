@@ -17,6 +17,7 @@ proto_library(
     name = "tracker_proto",
     srcs = [
         "tracker.proto",
+        "internal.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",
