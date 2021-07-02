@@ -34,6 +34,7 @@ service ImageAnnotator {
     };
   }
 
+  // Note: to fetch the latest available report use "latest" as report id.
   rpc GetImageReport(GetImageReportRequest) returns (ImageReport) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=galleries/*/images/*/reports/*}"
