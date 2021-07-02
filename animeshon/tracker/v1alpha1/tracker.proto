@@ -19,6 +19,18 @@ option ruby_package = "Animeshon::Tracker::v1Alpha1";
 service TrackerService {
   option (google.api.default_host) = "tracker.animeapis.com";
 
+  rpc GetTracker(GetTrackerRequest) returns (Tracker) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/trackers/*}"
+    };
+  }
+  
+  rpc ListTrackers(ListTrackersRequest) returns (ListTrackersResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/trackers"
+    };
+  }
+
   rpc CreateTracker(CreateTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=users/*}/trackers"
@@ -26,18 +38,6 @@ service TrackerService {
     };
   }
 
-  rpc ListTrackers(ListTrackersRequest) returns (ListTrackersResponse) {
-    option (google.api.http) = {
-      get: "/v1alpha1/{parent=users/*}/trackers"
-    };
-  }
-
-  rpc GetTracker(GetTrackerRequest) returns (Tracker) {
-    option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/trackers/*}"
-    };
-  }
-  
   rpc UpdateTracker(UpdateTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
       patch: "/v1alpha1/{tracker.name=users/*/trackers/*}"
@@ -89,54 +89,20 @@ message Tracker {
   State state = 7;
 }
 
-// This is a private internal structure used to store metadata information
-// about a specific Tracker. This structure is never exposed to the public.
-message TrackerEntry {
-  // The tracker resource id.
-  int64 id = 1;
-
-  // A reference to a parent resource.
-  oneof parent {
-    // The user resource id. Example: `users/789`.
-    int64 user_id = 2;
-  }
-
-  // The content whose progress is being tracked.
-  int64 item_id = 3;
-
-  // The items that belong to the content, if any.
-  repeated int64 subitem_ids = 4;
-
-  // When the progress started.
-  google.protobuf.Timestamp start_time = 5;
-
-  // When the progress ended.
-  google.protobuf.Timestamp end_time = 6;
-
-  // The percentage of progress from 1 to 100.
-  float progress_percentage = 7;
-
-  // The progress state of the tracker.
-  State state = 8;
-
-  // When the tracker was created.
-  google.protobuf.Timestamp create_time = 9;
-
-  // When the tracker was last updated.
-  google.protobuf.Timestamp update_time = 10;
-}
-
-message CreateTrackerRequest {
-  // The user this tracker belongs to.
-  string parent = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // The tracker to create.
-  Tracker tracker = 2 [(google.api.field_behavior) = REQUIRED];
+message GetTrackerRequest {
+  // The name of the tracker to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Tracker" }
+  ];
 }
 
 message ListTrackersRequest {
   // The user this tracker belongs to.
-  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/User" }
+  ];
 
   // If unspecified, server will pick an appropriate default.
   int32 page_size = 2;
@@ -156,14 +122,23 @@ message ListTrackersResponse {
   string next_page_token = 2;
 }
 
-message GetTrackerRequest {
-  // The resource name of the requested tracker.
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
+message CreateTrackerRequest {
+  // The user this tracker belongs to.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/User" }
+  ];
+
+  // The tracker to create.
+  Tracker tracker = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Tracker" }
+  ];
 }
 
 message UpdateTrackerRequest {
   // The tracker to update.
-  Tracker tracker = 1;
+  Tracker tracker = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The field mask to determine which fields are to be updated. If empty, the
   // server will assume all fields are to be updated.
@@ -172,5 +147,8 @@ message UpdateTrackerRequest {
 
 message DeleteTrackerRequest {
   // The name of the tracker to delete.
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "grbac.animeapis.com/Tracker" }
+  ];
 }
