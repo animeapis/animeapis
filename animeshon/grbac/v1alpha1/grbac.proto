@@ -284,7 +284,9 @@ message GetResourceRequest {
   // The API service name the resource belongs to.
   string service = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Service" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Service"
+    }
   ];
 }
 
@@ -312,7 +314,9 @@ message DeleteResourceRequest {
   // The API service name the resource belongs to.
   string service = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Service" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Service"
+    }
   ];
 }
 
@@ -325,7 +329,9 @@ message DeleteServiceRequest {
   // The service to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Service" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Service"
+    }
   ];
 }
 
@@ -338,7 +344,9 @@ message DeleteSubjectRequest {
   // The subject to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Subject" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Subject"
+    }
   ];
 }
 
@@ -346,7 +354,9 @@ message GetGroupRequest {
   // The name of the group to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Group"
+    }
   ];
 }
 
@@ -368,7 +378,9 @@ message AddGroupMemberRequest {
   // The name of the group to add a member to.
   string group = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Group"
+    }
   ];
 
   // The member to be added.
@@ -382,7 +394,9 @@ message RemoveGroupMemberRequest {
   // The name of the group to remove an member from.
   string group = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Group"
+    }
   ];
 
   // The member to be removed.
@@ -396,7 +410,9 @@ message DeleteGroupRequest {
   // The resource name of the group to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Group"
+    }
   ];
 }
 
@@ -409,7 +425,9 @@ message DeletePermissionRequest {
   // The resource name of the permission to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Permission" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Permission"
+    }
   ];
 }
 
@@ -417,7 +435,9 @@ message GetRoleRequest {
   // The name of the role to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Role" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Role"
+    }
   ];
 }
 
@@ -439,6 +459,8 @@ message DeleteRoleRequest {
   // The resource name of the role to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Role" }
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Role"
+    }
   ];
 }

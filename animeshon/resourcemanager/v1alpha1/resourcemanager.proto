@@ -96,7 +96,9 @@ message GetOrganizationRequest {
   // The name of the organization to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Organization" }
+    (google.api.resource_reference) = {
+      type: "resourcemanager.animeapis.com/Organization"
+    }
   ];
 }
 
@@ -123,7 +125,9 @@ message CreateOrganizationRequest {
   // The organization to create.
   Organization organization = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Organization" }
+    (google.api.resource_reference) = {
+      type: "resourcemanager.animeapis.com/Organization"
+    }
   ];
 }
 
@@ -140,7 +144,9 @@ message DeleteOrganizationRequest {
   // The name of the organization to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Organization" }
+    (google.api.resource_reference) = {
+      type: "resourcemanager.animeapis.com/Organization"
+    }
   ];
 }
 
@@ -148,7 +154,9 @@ message GetTeamRequest {
   // The name of the team to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Team" }
+    (google.api.resource_reference) = {
+      type: "resourcemanager.animeapis.com/Team"
+    }
   ];
 }
 
@@ -175,7 +183,9 @@ message CreateTeamRequest {
   // The team to create.
   Team team = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Team" }
+    (google.api.resource_reference) = {
+      type: "resourcemanager.animeapis.com/Team"
+    }
   ];
 }
 
@@ -192,6 +202,8 @@ message DeleteTeamRequest {
   // The name of the team to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Team" }
+    (google.api.resource_reference) = {
+      type: "resourcemanager.animeapis.com/Team"
+    }
   ];
 }

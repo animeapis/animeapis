@@ -96,7 +96,9 @@ message GetUserRequest {
   // The name of the user to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/User" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
   ];
 }
 
@@ -123,7 +125,9 @@ message CreateUserRequest {
   // The user to create.
   User user = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/User" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
   ];
 }
 
@@ -140,7 +144,9 @@ message DeleteUserRequest {
   // The name of the user to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/User" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
   ];
 }
 
@@ -148,7 +154,9 @@ message GetGroupRequest {
   // The name of the group to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/Group"
+    }
   ];
 }
 
@@ -175,7 +183,9 @@ message CreateGroupRequest {
   // The group to create.
   Group group = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/Group"
+    }
   ];
 }
 
@@ -192,6 +202,8 @@ message DeleteGroupRequest {
   // The name of the group to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Group" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/Group"
+    }
   ];
 }

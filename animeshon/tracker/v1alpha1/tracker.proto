@@ -93,7 +93,9 @@ message GetTrackerRequest {
   // The name of the tracker to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Tracker" }
+    (google.api.resource_reference) = {
+      type: "tracker.animeapis.com/Tracker"
+    }
   ];
 }
 
@@ -101,7 +103,9 @@ message ListTrackersRequest {
   // The user this tracker belongs to.
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/User" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
   ];
 
   // If unspecified, server will pick an appropriate default.
@@ -126,13 +130,17 @@ message CreateTrackerRequest {
   // The user this tracker belongs to.
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/User" }
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
   ];
 
   // The tracker to create.
   Tracker tracker = 2 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Tracker" }
+    (google.api.resource_reference) = {
+      type: "tracker.animeapis.com/Tracker"
+    }
   ];
 }
 
@@ -149,6 +157,8 @@ message DeleteTrackerRequest {
   // The name of the tracker to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "grbac.animeapis.com/Tracker" }
+    (google.api.resource_reference) = {
+      type: "tracker.animeapis.com/Tracker"
+    }
   ];
 }
