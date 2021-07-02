@@ -14,7 +14,7 @@ package(default_visibility = ["//visibility:public"])
 exports_files(glob(["*.json"]))
 
 proto_library(
-    name = "iam_proto",
+    name = "admin_proto",
     srcs = [
         "iam.proto",
     ],
@@ -23,6 +23,8 @@ proto_library(
         "@com_google_googleapis//google/api:client_proto",
         "@com_google_googleapis//google/api:field_behavior_proto",
         "@com_google_googleapis//google/api:resource_proto",
+        "@com_google_googleapis//google/iam/v1:iam_policy_proto",
+        "@com_google_googleapis//google/iam/v1:policy_proto",
         "@com_google_googleapis//google/longrunning:operations_proto",
         "@com_google_protobuf//:empty_proto",
         "@com_google_protobuf//:field_mask_proto",
@@ -31,9 +33,9 @@ proto_library(
 )
 
 proto_library_with_info(
-    name = "iam_proto_with_info",
+    name = "admin_proto_with_info",
     deps = [
-        ":iam_proto",
+        ":admin_proto",
         "@com_google_googleapis//google/cloud:common_resources_proto",
     ],
 )
@@ -42,44 +44,46 @@ proto_library_with_info(
 # Go
 ##############################################################################
 go_proto_library(
-    name = "iam_go_proto",
+    name = "admin_go_proto",
     compilers = ["@io_bazel_rules_go//proto:go_grpc"],
-    importpath = "github.com/animeapis/go-genproto/iam/v1alpha1",
-    protos = [":iam_proto"],
+    importpath = "github.com/animeapis/go-genproto/iam/admin/v1alpha1",
+    protos = [":admin_proto"],
     deps = [
         "@go_googleapis//google/api:annotations_go_proto",
+        "@go_googleapis//google/iam/v1:iam_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
     ],
 )
 
 go_gapic_library(
-    name = "iam_go_gapic",
-    srcs = [":iam_proto_with_info"],
+    name = "admin_go_gapic",
+    srcs = [":admin_proto_with_info"],
     grpc_service_config = "iam_grpc_service_config.json",
-    importpath = "github.com/animeapis/api-go-client/iam/v1alpha1;iam",
+    importpath = "github.com/animeapis/api-go-client/iam/admin/v1alpha1;admin",
     service_yaml = "iam_v1alpha1.yaml",
     metadata = True,
     deps = [
-        ":iam_go_proto",
-        "@go_googleapis//google/longrunning:longrunning_go_proto",
+        ":admin_go_proto",
         "@com_google_cloud_go//longrunning:go_default_library",
         "@com_google_cloud_go//longrunning/autogen:go_default_library",
+        "@go_googleapis//google/iam/v1:iam_go_proto",
+        "@go_googleapis//google/longrunning:longrunning_go_proto",
     ],
 )
 
 go_test(
-    name = "iam_go_gapic_test",
-    srcs = [":iam_go_gapic_srcjar_test"],
-    embed = [":iam_go_gapic"],
-    importpath = "github.com/animeapis/api-go-client/iam/v1alpha1",
+    name = "admin_go_gapic_test",
+    srcs = [":admin_go_gapic_srcjar_test"],
+    embed = [":admin_go_gapic"],
+    importpath = "github.com/animeapis/api-go-client/iam/admin/v1alpha1",
 )
 
 # Open Source Packages
 go_gapic_assembly_pkg(
-    name = "gapi-iam-v1alpha1-go",
+    name = "gapi-iam-admin-v1alpha1-go",
     deps = [
-        ":iam_go_gapic",
-        ":iam_go_gapic_srcjar-test.srcjar",
-        ":iam_go_proto",
+        ":admin_go_gapic",
+        ":admin_go_gapic_srcjar-test.srcjar",
+        ":admin_go_proto",
     ],
 )

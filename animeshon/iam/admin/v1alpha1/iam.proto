@@ -1,0 +1,404 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+package animeshon.iam.admin.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/iam/admin/v1alpha1;admin";
+option java_package = "com.animeshon.iam.admin.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::IAM::Admin::v1Alpha1";
+
+service IAM {
+  option (google.api.default_host) = "iam.animeapis.com";
+
+  rpc GetServiceAccount(GetServiceAccountRequest) returns (ServiceAccount) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/serviceAccounts/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=organizations/*/serviceAccounts/*}"
+      }
+    };
+  }
+
+  rpc ListServiceAccounts(ListServiceAccountsRequest) returns (ListServiceAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/serviceAccounts"
+      additional_bindings {
+        get: "/v1alpha1/{parent=organizations/*}/serviceAccounts"
+      }
+    };
+  }
+
+  rpc CreateServiceAccount(CreateServiceAccountRequest) returns (ServiceAccount) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*}/serviceAccounts"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=organizations/*}/serviceAccounts"
+        body: "*"
+      }
+    };
+  }
+
+  rpc UpdateServiceAccount(UpdateServiceAccountRequest) returns (ServiceAccount) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{service_account.name=users/*/serviceAccounts/*}"
+      body: "*"
+      additional_bindings {
+        patch: "/v1alpha1/{service_account.name=organizations/*/serviceAccounts/*}"
+        body: "*"
+      }
+    };
+  }
+
+  rpc DeleteServiceAccount(DeleteServiceAccountRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/serviceAccounts/*}"
+      additional_bindings {
+        delete: "/v1alpha1/{name=organizations/*/serviceAccounts/*}"
+      }
+    };
+  }
+
+  rpc GetIamPolicy(google.iam.v1.GetIamPolicyRequest) returns (google.iam.v1.Policy) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{resource=users/*/serviceAccounts/*}:getIamPolicy"
+      additional_bindings {
+        post: "/v1alpha1/{resource=organizations/*/serviceAccounts/*}:getIamPolicy"
+      }
+    };
+  }
+
+  rpc SetIamPolicy(google.iam.v1.SetIamPolicyRequest) returns (google.iam.v1.Policy) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{resource=users/*/serviceAccounts/*}:setIamPolicy"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{resource=organizations/*/serviceAccounts/*}:setIamPolicy"
+        body: "*"
+      }
+    };
+  }
+
+  rpc TestIamPermissions(google.iam.v1.TestIamPermissionsRequest) returns (google.iam.v1.TestIamPermissionsResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{resource=users/*/serviceAccounts/*}:testIamPermissions"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{resource=organizations/*/serviceAccounts/*}:testIamPermissions"
+        body: "*"
+      }
+    };
+  }
+
+  // rpc QueryGrantableRoles(QueryGrantableRolesRequest) returns (QueryGrantableRolesResponse) {
+  //   option (google.api.http) = {
+  //     post: "/v1alpha1/roles:queryGrantableRoles"
+  //     body: "*"
+  //   };
+  // }
+
+  rpc GetRole(GetRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=roles/*}"
+    };
+  }
+
+  rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/roles"
+    };
+  }
+
+  rpc CreateRole(CreateRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      post: "/v1alpha1/roles"
+      body: "*"
+    };
+  }
+
+  rpc UpdateRole(UpdateRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{role.name=roles/*}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteRole(DeleteRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=roles/*}"
+    };
+  }
+
+  // rpc QueryTestablePermissions(QueryTestablePermissionsRequest) returns (QueryTestablePermissionsResponse) {
+  //   option (google.api.http) = {
+  //     post: "/v1alpha1/permissions:queryTestablePermissions"
+  //     body: "*"
+  //   };
+  // }
+
+  rpc GetPermission(GetPermissionRequest) returns (Permission) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=permissions/*}"
+    };
+  }
+
+  rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/permissions"
+    };
+  }
+
+  rpc CreatePermission(CreatePermissionRequest) returns (Permission) {
+    option (google.api.http) = {
+      post: "/v1alpha1/permissions"
+      body: "*"
+    };
+  }
+
+  rpc UpdatePermission(UpdatePermissionRequest) returns (Permission) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{permission.name=permissions/*}"
+      body: "*"
+    };
+  }
+
+  rpc DeletePermission(DeletePermissionRequest) returns (Permission) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=permissions/*}"
+    };
+  }
+}
+
+message ServiceAccount {
+  // The name of the service account.
+  string name = 1;
+}
+
+message Role {
+  // The name of the role.
+  string name = 1;
+
+  // The title of this role.
+  string title = 2;
+
+  // A brief description of what this role is used for.
+  string description = 3;
+
+  // The names of the permissions this role grants when bound in an IAM policy.
+  repeated string included_permissions = 4;
+
+  // Used to perform a consistent read-modify-write.
+  bytes etag = 5;
+}
+
+message Permission {
+  // The name of this permission.
+  string name = 1;
+
+  // The title of this permission.
+  string title = 2;
+
+  // A brief description of what this permission is used for.
+  string description = 3;
+}
+
+message GetServiceAccountRequest {
+  // The name of the service account to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/ServiceAccount"
+    }
+  ];
+}
+
+message ListServiceAccountsRequest {
+  // The parent, which owns this collection of service accounts.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "*"
+    }
+  ];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListServiceAccountsResponse {
+  // The list of service accounts.
+  repeated ServiceAccount service_accounts = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateServiceAccountRequest {
+  // The parent resource where this service account will be created.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "*"
+    }
+  ];
+
+  // The service account to create.
+  ServiceAccount service_account = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/ServiceAccount"
+    }
+  ];
+}
+
+message UpdateServiceAccountRequest {
+  // The service account to update.
+  ServiceAccount service_account = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteServiceAccountRequest {
+  // The name of the service account to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/ServiceAccount"
+    }
+  ];
+}
+
+message GetRoleRequest {
+  // The name of the role to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/Role"
+    }
+  ];
+}
+
+message ListRolesRequest {
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 1;
+
+  // The value returned from the previous call.
+  string page_token = 2;
+
+  // A filter to be applied to results.
+  string filter = 3;
+}
+
+message ListRolesResponse {
+  // The list of roles.
+  repeated Role roles = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateRoleRequest {
+  // The role to create.
+  Role role = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/Role"
+    }
+  ];
+}
+
+message UpdateRoleRequest {
+  // The role to update.
+  Role role = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteRoleRequest {
+  // The name of the role to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/Role"
+    }
+  ];
+}
+
+message GetPermissionRequest {
+  // The name of the permission to retrieve.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/Permission"
+    }
+  ];
+}
+
+message ListPermissionsRequest {
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 1;
+
+  // The value returned from the previous call.
+  string page_token = 2;
+
+  // A filter to be applied to results.
+  string filter = 3;
+}
+
+message ListPermissionsResponse {
+  // The list of permissions.
+  repeated Permission permissions = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreatePermissionRequest {
+  // The permission to create.
+  Permission permission = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/Permission"
+    }
+  ];
+}
+
+message UpdatePermissionRequest {
+  // The permission to update.
+  Permission permission = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeletePermissionRequest {
+  // The name of the permission to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/Permission"
+    }
+  ];
+}
