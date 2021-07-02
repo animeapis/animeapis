@@ -183,14 +183,28 @@ service IAM {
 message ServiceAccount {
   // The name of the service account.
   string name = 1;
+
+  // The display name of this service account.
+  string display_name = 2;
+
+  // A brief description of what this service account is used for.
+  string description = 3;
+
+  // The names of the OAuth 2.0 scopes this service account was granted.
+  repeated string oauth2_scopes = 4;
+
+  string oauth2_client_id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The secret of this service account, available only during creation.
+  string oauth2_client_secret = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 message Role {
   // The name of the role.
   string name = 1;
 
-  // The title of this role.
-  string title = 2;
+  // The display name of this role.
+  string display_name = 2;
 
   // A brief description of what this role is used for.
   string description = 3;
@@ -206,8 +220,8 @@ message Permission {
   // The name of this permission.
   string name = 1;
 
-  // The title of this permission.
-  string title = 2;
+  // The display name of this permission.
+  string display_name = 2;
 
   // A brief description of what this permission is used for.
   string description = 3;
