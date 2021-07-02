@@ -193,9 +193,10 @@ message ServiceAccount {
   // The names of the OAuth 2.0 scopes this service account was granted.
   repeated string oauth2_scopes = 4;
 
+  // OAuth2 client ID to use for the authentication flow.
   string oauth2_client_id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The secret of this service account, available only during creation.
+  // OAuth2 client secret to use for the authentication flow.
   string oauth2_client_secret = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
