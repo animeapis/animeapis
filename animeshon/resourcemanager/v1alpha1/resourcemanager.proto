@@ -21,65 +21,65 @@ service ResourceManager {
 
   rpc GetOrganization(GetOrganizationRequest) returns (Organization) {
     option (google.api.http) = {
-      get: "/v1/{name=organizations/*}"
+      get: "/v1alpha1/{name=organizations/*}"
     };
   }
 
   rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse) {
     option (google.api.http) = {
-      get: "/v1/organizations"
+      get: "/v1alpha1/organizations"
     };
   }
 
   rpc CreateOrganization(CreateOrganizationRequest) returns (Organization) {
     option (google.api.http) = {
-      post: "/v1/organizations"
+      post: "/v1alpha1/organizations"
       body: "*"
     };
   }
 
   rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {
     option (google.api.http) = {
-      patch: "/v1/{organization.name=organizations/*}"
+      patch: "/v1alpha1/{organization.name=organizations/*}"
       body: "*"
     };
   }
 
   rpc DeleteOrganization(DeleteOrganizationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/{name=organizations/*}"
+      delete: "/v1alpha1/{name=organizations/*}"
     };
   }
 
   rpc GetTeam(GetTeamRequest) returns (Team) {
     option (google.api.http) = {
-      get: "/v1/{name=teams/*}"
+      get: "/v1alpha1/{name=teams/*}"
     };
   }
 
   rpc ListTeams(ListTeamsRequest) returns (ListTeamsResponse) {
     option (google.api.http) = {
-      get: "/v1/teams"
+      get: "/v1alpha1/teams"
     };
   }
 
   rpc CreateTeam(CreateTeamRequest) returns (Team) {
     option (google.api.http) = {
-      post: "/v1/teams"
+      post: "/v1alpha1/teams"
       body: "*"
     };
   }
 
   rpc UpdateTeam(UpdateTeamRequest) returns (Team) {
     option (google.api.http) = {
-      patch: "/v1/{team.name=teams/*}"
+      patch: "/v1alpha1/{team.name=teams/*}"
       body: "*"
     };
   }
 
   rpc DeleteTeam(DeleteTeamRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/{name=teams/*}"
+      delete: "/v1alpha1/{name=teams/*}"
     };
   }
 }

@@ -21,65 +21,65 @@ service Identity {
 
   rpc GetUser(GetUserRequest) returns (User) {
     option (google.api.http) = {
-      get: "/v1/{name=users/*}"
+      get: "/v1alpha1/{name=users/*}"
     };
   }
 
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
     option (google.api.http) = {
-      get: "/v1/users"
+      get: "/v1alpha1/users"
     };
   }
 
   rpc CreateUser(CreateUserRequest) returns (User) {
     option (google.api.http) = {
-      post: "/v1/users"
+      post: "/v1alpha1/users"
       body: "*"
     };
   }
 
   rpc UpdateUser(UpdateUserRequest) returns (User) {
     option (google.api.http) = {
-      patch: "/v1/{user.name=users/*}"
+      patch: "/v1alpha1/{user.name=users/*}"
       body: "*"
     };
   }
 
   rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/{name=users/*}"
+      delete: "/v1alpha1/{name=users/*}"
     };
   }
 
   rpc GetGroup(GetGroupRequest) returns (Group) {
     option (google.api.http) = {
-      get: "/v1/{name=groups/*}"
+      get: "/v1alpha1/{name=groups/*}"
     };
   }
 
   rpc ListGroups(ListGroupsRequest) returns (ListGroupsResponse) {
     option (google.api.http) = {
-      get: "/v1/groups"
+      get: "/v1alpha1/groups"
     };
   }
 
   rpc CreateGroup(CreateGroupRequest) returns (Group) {
     option (google.api.http) = {
-      post: "/v1/groups"
+      post: "/v1alpha1/groups"
       body: "*"
     };
   }
 
   rpc UpdateGroup(UpdateGroupRequest) returns (Group) {
     option (google.api.http) = {
-      patch: "/v1/{group.name=groups/*}"
+      patch: "/v1alpha1/{group.name=groups/*}"
       body: "*"
     };
   }
 
   rpc DeleteGroup(DeleteGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1/{name=groups/*}"
+      delete: "/v1alpha1/{name=groups/*}"
     };
   }
 }
