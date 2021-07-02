@@ -1,7 +1,7 @@
 type: google.api.Service
 config_version: 3
 name: resourcemanager.animeapis.com
-title: ResourceManager API
+title: Resource Manager API
 
 apis:
 - name: animeshon.resourcemanager.v1alpha1.ResourceManager
