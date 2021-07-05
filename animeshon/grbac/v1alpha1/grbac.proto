@@ -49,14 +49,14 @@ service AccessControl {
   // GetResource returns a resource.
   rpc GetResource(GetResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      get: "/v1alpha1/{service=services/*}/resources/{name=**}"
+      get: "/v1alpha1/services/{service}/resources/{name=**}"
     };
   }
 
   // CreateResource creates a new resource.
   rpc CreateResource(CreateResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      post: "/v1alpha1/{resource.service=services/*}/resources/{resource.name=**}"
+      post: "/v1alpha1/services/{resource.service}/resources/{resource.name=**}"
       body: "*"
     };
   }
@@ -64,7 +64,7 @@ service AccessControl {
   // UpdateResource updates a resource with a field mask.
   rpc UpdateResource(UpdateResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{resource.service=services/*}/resources/{resource.name=**}"
+      patch: "/v1alpha1/services/{resource.service}/resources/{resource.name=**}"
       body: "*"
     };
   }
@@ -72,14 +72,14 @@ service AccessControl {
   // DeleteResource deletes a resource.
   rpc DeleteResource(DeleteResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{service=services/*}/resources/{name=**}"
+      delete: "/v1alpha1/services/{service}/resources/{name=**}"
     };
   }
 
   // CreateService creates a new service.
   rpc CreateService(CreateServiceRequest) returns (Service) {
     option (google.api.http) = {
-      post: "/v1alpha1/{service.name=services/*}"
+      post: "/v1alpha1/services/{service.name}"
       body: "*"
     };
   }
@@ -87,7 +87,7 @@ service AccessControl {
   // DeleteService deletes a service.
   rpc DeleteService(DeleteServiceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=services/*}"
+      delete: "/v1alpha1/services/{name}"
     };
   }
 
@@ -288,6 +288,12 @@ message GetResourceRequest {
       type: "grbac.animeapis.com/Service"
     }
   ];
+  
+  // The full resource name that identifies the parent resource.
+  string parent = 3 [
+    (google.api.field_behavior) = OPTIONAL,
+    (google.api.resource_reference) = { type: "*" }
+  ];
 }
 
 message CreateResourceRequest {
@@ -317,6 +323,12 @@ message DeleteResourceRequest {
     (google.api.resource_reference) = {
       type: "grbac.animeapis.com/Service"
     }
+  ];
+
+  // The full resource name that identifies the parent resource.
+  string parent = 3 [
+    (google.api.field_behavior) = OPTIONAL,
+    (google.api.resource_reference) = { type: "*" }
   ];
 }
 
