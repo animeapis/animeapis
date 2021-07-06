@@ -49,14 +49,14 @@ service AccessControl {
   // GetResource returns a resource.
   rpc GetResource(GetResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      get: "/v1alpha1/services/{service}/resources/{name=**}"
+      get: "/v1alpha1/resources/{name=**}"
     };
   }
 
   // CreateResource creates a new resource.
   rpc CreateResource(CreateResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      post: "/v1alpha1/services/{resource.service}/resources/{resource.name=**}"
+      post: "/v1alpha1/resources/{resource.name=**}"
       body: "*"
     };
   }
@@ -64,29 +64,14 @@ service AccessControl {
   // TransferResource transfers a resource to a new parent.
   rpc TransferResource(TransferResourceRequest) returns (Resource) {
     option (google.api.http) = {
-      post: "/v1alpha1/services/{service}/resources/{name=**}:transfer"
+      post: "/v1alpha1/resources/{name=**}:transfer"
     };
   }
 
   // DeleteResource deletes a resource.
   rpc DeleteResource(DeleteResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/services/{service}/resources/{name=**}"
-    };
-  }
-
-  // CreateService creates a new service.
-  rpc CreateService(CreateServiceRequest) returns (Service) {
-    option (google.api.http) = {
-      post: "/v1alpha1/services/{service.name}"
-      body: "*"
-    };
-  }
-
-  // DeleteService deletes a service.
-  rpc DeleteService(DeleteServiceRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      delete: "/v1alpha1/services/{name}"
+      delete: "/v1alpha1/resources/{name=**}"
     };
   }
 
@@ -217,22 +202,14 @@ message AccessTuple {
 }
 
 message Resource {
-  // The resource name that identifies the resource.
+  // The full resource name that identifies the resource.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // The API service name the resource belongs to.
-  string service = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The full resource name that identifies the parent resource.
-  string parent = 3;
+  string parent = 2;
 
   // An etag for concurrency control, ignored during creation.
-  bytes etag = 4;
-}
-
-message Service {
-  // The API service name.
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  bytes etag = 3;
 }
 
 message Subject {
@@ -274,23 +251,9 @@ message TestIamPolicyRequest {
 }
 
 message GetResourceRequest {
-  // The name of the resource to retrieve.
+  // The full resource name of the resource to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "*" }
-  ];
-
-  // The API service name the resource belongs to.
-  string service = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "grbac.animeapis.com/Service"
-    }
-  ];
-  
-  // The full resource name that identifies the parent resource.
-  string parent = 3 [
-    (google.api.field_behavior) = OPTIONAL,
     (google.api.resource_reference) = { type: "*" }
   ];
 }
@@ -301,18 +264,10 @@ message CreateResourceRequest {
 }
 
 message TransferResourceRequest {
-  // The resource name that identifies the resource.
+  // The full resource name that identifies the resource.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = { type: "*" }
-  ];
-
-  // The API service name the resource belongs to.
-  string service = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "grbac.animeapis.com/Service"
-    }
   ];
 
   // The full resource name that identifies the old parent resource.
@@ -326,42 +281,42 @@ message TransferResourceRequest {
     (google.api.field_behavior) = OPTIONAL,
     (google.api.resource_reference) = { type: "*" }
   ];
-}
 
-message DeleteResourceRequest {
-  // The resource name that identifies the resource.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "*" }
-  ];
-
-  // The API service name the resource belongs to.
-  string service = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "grbac.animeapis.com/Service"
-    }
-  ];
-
-  // The full resource name that identifies the parent resource.
-  string parent = 3 [
+  // The map of substitutions to apply to the full resource name and all of its
+  // children.
+  //
+  // As an example, it might be required to change the parent of a resource from
+  // "users/123" to "users/678", the substitutions would then look like this:
+  //
+  // substitutions = {"users/123": "users/456789"}
+  //
+  // and the expected result would then be the following:
+  //
+  // from : //abc.animeapis.com/users/123/resources/210
+  // to   : //abc.animeapis.com/users/456789/resources/210
+  // 
+  // The same applies if we need to transfer a resource between two parents of
+  // different type:
+  //
+  // substitutions = {"users/123": "organizations/678/teams/987"}
+  //
+  // and the expected result would then be the following:
+  //
+  // from : //abc.animeapis.com/users/123/resources/210
+  // to   : //abc.animeapis.com/organizations/678/teams/987/resources/210
+  //
+  // It is possible to apply multiple substitutions simultaneously.
+  map<string,string> substitutions = 5 [
     (google.api.field_behavior) = OPTIONAL,
     (google.api.resource_reference) = { type: "*" }
   ];
 }
 
-message CreateServiceRequest {
-  // The service to create.
-  Service service = 1 [(google.api.field_behavior) = REQUIRED];
-}
-
-message DeleteServiceRequest {
-  // The service to delete.
+message DeleteResourceRequest {
+  // The full resource name that identifies the resource.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "grbac.animeapis.com/Service"
-    }
+    (google.api.resource_reference) = { type: "*" }
   ];
 }
 
