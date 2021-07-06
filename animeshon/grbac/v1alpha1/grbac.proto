@@ -206,7 +206,7 @@ message Resource {
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The full resource name that identifies the parent resource.
-  string parent = 2;
+  string parent = 2 [(google.api.field_behavior) = REQUIRED];
 
   // An etag for concurrency control, ignored during creation.
   bytes etag = 3;
@@ -270,15 +270,9 @@ message TransferResourceRequest {
     (google.api.resource_reference) = { type: "*" }
   ];
 
-  // The full resource name that identifies the old parent resource.
-  string old_parent = 3 [
-    (google.api.field_behavior) = OPTIONAL,
-    (google.api.resource_reference) = { type: "*" }
-  ];
-
   // The full resource name that identifies the new parent resource.
-  string new_parent = 4 [
-    (google.api.field_behavior) = OPTIONAL,
+  string target_parent = 2 [
+    (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = { type: "*" }
   ];
 
@@ -306,10 +300,7 @@ message TransferResourceRequest {
   // to   : //abc.animeapis.com/organizations/678/teams/987/resources/210
   //
   // It is possible to apply multiple substitutions simultaneously.
-  map<string,string> substitutions = 5 [
-    (google.api.field_behavior) = OPTIONAL,
-    (google.api.resource_reference) = { type: "*" }
-  ];
+  map<string,string> substitutions = 3;
 }
 
 message DeleteResourceRequest {
