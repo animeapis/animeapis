@@ -61,14 +61,6 @@ service AccessControl {
     };
   }
 
-  // UpdateResource updates a resource with a field mask.
-  rpc UpdateResource(UpdateResourceRequest) returns (Resource) {
-    option (google.api.http) = {
-      patch: "/v1alpha1/services/{resource.service}/resources/{resource.name=**}"
-      body: "*"
-    };
-  }
-
   // DeleteResource deletes a resource.
   rpc DeleteResource(DeleteResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
