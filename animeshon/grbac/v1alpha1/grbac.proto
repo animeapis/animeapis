@@ -61,6 +61,13 @@ service AccessControl {
     };
   }
 
+  // TransferResource transfers a resource to a new parent.
+  rpc TransferResource(TransferResourceRequest) returns (Resource) {
+    option (google.api.http) = {
+      post: "/v1alpha1/services/{service}/resources/{name=**}:transfer"
+    };
+  }
+
   // DeleteResource deletes a resource.
   rpc DeleteResource(DeleteResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
@@ -293,13 +300,32 @@ message CreateResourceRequest {
   Resource resource = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message UpdateResourceRequest {
-  // The resource to update.
-  Resource resource = 1 [(google.api.field_behavior) = REQUIRED];
+message TransferResourceRequest {
+  // The resource name that identifies the resource.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = { type: "*" }
+  ];
 
-  // The field mask to determine which fields are to be updated. If empty, the
-  // server will assume all fields are to be updated.
-  google.protobuf.FieldMask update_mask = 2;
+  // The API service name the resource belongs to.
+  string service = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "grbac.animeapis.com/Service"
+    }
+  ];
+
+  // The full resource name that identifies the old parent resource.
+  string old_parent = 3 [
+    (google.api.field_behavior) = OPTIONAL,
+    (google.api.resource_reference) = { type: "*" }
+  ];
+
+  // The full resource name that identifies the new parent resource.
+  string new_parent = 4 [
+    (google.api.field_behavior) = OPTIONAL,
+    (google.api.resource_reference) = { type: "*" }
+  ];
 }
 
 message DeleteResourceRequest {
