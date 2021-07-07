@@ -83,7 +83,9 @@ message Tracker {
   // When the progress ended.
   google.protobuf.Timestamp end_time = 5;
 
-  // The percentage of progress from 1 to 100.
+  // The percentage of progress from 0 to 100.
+  // null means the percentage should be calculated based on the amount of
+  // subitems in the item being tracked.
   google.protobuf.FloatValue progress_percentage = 6;
 
   // The progress state of the tracker.
