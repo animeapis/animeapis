@@ -134,7 +134,7 @@ service IAM {
     };
   }
 
-  rpc DeleteRole(DeleteRoleRequest) returns (Role) {
+  rpc DeleteRole(DeleteRoleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=roles/*}"
     };
@@ -173,7 +173,7 @@ service IAM {
     };
   }
 
-  rpc DeletePermission(DeletePermissionRequest) returns (Permission) {
+  rpc DeletePermission(DeletePermissionRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=permissions/*}"
     };
