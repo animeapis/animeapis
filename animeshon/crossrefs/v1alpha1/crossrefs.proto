@@ -83,7 +83,7 @@ service Referrer {
 
   // Exports the cross-references to Cloud Pub/Sub for a full synchronization.
   // This operation is usually called after a new import with a clean database.
-  rpc ExportCrossRefs(google.protobuf.Empty) returns (google.longrunning.Operation) {
+  rpc ExportCrossRefs(ExportCrossRefRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/crossrefs:export"
       body: "*"
@@ -162,6 +162,22 @@ message ImportCrossRefRequest {
   map<string, bool> opts = 1;
 }
 
+message ExportCrossRefRequest {
+  // Determine the target of the export.
+  // Full means storage + migration
+  // Storage means only persinstent stogare
+  // Migration means notify the migrato to perform the data consolidation  
+  enum Target {
+    FULL = 0;
+    STORAGE = 1;
+    MIGRATOR = 2;
+  }
+
+  Target target = 0;
+
+  // Prefix to restrict the crossrefs to export to a specific subset
+  string prefix = 1;
+}
 
 message AnalyzeCrossRefRequest {
   // Tollerance of the match in pct
