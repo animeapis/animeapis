@@ -173,10 +173,10 @@ message ExportCrossRefRequest {
     MIGRATOR = 2;
   }
 
-  Target target = 0;
+  Target target = 1;
 
   // Prefix to restrict the crossrefs to export to a specific subset
-  string prefix = 1;
+  string prefix = 0;
 }
 
 message AnalyzeCrossRefRequest {
