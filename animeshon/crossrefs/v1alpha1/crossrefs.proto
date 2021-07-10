@@ -176,7 +176,7 @@ message ExportCrossRefRequest {
   Target target = 1;
 
   // Prefix to restrict the crossrefs to export to a specific subset
-  string prefix = 0;
+  string prefix = 2;
 }
 
 message AnalyzeCrossRefRequest {
