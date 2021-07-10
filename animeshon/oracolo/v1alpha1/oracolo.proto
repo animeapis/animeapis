@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+
+package animeshon.oracolo.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/oracolo/v1alpha1;oracolo";
+option java_package = "com.animeshon.oracolo.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Oracolo::v1Alpha1";
+
+service Oracolo {
+  option (google.api.default_host) = "oracolo.animeapis.com";
+
+  // CreateOracoloFulltextIndex indexes a resources and returns the document indexed
+  rpc CreateOracoloFulltextIndex(CreateOracoloFulltextIndexRequest) returns (OracoloFulltextIndex) {
+    option (google.api.http) = {
+      post: "/v1alpha1/oracoloindexes/fulltext"
+      body: "*"
+    };
+  }
+
+  // DeleteOracoloFulltextIndex removes the document idenfied by the provided name
+  rpc DeleteOracoloFulltextIndex(DeleteOracoloFulltextIndexRequest) returns (DeleteOracoloFulltextIndexResponse) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=oracoloindexes/fulltext/*}"
+    };
+  }
+
+  // UpdateOracoloFulltextIndexWeight updates the weight of a document and makes it more or less important
+  // for the search query.
+  // the weight is determine by metics such as: clicks / time presented to the user  
+  rpc UpdateOracoloFulltextIndexWeight(UpdateOracoloFulltextIndexRequest) returns (OracoloFulltextIndex) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{name=oracoloindexes/fulltext/*}"
+      body: "*"
+    };
+  }
+
+  // ReconcileOracoloFulltextIndexes must be run after a bulk inport and reconciles Oracolo with the 
+  // storage responsabile of the indexed entities
+  // The process deleted from Oracolo all entities no more existing in the storage and
+  // indexes all new entities. 
+  rpc ReconcileOracoloFulltextIndexes(ReconcileOracoloFulltextIndexesRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/contributions/fulltext:reconcile"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ReconcileOracoloFulltextIndexesResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
+}
+
+message OracoloFulltextIndex {
+  option (google.api.resource) = {
+    type: "oracolo.animeapis.com/OracoloFulltextIndex"
+    pattern: "oracoloindexes/fulltext/{index}"
+  };
+
+  // The resource name of the index.
+  string name = 1;
+}
+
+message CreateOracoloFulltextIndexRequest {
+  // The name of the index to create.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/OracoloFulltextIndex"
+    }
+  ];
+
+  // The name of the entity
+  // it will be used to perform the query on the storage and get all information
+  // needed to index
+  string entityName = 2 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+message DeleteOracoloFulltextIndexRequest {
+  // The name of the index to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/OracoloFulltextIndex"
+    }
+  ];
+}
+
+message UpdateOracoloFulltextIndexRequest {
+  // The name of the index to update.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "iam.animeapis.com/OracoloFulltextIndex"
+    }
+  ];
+
+  // How many times the index has been shown as result of a search query
+  int64 proposals = 2;
+
+  // How many times the index was successfully accepted by users
+  int64 hits = 3;
+}
+
+message ReconcileOracoloFulltextIndexesRequest {
+  // kinds of entities to reconcile
+  repeated string kinds = 1;
+}
+
+// TODO(christian-roggia): this is a workaround to solve the issue of GAPIC
+// CLI where broken code is generated if google.protobuf.Empty is used in the
+// response_type of longrunning operations.
+message ReconcileOracoloFulltextIndexesResponse {}
