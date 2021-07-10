@@ -4,7 +4,8 @@ import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
-import "google/protobuf/empty.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/timestamp.proto";
 
 package animeshon.oracolo.v1alpha1;
 
@@ -113,6 +114,50 @@ message UpdateOracoloFulltextIndexRequest {
 message ReconcileOracoloFulltextIndexesRequest {
   // kinds of entities to reconcile
   repeated string kinds = 1;
+}
+
+message DeleteOracoloFulltextIndexResponse {
+  string name = 1;
+  bool ok = 2;
+}
+
+// Represents the metadata of the long-running operation.
+message OperationMetadata {
+  // Output only. The time the operation was created.
+  google.protobuf.Timestamp create_time = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. The time the operation finished running.
+  google.protobuf.Timestamp end_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Server-defined resource path for the target of the operation.
+  string target = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Name of the verb executed by the operation.
+  string verb = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Human-readable status of the operation, if any.
+  string status_message = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Identifies whether the user has requested cancellation
+  // of the operation. Operations that have successfully been cancelled
+  // have [Operation.error][] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1,
+  // corresponding to `Code.CANCELLED`.
+  bool requested_cancellation = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. API version used to start the operation.
+  string api_version = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 step_count = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 step_progress = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 item_count = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 item_progress = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // TODO(christian-roggia): this is a workaround to solve the issue of GAPIC
