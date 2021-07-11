@@ -112,8 +112,11 @@ message UpdateOracoloFulltextIndexRequest {
 }
 
 message ReconcileOracoloFulltextIndexesRequest {
-  // kinds of entities to reconcile
+  // Kinds of entities to reconcile
   repeated string kinds = 1;
+
+  // If true all entities found in the storage are reindexed 
+  bool forceReindex = 2;
 }
 
 message DeleteOracoloFulltextIndexResponse {
