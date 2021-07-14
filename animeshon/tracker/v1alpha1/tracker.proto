@@ -72,7 +72,7 @@ message Tracker {
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The content whose progress is being tracked.
-  int64 item_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string item_name = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The items that belong to the content, if any.
   repeated int64 subitem_ids = 3;
