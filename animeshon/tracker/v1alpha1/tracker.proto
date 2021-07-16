@@ -22,7 +22,7 @@ service TrackerService {
 
   rpc GetTracker(GetTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/trackers/*}"
+      get: "/v1alpha1/{name=users/*/trackers/*/*}"
     };
   }
   
@@ -41,14 +41,14 @@ service TrackerService {
 
   rpc UpdateTracker(UpdateTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{tracker.name=users/*/trackers/*}"
+      patch: "/v1alpha1/{tracker.name=users/*/trackers/*/*}"
       body: "*"
     };
   }
 
   rpc DeleteTracker(DeleteTrackerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=users/*/trackers/*}"
+      delete: "/v1alpha1/{name=users/*/trackers/*/*}"
       body: "*"
     };
   }
