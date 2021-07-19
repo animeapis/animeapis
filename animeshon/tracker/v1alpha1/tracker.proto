@@ -270,10 +270,10 @@ message SetAuthRequest {
 
 // Selecting what provider we want to import from
 message ImportTrackersRequest {
-  Provider providers = 1;
+  Provider provider = 1;
 }
 
 // Selecting what provider we want to export to
 message ExportTrackersRequest {
-  Provider providers = 1;
+  Provider provider = 1;
 }
