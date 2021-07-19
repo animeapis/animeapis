@@ -69,14 +69,14 @@ service TrackerService {
 
   rpc ImportTrackers(ImportTrackersRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=users/*/trackers}:import"
+      post: "/v1alpha1/{parent=users/*}/trackers:import"
       body: "*"
     };
   }
 
   rpc ExportTrackers(ExportTrackersRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=users/*/trackers}:export"
+      post: "/v1alpha1/{parent=users/*}/trackers:export"
       body: "*"
     };
   }
@@ -266,10 +266,24 @@ message SetAuthRequest {
 
 // Selecting what provider we want to import from
 message ImportTrackersRequest {
-  Provider provider = 1;
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+
+  Provider provider = 2;
 }
 
 // Selecting what provider we want to export to
 message ExportTrackersRequest {
-  Provider provider = 1;
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+
+  Provider provider = 2;
 }
