@@ -259,12 +259,8 @@ message SetAuthRequest {
   ];
   // Providers either support OAuth or password/username, not both
   oneof auth {
-    OAuth oauth = 3[
-      (google.api.field_behavior) = REQUIRED
-    ];
-    PlainAuth plain_auth = 4[
-      (google.api.field_behavior) = REQUIRED
-    ];
+    OAuth oauth = 3;
+    PlainAuth plain_auth = 4;
   }
 }
 
