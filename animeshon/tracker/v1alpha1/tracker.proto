@@ -52,6 +52,19 @@ service TrackerService {
       body: "*"
     };
   }
+
+  rpc GetOAuthInfo(OAuthInfoRequest) returns (OAuthInfoResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/trackers/{provider=providers/*}/authenticate"
+    };
+  }
+
+  rpc SetOAuth(SetAuthRequest) returns (google.protobuf.BoolValue) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*}/trackers/{provider=providers/*}/authenticate"
+      body: "*"
+    };
+  }
 }
 
 enum State {
@@ -66,6 +79,16 @@ enum State {
   // The consumption of the media is on hold.
   STATE_ON_HOLD = 3;
 }
+
+enum Provider{
+  PROVIDER_UNSPECIFIED = 0;
+  PROVIDER_MYANIMELIST  = 1;
+  PROVIDER_MANGADEX  = 2;
+  PROVIDER_ANILIST  = 3;
+  PROVIDER_ANIDB  = 4;
+  PROVIDER_MANGAUPDATES  = 5;
+  PROVIDER_VNDB  = 6;
+};
 
 message Tracker {
   // The id of the tracker.
@@ -164,4 +187,69 @@ message DeleteTrackerRequest {
       type: "tracker.animeapis.com/Tracker"
     }
   ];
+}
+
+message OAuthInfoRequest {
+  // The OAuth provider to get the auth info from
+  Provider provider = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "tracker.animeapis.com/Tracker"
+    }
+  ];
+  string parent = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+}
+
+message OAuthInfoResponse {
+    // The name of the tracker to retrieve.
+    string url = 1 [
+      (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message OAuth {
+  // The name of the tracker to retrieve.
+  string code = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  string state = 2 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+message PlainAuth {
+  // The name of the tracker to retrieve.
+  string username = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  string password = 2 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+message SetAuthRequest {
+  // The OAuth provider to get the auth info from
+  Provider provider = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "tracker.animeapis.com/Tracker"
+    }
+  ];
+  string parent = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+
+  oneof auth {
+    OAuth oauth = 3;
+    PlainAuth plain_auth = 4;
+  }
+
 }
