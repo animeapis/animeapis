@@ -53,15 +53,16 @@ service TrackerService {
     };
   }
 
+  // Only used for OAuth as we need to set up the flow
   rpc GetOAuthInfo(OAuthInfoRequest) returns (OAuthInfoResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{parent=users/*}/trackers/{provider=providers/*}/authenticate"
+      get: "/v1alpha1/{parent=users/*}/trackers/authenticate"
     };
   }
 
   rpc SetOAuth(SetAuthRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*}/trackers/{provider=providers/*}/authenticate"
+      post: "/v1alpha1/{parent=users/*}/trackers/authenticate"
       body: "*"
     };
   }
@@ -211,6 +212,7 @@ message OAuthInfoRequest {
       type: "tracker.animeapis.com/Tracker"
     }
   ];
+  // The user associated with the external provider
   string parent = 2 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
@@ -220,14 +222,15 @@ message OAuthInfoRequest {
 }
 
 message OAuthInfoResponse {
-    // The name of the tracker to retrieve.
+    // The url to authenticate the user within the provider
     string url = 1 [
       (google.api.field_behavior) = REQUIRED
     ];
 }
 
 message OAuth {
-  // The name of the tracker to retrieve.
+  // OAuth should reply with a code and a state,
+  // this should compete the auth flow
   string code = 1 [
     (google.api.field_behavior) = REQUIRED
   ];
@@ -237,7 +240,7 @@ message OAuth {
 }
 
 message PlainAuth {
-  // The name of the tracker to retrieve.
+  // The login info for website sthat dont have API support
   string username = 1 [
     (google.api.field_behavior) = REQUIRED
   ];
@@ -247,7 +250,7 @@ message PlainAuth {
 }
 
 message SetAuthRequest {
-  // The OAuth provider to get the auth info from
+  // The Auth provider
   Provider provider = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
@@ -260,17 +263,19 @@ message SetAuthRequest {
       type: "identity.animeapis.com/User"
     }
   ];
-
+  // Providers either support OAuth or password/username, not both
   oneof auth {
     OAuth oauth = 3;
     PlainAuth plain_auth = 4;
   }
 }
 
+// Selecting what providers we want to import from
 message ImportTrackersRequest {
   repeated Provider providers = 1;
 }
 
+// Selecting what providers we want to export to
 message ExportTrackersRequest {
   repeated Provider providers = 1;
 }
