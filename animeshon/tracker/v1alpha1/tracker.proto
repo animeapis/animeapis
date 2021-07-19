@@ -59,9 +59,23 @@ service TrackerService {
     };
   }
 
-  rpc SetOAuth(SetAuthRequest) returns (google.protobuf.BoolValue) {
+  rpc SetOAuth(SetAuthRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=users/*}/trackers/{provider=providers/*}/authenticate"
+      body: "*"
+    };
+  }
+
+  rpc ImportTrackers(ImportTrackersRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/trackers/import}"
+      body: "*"
+    };
+  }
+
+  rpc ExportTrackers(ExportTrackersRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/trackers/export}"
       body: "*"
     };
   }
@@ -251,5 +265,12 @@ message SetAuthRequest {
     OAuth oauth = 3;
     PlainAuth plain_auth = 4;
   }
+}
 
+message ImportTrackersRequest {
+  repeated Provider providers = 1;
+}
+
+message ExportTrackersRequest {
+  repeated Provider providers = 1;
 }
