@@ -56,27 +56,27 @@ service TrackerService {
   // Only used for OAuth as we need to set up the flow
   rpc GetOAuthInfo(OAuthInfoRequest) returns (OAuthInfoResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{parent=users/*}/trackers/authenticate"
+      get: "/v1alpha1/{parent=users/*}/trackers:authenticate"
     };
   }
 
-  rpc SetOAuth(SetAuthRequest) returns (google.protobuf.Empty) {
+  rpc SetAuth(SetAuthRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*}/trackers/authenticate"
+      post: "/v1alpha1/{parent=users/*}/trackers:authenticate"
       body: "*"
     };
   }
 
   rpc ImportTrackers(ImportTrackersRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=users/*/trackers/import}"
+      post: "/v1alpha1/{name=users/*/trackers}:import"
       body: "*"
     };
   }
 
   rpc ExportTrackers(ExportTrackersRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=users/*/trackers/export}"
+      post: "/v1alpha1/{name=users/*/trackers}:export"
       body: "*"
     };
   }
@@ -207,10 +207,7 @@ message DeleteTrackerRequest {
 message OAuthInfoRequest {
   // The OAuth provider to get the auth info from
   Provider provider = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "tracker.animeapis.com/Tracker"
-    }
+    (google.api.field_behavior) = REQUIRED
   ];
   // The user associated with the external provider
   string parent = 2 [
@@ -240,7 +237,7 @@ message OAuth {
 }
 
 message PlainAuth {
-  // The login info for website sthat dont have API support
+  // The login info for websites that dont have API support
   string username = 1 [
     (google.api.field_behavior) = REQUIRED
   ];
@@ -252,10 +249,7 @@ message PlainAuth {
 message SetAuthRequest {
   // The Auth provider
   Provider provider = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "tracker.animeapis.com/Tracker"
-    }
+    (google.api.field_behavior) = REQUIRED
   ];
   string parent = 2 [
     (google.api.field_behavior) = REQUIRED,
@@ -265,17 +259,21 @@ message SetAuthRequest {
   ];
   // Providers either support OAuth or password/username, not both
   oneof auth {
-    OAuth oauth = 3;
-    PlainAuth plain_auth = 4;
+    OAuth oauth = 3[
+      (google.api.field_behavior) = REQUIRED
+    ];
+    PlainAuth plain_auth = 4[
+      (google.api.field_behavior) = REQUIRED
+    ];
   }
 }
 
-// Selecting what providers we want to import from
+// Selecting what provider we want to import from
 message ImportTrackersRequest {
-  repeated Provider providers = 1;
+  Provider providers = 1;
 }
 
-// Selecting what providers we want to export to
+// Selecting what provider we want to export to
 message ExportTrackersRequest {
-  repeated Provider providers = 1;
+  Provider providers = 1;
 }
