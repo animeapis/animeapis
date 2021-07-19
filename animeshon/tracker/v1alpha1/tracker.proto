@@ -52,6 +52,34 @@ service TrackerService {
       body: "*"
     };
   }
+
+  // Only used for OAuth as we need to set up the flow
+  rpc GetOAuthInfo(OAuthInfoRequest) returns (OAuthInfoResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/trackers:authenticate"
+    };
+  }
+
+  rpc SetAuth(SetAuthRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*}/trackers:authenticate"
+      body: "*"
+    };
+  }
+
+  rpc ImportTrackers(ImportTrackersRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/trackers}:import"
+      body: "*"
+    };
+  }
+
+  rpc ExportTrackers(ExportTrackersRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/trackers}:export"
+      body: "*"
+    };
+  }
 }
 
 enum State {
@@ -66,6 +94,16 @@ enum State {
   // The consumption of the media is on hold.
   STATE_ON_HOLD = 3;
 }
+
+enum Provider{
+  PROVIDER_UNSPECIFIED = 0;
+  PROVIDER_MYANIMELIST  = 1;
+  PROVIDER_MANGADEX  = 2;
+  PROVIDER_ANILIST  = 3;
+  PROVIDER_ANIDB  = 4;
+  PROVIDER_MANGAUPDATES  = 5;
+  PROVIDER_VNDB  = 6;
+};
 
 message Tracker {
   // The id of the tracker.
@@ -164,4 +202,74 @@ message DeleteTrackerRequest {
       type: "tracker.animeapis.com/Tracker"
     }
   ];
+}
+
+message OAuthInfoRequest {
+  // The OAuth provider to get the auth info from
+  Provider provider = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  // The user associated with the external provider
+  string parent = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+}
+
+message OAuthInfoResponse {
+    // The url to authenticate the user within the provider
+    string url = 1 [
+      (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message OAuth {
+  // OAuth should reply with a code and a state,
+  // this should compete the auth flow
+  string code = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  string state = 2 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+message PlainAuth {
+  // The login info for websites that dont have API support
+  string username = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  string password = 2 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+}
+
+message SetAuthRequest {
+  // The Auth provider
+  Provider provider = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  string parent = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+  // Providers either support OAuth or password/username, not both
+  oneof auth {
+    OAuth oauth = 3;
+    PlainAuth plain_auth = 4;
+  }
+}
+
+// Selecting what provider we want to import from
+message ImportTrackersRequest {
+  Provider provider = 1;
+}
+
+// Selecting what provider we want to export to
+message ExportTrackersRequest {
+  Provider provider = 1;
 }
