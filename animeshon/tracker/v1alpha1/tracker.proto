@@ -113,7 +113,7 @@ message Tracker {
   string item_name = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The items that belong to the content, if any.
-  repeated int64 subitem_ids = 3;
+  repeated string subitem_names = 3;
 
   // When the progress started.
   google.protobuf.Timestamp start_time = 4;
