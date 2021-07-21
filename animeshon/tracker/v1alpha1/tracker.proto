@@ -223,6 +223,7 @@ message OAuthInfoResponse {
     string url = 1 [
       (google.api.field_behavior) = REQUIRED
     ];
+    bool authenticated = 2;
 }
 
 message OAuth {
