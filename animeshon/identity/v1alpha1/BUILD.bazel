@@ -17,7 +17,6 @@ proto_library(
     name = "identity_proto",
     srcs = [
         "identity.proto",
-        "internal.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",
