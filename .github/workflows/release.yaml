@@ -25,7 +25,6 @@ jobs:
         repository: animeapis/proto-binary
         path: animeapis/proto-binary
         token: ${{ env.TOKEN }}
-        ref: ${{ github.ref }}
 
     - name: Clone animeapis/api-go-client
       uses: actions/checkout@v2
@@ -33,7 +32,6 @@ jobs:
         repository: animeapis/api-go-client
         path: animeapis/api-go-client
         token: ${{ env.TOKEN }}
-        ref: ${{ github.ref }}
 
     - name: Clone animeapis/go-genproto
       uses: actions/checkout@v2
@@ -41,7 +39,6 @@ jobs:
         repository: animeapis/go-genproto
         path: animeapis/go-genproto
         token: ${{ env.TOKEN }}
-        ref: ${{ github.ref }}
 
     - name: Cache bazel and bazelisk
       uses: actions/cache@v2
@@ -72,7 +69,7 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate protobuf binaries"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
-        git push origin ${{ github.ref }}
+        git push origin master
 
     - name: Generate new commit for animeapis/api-go-client
       if: github.ref == 'refs/heads/master'
@@ -87,7 +84,7 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
-        git push origin ${{ github.ref }}
+        git push origin master
 
     - name: Generate new commit for animeapis/go-genproto
       if: github.ref == 'refs/heads/master'
@@ -102,4 +99,4 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
-        git push origin ${{ github.ref }}
+        git push origin master
