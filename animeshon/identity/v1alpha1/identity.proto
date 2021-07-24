@@ -27,7 +27,7 @@ service Identity {
 
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/users"
+      get: "/v1alpha1/userstest"
     };
   }
 
