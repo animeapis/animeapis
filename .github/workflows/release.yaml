@@ -46,7 +46,7 @@ jobs:
         path: |
           ~/.cache/bazelisk
           ~/.cache/bazel
-        key: ${{ runner.os }}-bazel-cache
+        key: ${{ runner.os }}-bazel-${{ hashFiles('**/WORKSPACE') }}
 
     - name: Build all client libraries
       run: |-
