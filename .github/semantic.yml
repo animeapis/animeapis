@@ -1,0 +1,31 @@
+# Always validate the PR title AND all the commits
+titleAndCommits: true
+
+# Allow use of Merge commits.
+allowMergeCommits: true
+
+scopes:
+  - all
+  - crossrefs
+  - grbac
+  - hub
+  - iam
+  - image
+  - knowledge
+  - search
+  - resourcemanager
+  - tracker
+  - vision
+  - webcache
+
+types:
+  - feat
+  - fix
+  - docs
+  - style
+  - refactor
+  - perf
+  - test
+  - build
+  - ci
+  - chore
