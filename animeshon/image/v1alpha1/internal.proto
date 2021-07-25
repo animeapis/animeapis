@@ -51,18 +51,21 @@ message FolderEntry {
   bool system_managed = 4;
 
   // Whether images should be available through the image search.
-  bool enable_search_discovery = 5;
+  bool enable_search = 5;
+
+  // Whether images can be annotated.
+  bool enable_annotation = 6;
 
   // Whether images should be client-side encrypted.
-  bool enable_client_encryption = 6;
+  bool enable_encryption = 7;
 
-  // Whether the content of this folder is highly visible by the public such
-  // as profile pictures and banners.
-  bool high_visibility = 7;
+  // Whether the content of this folder is highly visible by the public such as
+  // profile pictures and banners.
+  bool high_visibility = 8;
 
   // When the folder was created.
-  google.protobuf.Timestamp create_time = 8;
+  google.protobuf.Timestamp create_time = 9;
 
   // When the folder was updated.
-  google.protobuf.Timestamp update_time = 9;
+  google.protobuf.Timestamp update_time = 10;
 }
