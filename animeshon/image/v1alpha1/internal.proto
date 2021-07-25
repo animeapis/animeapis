@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package animeshon.image.v1alpha1;
 
 option go_package = "github.com/animeapis/go-genproto/image/v1alpha1;image";
