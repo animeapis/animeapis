@@ -171,7 +171,11 @@ message GetImageRequest {
 }
 
 message CreateFolderRequest {
+  // The parent this folder belongs to.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The folder to create.
+  Folder folder = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteFolderRequest {

@@ -17,22 +17,22 @@ message ImageEntry {
   oneof parent {
     // The folder resource id. Example: `folders/123`.
     int64 folder_id = 2;
-
-    // The organization resource id. Example: `organizations/456`.
-    int64 organization_id = 3;
-
-    // The user resource id. Example: `users/789`.
-    int64 user_id = 4;
   }
 
   // The uri of the image file.
   // Example: gs://my-bucket/my-folder/my-image.jpeg
-  string uri = 5;
+  string uri = 3;
+
+  // When the image was created.
+  google.protobuf.Timestamp create_time = 4;
+
+  // When the image was updated.
+  google.protobuf.Timestamp update_time = 5;
 }
 
 // This is a private internal structure used to store metadata information
-// about a specific Gallery. This structure is never exposed to the public.
-message GalleryEntry {
+// about a specific Folder. This structure is never exposed to the public.
+message FolderEntry {
   // The folder resource id.
   int64 id = 1;
 
@@ -57,4 +57,10 @@ message GalleryEntry {
   // Whether the content of this folder is highly visible by the public such
   // as profile pictures and banners.
   bool high_visibility = 7;
+
+  // When the folder was created.
+  google.protobuf.Timestamp create_time = 8;
+
+  // When the folder was updated.
+  google.protobuf.Timestamp update_time = 9;
 }
