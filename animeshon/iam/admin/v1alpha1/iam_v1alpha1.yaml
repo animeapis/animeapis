@@ -4,4 +4,4 @@ name: iam.animeapis.com
 title: Identity and Access Management API
 
 apis:
-- name: animeshon.iam.v1alpha1.IAM
+- name: animeshon.iam.admin.v1alpha1.IAM
