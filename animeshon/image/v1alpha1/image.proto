@@ -65,6 +65,7 @@ service Image {
     };
   }
   
+  // Gets the settings of an image folder.
   rpc GetFolderSettings(GetFolderSettingsRequest) returns (FolderSettings) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=users/*/folders/*}:settings"
@@ -74,6 +75,7 @@ service Image {
     };
   }
 
+  // Updates the settings of an image folder.
   rpc UpdateFolderSettings(UpdateFolderSettingsRequest) returns (FolderSettings) {
     option (google.api.http) = {
       post: "/v1alpha1/{settings.name=users/*/folders/*}:settings"
