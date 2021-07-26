@@ -84,26 +84,14 @@ message ImageReport {
   // The image resource name.
   string name = 1;
 
-  // The content type of the image.
-  string content_type = 2;
-
-  // The size of the image in bytes.
-  int32 size_bytes = 3;
-
-  // The width of image in pixels.
-  int32 width_pixel = 4;
-
-  // The height of image in pixels.
-  int32 height_pixel = 5;
-
   // The (immutable) properties of the image.
-  ImageProperties properties = 6;
+  ImageProperties properties = 2;
 
   // The annotations of the image.
-  ImageAnnotations annotations = 7;
+  ImageAnnotations annotations = 3;
 
   // The timestamp at which the report was created.
-  google.protobuf.Timestamp create_time = 8
+  google.protobuf.Timestamp create_time = 4
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 

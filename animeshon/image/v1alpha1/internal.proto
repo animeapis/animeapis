@@ -25,11 +25,20 @@ message ImageEntry {
   // Example: gs://my-bucket/my-folder/my-image.jpeg
   string uri = 3;
 
-  // When the image was created.
-  google.protobuf.Timestamp create_time = 4;
+  // The MIME type of the image.
+  string mime_type = 4;
 
-  // When the image was updated.
-  google.protobuf.Timestamp update_time = 5;
+  // The size of the image in bytes.
+  int32 file_size = 5;
+
+  // The width of image in pixels.
+  int32 width = 6;
+
+  // The height of image in pixels.
+  int32 height = 7;
+
+  // When the image was created.
+  google.protobuf.Timestamp create_time = 8;
 }
 
 // This is a private internal structure used to store metadata information
