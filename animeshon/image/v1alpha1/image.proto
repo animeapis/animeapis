@@ -24,7 +24,7 @@ service Image {
   rpc UploadImage(UploadImageRequest) returns (UploadImageResponse) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=folders/*}/images:upload"
-      body: "*"
+      body: "body"
     };
   }
 
@@ -93,12 +93,12 @@ message Folder {
 }
 
 message UploadImageRequest {
-  // The image content, represented as an HttpBody.
-  google.api.HttpBody body = 1 [(google.api.field_behavior) = REQUIRED];
-
   // The image parent of the image. This value defaults to the user performing
   // the upload operation if no parent is set.
-  string parent = 2 [(google.api.field_behavior) = REQUIRED];
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The image content, represented as an HttpBody.
+  google.api.HttpBody body = 2;
 }
 
 message UploadImageResponse {
