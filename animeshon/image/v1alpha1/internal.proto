@@ -56,25 +56,28 @@ message FolderEntry {
     int64 user_id = 3;
   }
 
+  // The bucket where to store resources.
+  string bucket = 4;
+
   // Whether the folder is system managed.
-  bool system_managed = 4;
+  bool system_managed = 5;
 
   // Whether images should be available through the image search.
-  bool enable_search = 5;
+  bool enable_search = 6;
 
   // Whether images can be annotated.
-  bool enable_annotation = 6;
+  bool enable_annotation = 7;
 
   // Whether images should be client-side encrypted.
-  bool enable_encryption = 7;
+  bool enable_encryption = 8;
 
   // Whether the content of this folder is highly visible by the public such as
   // profile pictures and banners.
-  bool high_visibility = 8;
+  bool high_visibility = 9;
 
   // When the folder was created.
-  google.protobuf.Timestamp create_time = 9;
+  google.protobuf.Timestamp create_time = 10;
 
   // When the folder was updated.
-  google.protobuf.Timestamp update_time = 10;
+  google.protobuf.Timestamp update_time = 11;
 }

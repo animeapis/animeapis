@@ -64,6 +64,26 @@ service Image {
       }
     };
   }
+  
+  rpc GetFolderSettings(GetFolderSettingsRequest) returns (FolderSettings) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/folders/*}:settings"
+      additional_bindings {
+        get: "/v1alpha1/{name=organizations/*/folders/*}:settings"
+      }
+    };
+  }
+
+  rpc UpdateFolderSettings(UpdateFolderSettingsRequest) returns (FolderSettings) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{settings.name=users/*/folders/*}:settings"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{settings.name=organizations/*/folders/*}:settings"
+        body: "*"
+      }
+    };
+  }
 }
 
 // The image router is used to generate public links that can be routed through
@@ -90,6 +110,28 @@ service ImageRouter {
 message Folder {
   // The folder resource name.
   string name = 1;
+}
+
+message FolderSettings {
+  // The folder resource name.
+  string name = 1;
+
+  // Whether the folder is system managed.
+  bool system_managed = 2;
+
+  // Whether images in this folder show up in the search engine results.
+  bool enable_search = 3;
+
+  // Whether images in this folder can be annotated.
+  bool enable_annotation = 4;
+
+  // Whether images in this folder must be client-side encrypted.
+  bool enable_encryption = 5;
+
+  // Whether the content of this folder is highly visible by the public such as
+  // profile pictures and banners. Highly visible folders *cannot* contain
+  // sensitive or adult images.
+  bool high_visibility = 6;
 }
 
 message UploadImageRequest {
@@ -179,7 +221,22 @@ message CreateFolderRequest {
 }
 
 message DeleteFolderRequest {
+  // The folder to delete.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetFolderSettingsRequest {
+  // The name of the folder to retrieve settings from.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateFolderSettingsRequest {
+  // The folder settings to update.
+  FolderSettings settings = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
 }
 
 message GetImageRouteRequest {
