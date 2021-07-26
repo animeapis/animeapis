@@ -118,22 +118,25 @@ message FolderSettings {
   // The folder resource name.
   string name = 1;
 
+  // The bucket where to store resources.
+  string bucket = 2;
+
   // Whether the folder is system managed.
-  bool system_managed = 2;
+  bool system_managed = 3;
 
   // Whether images in this folder show up in the search engine results.
-  bool enable_search = 3;
+  bool enable_search = 4;
 
   // Whether images in this folder can be annotated.
-  bool enable_annotation = 4;
+  bool enable_annotation = 5;
 
   // Whether images in this folder must be client-side encrypted.
-  bool enable_encryption = 5;
+  bool enable_encryption = 6;
 
   // Whether the content of this folder is highly visible by the public such as
   // profile pictures and banners. Highly visible folders *cannot* contain
   // sensitive or adult images.
-  bool high_visibility = 6;
+  bool high_visibility = 7;
 }
 
 message UploadImageRequest {
