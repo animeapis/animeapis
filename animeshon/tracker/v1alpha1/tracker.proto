@@ -25,16 +25,24 @@ service TrackerService {
       get: "/v1alpha1/{name=users/*/trackers/*/*}"
     };
   }
-  
+
   rpc ListTrackers(ListTrackersRequest) returns (ListTrackersResponse) {
     option (google.api.http) = {
       get: "/v1alpha1/{parent=users/*}/trackers"
     };
   }
 
-  rpc CreateTracker(CreateTrackerRequest) returns (Tracker) {
+  // You cant create trackers, only records
+//  rpc CreateTracker(CreateTrackerRequest) returns (Tracker) {
+//    option (google.api.http) = {
+//      post: "/v1alpha1/{parent=users/*}/trackers"
+//      body: "*"
+//    };
+//  }
+
+  rpc CreateRecord(CreateRecordRequest) returns (Record) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*}/trackers"
+      post: "/v1alpha1/{parent=users/*}/records"
       body: "*"
     };
   }
@@ -49,6 +57,13 @@ service TrackerService {
   rpc DeleteTracker(DeleteTrackerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*/trackers/*/*}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteRecord(DeleteRecordRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/records/*}"
       body: "*"
     };
   }
@@ -105,6 +120,26 @@ enum Provider{
   PROVIDER_VNDB  = 6;
 };
 
+message Record {
+  // The id of the tracker.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The content whose progress is being tracked.
+  string item_name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Means that is the user's main tracker and not a shared one
+  bool canonical = 3;
+
+  // When the progress started.
+  google.protobuf.Timestamp time = 4;
+
+  // The progress state of the tracker.
+  State state = 6;
+
+  // Todo: Change this to enum?, or one of enum or string
+  string platform = 7;
+}
+
 message Tracker {
   // The id of the tracker.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
@@ -113,21 +148,24 @@ message Tracker {
   string item_name = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The items that belong to the content, if any.
-  repeated string subitem_names = 3;
+  repeated Record records = 3;
+
+  // Means that is the user's main tracker and not a shared one
+  bool canonical = 4;
 
   // When the progress started.
-  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp start_time = 5;
 
   // When the progress ended.
-  google.protobuf.Timestamp end_time = 5;
+  google.protobuf.Timestamp end_time = 6;
 
   // The percentage of progress from 0 to 100.
   // null means the percentage should be calculated based on the amount of
   // subitems in the item being tracked.
-  google.protobuf.FloatValue progress_percentage = 6;
+  google.protobuf.FloatValue progress_percentage = 7;
 
   // The progress state of the tracker.
-  State state = 7;
+  State state = 8;
 }
 
 message GetTrackerRequest {
@@ -185,6 +223,24 @@ message CreateTrackerRequest {
   ];
 }
 
+message CreateRecordRequest {
+  // The user this tracker belongs to.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+
+  // The tracker to create.
+  Record record = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "tracker.animeapis.com/Record"
+    }
+  ];
+}
+
 message UpdateTrackerRequest {
   // The tracker to update.
   Tracker tracker = 1 [(google.api.field_behavior) = REQUIRED];
@@ -203,6 +259,17 @@ message DeleteTrackerRequest {
     }
   ];
 }
+
+message DeleteRecordRequest {
+  // The name of the tracker to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "tracker.animeapis.com/Record"
+    }
+  ];
+}
+
 
 message OAuthInfoRequest {
   // The OAuth provider to get the auth info from
