@@ -8,6 +8,7 @@ env:
 on:
   push:
     branches: [ master ]
+    tags-ignore: [ "**" ]
   pull_request:
 
 jobs:
@@ -63,11 +64,20 @@ jobs:
 
         git config --local core.filemode false
 
+        if [ ${{ github.event_name }} == "pull_request" ]; then
+          git checkout -B ${{ github.event.pull_request.head.ref }}
+        fi
+
         git add -A
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate protobuf binaries"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
-        git push origin ${{ github.ref }}
+
+        if [ ${{ github.event_name }} == "pull_request" ]; then
+          git push origin ${{ github.event.pull_request.head.ref }}
+        else
+          git push origin ${{ github.ref }}
+        fi
 
     - name: Generate new commit for animeapis/api-go-client
       working-directory: animeapis/api-go-client
@@ -77,11 +87,20 @@ jobs:
 
         git config --local core.filemode false
 
+        if [ ${{ github.event_name }} == "pull_request" ]; then
+          git checkout -B ${{ github.event.pull_request.head.ref }}
+        fi
+
         git add -A
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
-        git push origin ${{ github.ref }}
+
+        if [ ${{ github.event_name }} == "pull_request" ]; then
+          git push -u origin ${{ github.event.pull_request.head.ref }}
+        else
+          git push origin ${{ github.ref }}
+        fi
 
     - name: Generate new commit for animeapis/go-genproto
       working-directory: animeapis/go-genproto
@@ -91,8 +110,17 @@ jobs:
 
         git config --local core.filemode false
 
+        if [ ${{ github.event_name }} == "pull_request" ]; then
+          git checkout -B ${{ github.event.pull_request.head.ref }}
+        fi
+
         git add -A
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
-        git push origin ${{ github.ref }}
+
+        if [ ${{ github.event_name }} == "pull_request" ]; then
+          git push origin ${{ github.event.pull_request.head.ref }}
+        else
+          git push origin ${{ github.ref }}
+        fi
