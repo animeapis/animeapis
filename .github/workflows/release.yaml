@@ -1,4 +1,4 @@
-name: Animeshon APIs
+name: Animeshon APIs [release]
 
 env:
   EMAIL: ${{ secrets.WORKFLOW_GITHUB_EMAIL }}
@@ -7,9 +7,9 @@ env:
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "*" ]
 
 jobs:
   build:
@@ -25,6 +25,7 @@ jobs:
         repository: animeapis/proto-binary
         path: animeapis/proto-binary
         token: ${{ env.TOKEN }}
+        ref: ${{ github.ref }}
 
     - name: Clone animeapis/api-go-client
       uses: actions/checkout@v2
@@ -32,6 +33,7 @@ jobs:
         repository: animeapis/api-go-client
         path: animeapis/api-go-client
         token: ${{ env.TOKEN }}
+        ref: ${{ github.ref }}
 
     - name: Clone animeapis/go-genproto
       uses: actions/checkout@v2
@@ -39,6 +41,7 @@ jobs:
         repository: animeapis/go-genproto
         path: animeapis/go-genproto
         token: ${{ env.TOKEN }}
+        ref: ${{ github.ref }}
 
     - name: Cache bazel and bazelisk
       uses: actions/cache@v2
@@ -46,7 +49,7 @@ jobs:
         path: |
           ~/.cache/bazelisk
           ~/.cache/bazel
-        key: ${{ runner.os }}-bazel-${{ hashFiles('**/WORKSPACE') }}
+        key: ${{ runner.os }}-${{ github.ref }}-bazel-${{ hashFiles('**/WORKSPACE') }}
 
     - name: Build all client libraries
       run: |-
@@ -57,7 +60,6 @@ jobs:
         bash .github/workflows/release.sh
 
     - name: Generate new commit for animeapis/proto-binary
-      if: github.ref == 'refs/heads/master'
       working-directory: animeapis/proto-binary
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
@@ -69,10 +71,9 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate protobuf binaries"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
-        git push origin master
+        git push origin ${{ github.ref }}
 
     - name: Generate new commit for animeapis/api-go-client
-      if: github.ref == 'refs/heads/master'
       working-directory: animeapis/api-go-client
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
@@ -84,10 +85,9 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
-        git push origin master
+        git push origin ${{ github.ref }}
 
     - name: Generate new commit for animeapis/go-genproto
-      if: github.ref == 'refs/heads/master'
       working-directory: animeapis/go-genproto
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
@@ -99,4 +99,4 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
-        git push origin master
+        git push origin ${{ github.ref }}
