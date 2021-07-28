@@ -64,8 +64,14 @@ jobs:
 
         git config --local core.filemode false
 
+        # If we are in a pull request switch to (or create) its branch.
         if [ ${{ github.event_name }} == "pull_request" ]; then
-          git checkout -B ${{ github.event.pull_request.head.ref }}
+          if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+            git fetch ${{ github.event.pull_request.head.ref }}
+            git checkout ${{ github.event.pull_request.head.ref }}
+          else
+            git checkout -b ${{ github.event.pull_request.head.ref }}
+          fi
         fi
 
         git add -A
@@ -82,8 +88,14 @@ jobs:
 
         git config --local core.filemode false
 
+        # If we are in a pull request switch to (or create) its branch.
         if [ ${{ github.event_name }} == "pull_request" ]; then
-          git checkout -B ${{ github.event.pull_request.head.ref }}
+          if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+            git fetch ${{ github.event.pull_request.head.ref }}
+            git checkout ${{ github.event.pull_request.head.ref }}
+          else
+            git checkout -b ${{ github.event.pull_request.head.ref }}
+          fi
         fi
 
         git add -A
@@ -100,8 +112,14 @@ jobs:
 
         git config --local core.filemode false
 
+        # If we are in a pull request switch to (or create) its branch.
         if [ ${{ github.event_name }} == "pull_request" ]; then
-          git checkout -B ${{ github.event.pull_request.head.ref }}
+          if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+            git fetch ${{ github.event.pull_request.head.ref }}
+            git checkout ${{ github.event.pull_request.head.ref }}
+          else
+            git checkout -b ${{ github.event.pull_request.head.ref }}
+          fi
         fi
 
         git add -A
