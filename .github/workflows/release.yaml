@@ -65,12 +65,12 @@ jobs:
         git config --local core.filemode false
 
         # If we are in a pull request switch to (or create) its branch.
-        if [ ${{ github.event_name }} == "pull_request" ]; then
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
           if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+            git checkout -b ${{ github.event.pull_request.head.ref }}
+          else
             git fetch ${{ github.event.pull_request.head.ref }}
             git checkout ${{ github.event.pull_request.head.ref }}
-          else
-            git checkout -b ${{ github.event.pull_request.head.ref }}
           fi
         fi
 
@@ -89,12 +89,12 @@ jobs:
         git config --local core.filemode false
 
         # If we are in a pull request switch to (or create) its branch.
-        if [ ${{ github.event_name }} == "pull_request" ]; then
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
           if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+            git checkout -b ${{ github.event.pull_request.head.ref }}
+          else
             git fetch ${{ github.event.pull_request.head.ref }}
             git checkout ${{ github.event.pull_request.head.ref }}
-          else
-            git checkout -b ${{ github.event.pull_request.head.ref }}
           fi
         fi
 
@@ -113,12 +113,12 @@ jobs:
         git config --local core.filemode false
 
         # If we are in a pull request switch to (or create) its branch.
-        if [ ${{ github.event_name }} == "pull_request" ]; then
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
           if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+            git checkout -b ${{ github.event.pull_request.head.ref }}
+          else
             git fetch ${{ github.event.pull_request.head.ref }}
             git checkout ${{ github.event.pull_request.head.ref }}
-          else
-            git checkout -b ${{ github.event.pull_request.head.ref }}
           fi
         fi
 
