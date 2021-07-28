@@ -9,7 +9,7 @@ on:
   delete:
 
 jobs:
-  build:
+  branch-delete:
     runs-on: ubuntu-latest
 
     steps:
