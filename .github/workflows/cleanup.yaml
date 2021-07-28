@@ -1,0 +1,50 @@
+name: Animeshon APIs [cleanup]
+
+env:
+  EMAIL: ${{ secrets.WORKFLOW_GITHUB_EMAIL }}
+  USERNAME: ${{ secrets.WORKFLOW_GITHUB_USERNAME }}
+  TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+
+on:
+  delete:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone animeapis/proto-binary
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/proto-binary
+        path: animeapis/proto-binary
+        token: ${{ env.TOKEN }}
+
+    - name: Clone animeapis/api-go-client
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/api-go-client
+        path: animeapis/api-go-client
+        token: ${{ env.TOKEN }}
+
+    - name: Clone animeapis/go-genproto
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/go-genproto
+        path: animeapis/go-genproto
+        token: ${{ env.TOKEN }}
+
+    - name: Delete branch ${{ github.event.ref }} from animeapis/proto-binary
+      working-directory: animeapis/proto-binary
+      run: |-
+        git push origin --delete ${{ github.event.ref }}
+
+    - name: Delete branch ${{ github.event.ref }} from animeapis/api-go-client
+      working-directory: animeapis/api-go-client
+      run: |-
+        git push origin --delete ${{ github.event.ref }}
+
+    - name: Delete branch ${{ github.event.ref }} from animeapis/go-genproto
+      working-directory: animeapis/go-genproto
+      run: |-
+        git push origin --delete ${{ github.event.ref }}
