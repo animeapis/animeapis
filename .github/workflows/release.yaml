@@ -1,4 +1,4 @@
-name: Animeshon APIs
+name: Animeshon APIs [release]
 
 env:
   EMAIL: ${{ secrets.WORKFLOW_GITHUB_EMAIL }}
@@ -7,9 +7,9 @@ env:
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master ]
+    tags-ignore: [ "**" ]
   pull_request:
-    branches: [ "master" ]
 
 jobs:
   build:
@@ -40,13 +40,46 @@ jobs:
         path: animeapis/go-genproto
         token: ${{ env.TOKEN }}
 
+    - name: Switch branch for animeapis/proto-binary (pull requests only)
+      working-directory: animeapis/proto-binary
+      if: github.event_name == 'pull_request'
+      run: |-
+        if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+        else
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        fi
+
+    - name: Switch branch for animeapis/api-go-client (pull requests only)
+      working-directory: animeapis/api-go-client
+      if: github.event_name == 'pull_request'
+      run: |-
+        if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+        else
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        fi
+
+    - name: Switch branch for animeapis/go-genproto (pull requests only)
+      working-directory: animeapis/go-genproto
+      if: github.event_name == 'pull_request'
+      run: |-
+        if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+        else
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        fi
+
     - name: Cache bazel and bazelisk
       uses: actions/cache@v2
       with:
         path: |
           ~/.cache/bazelisk
           ~/.cache/bazel
-        key: ${{ runner.os }}-bazel-${{ hashFiles('**/WORKSPACE') }}
+        key: ${{ runner.os }}-${{ github.ref }}-bazel-${{ hashFiles('**/WORKSPACE') }}
 
     - name: Build all client libraries
       run: |-
@@ -56,8 +89,7 @@ jobs:
       run: |-
         bash .github/workflows/release.sh
 
-    - name: Generate new commit for animeapis/proto-binary
-      if: github.ref == 'refs/heads/master'
+    - name: Push commit to animeapis/proto-binary
       working-directory: animeapis/proto-binary
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
@@ -69,10 +101,9 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate protobuf binaries"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/proto-binary.git
-        git push origin master
+        git push -u origin HEAD
 
-    - name: Generate new commit for animeapis/api-go-client
-      if: github.ref == 'refs/heads/master'
+    - name: Push commit to animeapis/api-go-client
       working-directory: animeapis/api-go-client
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
@@ -84,10 +115,9 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-go-client.git
-        git push origin master
+        git push -u origin HEAD
 
-    - name: Generate new commit for animeapis/go-genproto
-      if: github.ref == 'refs/heads/master'
+    - name: Push commit to animeapis/go-genproto
       working-directory: animeapis/go-genproto
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
@@ -99,4 +129,4 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
-        git push origin master
+        git push -u origin HEAD
