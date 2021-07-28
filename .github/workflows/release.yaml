@@ -40,7 +40,7 @@ jobs:
         path: animeapis/go-genproto
         token: ${{ env.TOKEN }}
 
-    - name: Set branch for animeapis/proto-binary
+    - name: Switch branch for animeapis/proto-binary (pull requests only)
       working-directory: animeapis/proto-binary
       if: github.event_name == 'pull_request'
       run: |-
@@ -51,7 +51,7 @@ jobs:
           git checkout ${{ github.event.pull_request.head.ref }}
         fi
 
-    - name: Set branch for animeapis/api-go-client
+    - name: Switch branch for animeapis/api-go-client (pull requests only)
       working-directory: animeapis/api-go-client
       if: github.event_name == 'pull_request'
       run: |-
@@ -62,7 +62,7 @@ jobs:
           git checkout ${{ github.event.pull_request.head.ref }}
         fi
 
-    - name: Set branch for animeapis/go-genproto
+    - name: Switch branch for animeapis/go-genproto (pull requests only)
       working-directory: animeapis/go-genproto
       if: github.event_name == 'pull_request'
       run: |-
