@@ -7,9 +7,8 @@ env:
 
 on:
   push:
-    branches: [ "*" ]
+    branches: [ master ]
   pull_request:
-    branches: [ "*" ]
 
 jobs:
   build:
@@ -25,7 +24,6 @@ jobs:
         repository: animeapis/proto-binary
         path: animeapis/proto-binary
         token: ${{ env.TOKEN }}
-        ref: ${{ github.ref }}
 
     - name: Clone animeapis/api-go-client
       uses: actions/checkout@v2
@@ -33,7 +31,6 @@ jobs:
         repository: animeapis/api-go-client
         path: animeapis/api-go-client
         token: ${{ env.TOKEN }}
-        ref: ${{ github.ref }}
 
     - name: Clone animeapis/go-genproto
       uses: actions/checkout@v2
@@ -41,7 +38,6 @@ jobs:
         repository: animeapis/go-genproto
         path: animeapis/go-genproto
         token: ${{ env.TOKEN }}
-        ref: ${{ github.ref }}
 
     - name: Cache bazel and bazelisk
       uses: actions/cache@v2
