@@ -50,7 +50,7 @@ service TrackerService {
   rpc AddRecord(AddRecordRequest) returns (Record) {
     option (google.api.http) = {
       // records/anime/anime_id
-      post: "/v1alpha1/{parent=users/*}/records/*/*"
+      post: "/v1alpha1/{parent=users/*}/records/{resource=*/*}"
       body: "*"
     };
   }
@@ -212,8 +212,18 @@ message AddRecordRequest {
     }
   ];
 
+  // The resource id
+  // anime/1234
+  string resource = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "identity.animeapis.com/User"
+    }
+  ];
+
+
   // The record to create.
-  Record record = 2 [
+  Record record = 3 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
       type: "tracker.animeapis.com/Record"
