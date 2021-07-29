@@ -32,22 +32,7 @@ service TrackerService {
     };
   }
 
-  // You cant create trackers, only records
-//  rpc CreateTracker(CreateTrackerRequest) returns (Tracker) {
-//    option (google.api.http) = {
-//      post: "/v1alpha1/{parent=users/*}/trackers"
-//      body: "*"
-//    };
-//  }
-
-  rpc CreateRecord(CreateRecordRequest) returns (Record) {
-    option (google.api.http) = {
-      // records/anime/anime_id
-      post: "/v1alpha1/{parent=users/*}/records/*/*"
-      body: "*"
-    };
-  }
-
+  // Only use will be to update state and progress percentage
   rpc UpdateTracker(UpdateTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
       patch: "/v1alpha1/{tracker.name=users/*/trackers/*/*}"
@@ -58,6 +43,14 @@ service TrackerService {
   rpc DeleteTracker(DeleteTrackerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*/trackers/*/*}"
+      body: "*"
+    };
+  }
+
+  rpc AddRecord(AddRecordRequest) returns (Record) {
+    option (google.api.http) = {
+      // records/anime/anime_id
+      post: "/v1alpha1/{parent=users/*}/records/*/*"
       body: "*"
     };
   }
@@ -136,10 +129,10 @@ message Record {
   google.protobuf.Timestamp time = 4;
 
   // The progress state of the tracker.
-  State state = 6;
+  State state = 5;
 
-  // Todo: Change this to enum?, or one of enum or string
-  string platform = 7;
+  string platform = 6;
+
 }
 
 message Tracker {
@@ -168,6 +161,8 @@ message Tracker {
 
   // The progress state of the tracker.
   State state = 8;
+
+  repeated string members = 9;
 }
 
 message GetTrackerRequest {
@@ -207,8 +202,9 @@ message ListTrackersResponse {
   string next_page_token = 2;
 }
 
-message CreateTrackerRequest {
+message AddRecordRequest {
   // The user this tracker belongs to.
+  // users/1234
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
@@ -216,25 +212,7 @@ message CreateTrackerRequest {
     }
   ];
 
-  // The tracker to create.
-  Tracker tracker = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "tracker.animeapis.com/Tracker"
-    }
-  ];
-}
-
-message CreateRecordRequest {
-  // The user this tracker belongs to.
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
-
-  // The tracker to create.
+  // The record to create.
   Record record = 2 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
@@ -263,7 +241,7 @@ message DeleteTrackerRequest {
 }
 
 message DeleteRecordRequest {
-  // The name of the tracker to delete.
+  // The name of the record to delete.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
@@ -288,11 +266,11 @@ message OAuthInfoRequest {
 }
 
 message OAuthInfoResponse {
-    // The url to authenticate the user within the provider
-    string url = 1 [
-      (google.api.field_behavior) = REQUIRED
-    ];
-    bool authenticated = 2;
+  // The url to authenticate the user within the provider
+  string url = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  bool authenticated = 2;
 }
 
 message OAuth {
