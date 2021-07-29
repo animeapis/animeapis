@@ -122,16 +122,13 @@ message Record {
   // The content whose progress is being tracked.
   string item_name = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // Means that is the user's main tracker and not a shared one
-  bool canonical = 3;
-
   // When the progress started.
-  google.protobuf.Timestamp time = 4;
+  google.protobuf.Timestamp time = 3;
 
   // The progress state of the tracker.
-  State state = 5;
+  State state = 4;
 
-  string platform = 6;
+  string platform = 5;
 
 }
 
