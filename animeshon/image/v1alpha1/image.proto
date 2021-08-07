@@ -43,6 +43,26 @@ service Image {
     };
   }
 
+  // Gets an image folder.
+  rpc GetFolder(GetFolderRequest) returns (Folder) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/folders/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=organizations/*/folders/*}"
+      }
+    };
+  }
+
+  // Lists image folders with pagination.
+  rpc ListFolders(ListFoldersRequest) returns (ListFoldersResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/folders"
+      additional_bindings {
+        get: "/v1alpha1/{parent=organizations/*}/folders"
+      }
+    };
+  }
+
   // Creates a new image folder.
   rpc CreateFolder(CreateFolderRequest) returns (Folder) {
     option (google.api.http) = {
@@ -215,6 +235,33 @@ message GetImageRequest {
   // image has the closest standard ratio to the requested width or height.
   // If the requested ratio is larger than the original image it is ignored.
   ResizeBounds resize = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message GetFolderRequest {
+  // The name of the folder to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListFoldersRequest {
+  // The parent, which owns this collection of folders.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListFoldersResponse {
+  // The list of folders.
+  repeated Folder folders = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
 }
 
 message CreateFolderRequest {
