@@ -117,7 +117,7 @@ service ImageRouter {
   // Gets the image public link address that is used to fetch images via CDN.
   rpc GetImageRoute(GetImageRouteRequest) returns (GetImageRouteResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/folders/*}:route"
+      get: "/v1alpha1/{name=folders/*/images/*}:route"
     };
   }
 
