@@ -124,7 +124,7 @@ service ImageRouter {
   // Routes a raw request received by a CDN host to its target image.
   rpc RouteImage(RouteImageRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
-      get: "/v1alpha1/{get=routers/*/parameters/**}"
+      get: "/v1alpha1/{host=*}/{path=**}"
     };
   }
 }
@@ -301,7 +301,9 @@ message GetImageRouteResponse {
 }
 
 message RouteImageRequest {
-  // An opaque route indicating which host received the request and which
-  // parameters were passed to the request.
-  string get = 1 [(google.api.field_behavior) = REQUIRED];
+  // The host that received the request.
+  string host = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The requested path representing an opaque route.
+  string path = 2 [(google.api.field_behavior) = REQUIRED];
 }
