@@ -206,8 +206,32 @@ message ImportImageRequest {
 }
 
 message ImportImageResponse {
-  // The image resource name.
-  string name = 1;
+  message ImportImageResult {
+    // The image resource name.
+    string name = 1;
+
+    // Whether this image was found in the cache.
+    bool cache_hit = 2;
+  }
+
+  message ImportImageRemoteError {
+    // The status code returned from the remote server.
+    int32 status_code = 1;
+
+    // The details related to the import failure.
+    string details = 2;
+  }
+
+  // The response is either the imported image or a remote error with details.
+  oneof response {
+    // If the import was successful this field will provide the newly created
+    // image resource name.
+    ImportImageResult result = 1;
+
+    // If the import ended up in a failure due to an error with the remote
+    // server this field will provide more details about the failure.
+    ImportImageRemoteError error = 2;
+  }
 }
 
 message GetImageRequest {
