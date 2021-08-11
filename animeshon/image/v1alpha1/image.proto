@@ -23,23 +23,34 @@ service Image {
   // Uploads an image through the request HttpBody.
   rpc UploadImage(UploadImageRequest) returns (UploadImageResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=folders/*}/images:upload"
+      post: "/v1alpha1/{parent=users/*/folders/*}/images:upload"
       body: "body"
+      additional_bindings {
+        post: "/v1alpha1/{parent=organizations/*/folders/*}/images:upload"
+        body: "body"
+      }
     };
   }
 
   // Imports an image from a remote web address.
   rpc ImportImage(ImportImageRequest) returns (ImportImageResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=folders/*}/images:import"
+      post: "/v1alpha1/{parent=users/*/folders/*}/images:import"
       body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=organizations/*/folders/*}/images:import"
+        body: "*"
+      }
     };
   }
 
   // Gets an image in binary representation with the format and size requested.
   rpc GetImage(GetImageRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=folders/*/images/*}"
+      get: "/v1alpha1/{name=users/*/folders/*/images/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=organizations/*/folders/*/images/*}"
+      }
     };
   }
 
@@ -117,7 +128,10 @@ service ImageRouter {
   // Gets the image public link address that is used to fetch images via CDN.
   rpc GetImageRoute(GetImageRouteRequest) returns (GetImageRouteResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=folders/*/images/*}:route"
+      get: "/v1alpha1/{name=users/*/folders/*/images/*}:route"
+      additional_bindings {
+        get: "/v1alpha1/{name=organizations/*/folders/*/images/*}:route"
+      }
     };
   }
 
