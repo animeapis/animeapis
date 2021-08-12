@@ -81,3 +81,20 @@ message FolderEntry {
   // When the folder was updated.
   google.protobuf.Timestamp update_time = 11;
 }
+
+message RouteEntry {
+  // A reference to a parent resource.
+  oneof parent {
+    // The organization resource id. Example: `organizations/456`.
+    int64 organization_id = 1;
+
+    // The user resource id. Example: `users/789`.
+    int64 user_id = 2;
+  }
+
+  // The folder resource id.
+  int64 folder_id = 3;
+
+  // The image resource id.
+  int64 image_id = 4;
+}
