@@ -96,7 +96,7 @@ message CreateCacheRequest {
 
 message ListCachesRequest {
   // If unspecified, server will pick an appropriate default.
-  int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 page_size = 1;
 
   // The value returned from the previous call.
   string page_token = 2;
