@@ -155,6 +155,12 @@ service Referrer {
     get: "/v1alpha1/wormhole/{name=namespaces/*/*/*}"
     };
   }
+
+  rpc ListWormholeCrossRefs(ListWormholeCrossRefsRequest) returns (ListWormholeCrossRefsResponse) {
+    option (google.api.http) = {
+    get: "/v1alpha1/wormhole/{name=namespaces/*/*/*}/crossrefs"
+    };
+  }
 }
 
 message ImportCrossRefRequest {
@@ -403,6 +409,36 @@ message GetWormholeRequest {
     (google.api.resource_reference).type = "crossrefs.animeapis.com/Wormhole",
     (google.api.field_behavior) = REQUIRED
   ];
+}
+
+message ListWormholeCrossRefsRequest {
+  string name = 1 [
+    (google.api.resource_reference).type = "crossrefs.animeapis.com/Wormhole",
+    (google.api.field_behavior) = REQUIRED
+  ];
+
+  // search wormhole entity in approved edges
+  bool withApproved = 2;
+
+  // search wormhole entity in pending edges
+  bool withPending = 3;
+
+  // search wormhole entity in partial edges
+  bool withPartial = 4;
+
+  // search wormhole entity in rejected edges
+  bool withRejected = 5;
+
+  // list of CrossRefs to exclude
+  repeated string crossRefsExclusion = 6;
+
+  // prefix of the CrossRefs to search
+  string prefix = 7;
+}
+
+message ListWormholeCrossRefsResponse {
+  // The list of crossrefs.
+  repeated CrossRef crossrefs = 1;
 }
 
 message Wormhole {
