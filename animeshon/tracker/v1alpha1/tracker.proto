@@ -20,6 +20,10 @@ option ruby_package = "Animeshon::Tracker::v1Alpha1";
 service TrackerService {
   option (google.api.default_host) = "tracker.animeapis.com";
 
+  // Get a tracker by its unique identifier.
+  //
+  // To fetch a tracker by the resource, use `ListTrackers` instead with an
+  // appropriate filter. Example: `filter = "resource:animes/1245678"`.
   rpc GetTracker(GetTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=users/*/trackers/*}"
@@ -29,11 +33,12 @@ service TrackerService {
     };
   }
 
+  // TODO: add documentation about supported filters.
   rpc ListTrackers(ListTrackersRequest) returns (ListTrackersResponse) {
     option (google.api.http) = {
       get: "/v1alpha1/{parent=users/*}/trackers"
       additional_bindings {
-        get: "/v1alpha1/{parent=audiences/*/trackers}"
+        get: "/v1alpha1/{parent=audiences/*}/trackers"
       }
     };
   }
@@ -100,9 +105,9 @@ service TrackerService {
 
   rpc DeleteActivity(DeleteActivityRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=users/*/activities/*}"
+      delete: "/v1alpha1/{name=users/*/trackers/*/activities/*}"
       additional_bindings {
-        delete: "/v1alpha1/{name=audiences/*/activities/*"
+        delete: "/v1alpha1/{name=audiences/*/trackers/*/activities/*}"
       }
     };
   }
@@ -155,6 +160,9 @@ enum Provider{
 // when a user is reading a graph novel directly on our platform. Activities can
 // also be repeated multiple times for the same range (e.g. if a user rewatches
 // the same scene in an episode 5 times).
+//
+// Whenever an activity is created that marks the end of a resource, its parent
+// tracker is updated to include it in the list of completed resource.
 message Activity {
   // The id of the activity.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
@@ -228,13 +236,16 @@ message Tracker {
   // When the progress ended.
   google.protobuf.Timestamp end_time = 4;
 
+  // The list of completed sub-resources (e.g episodes or chapters).
+  repeated string completed_resources = 5;
+
   // The percentage of progress from 0 to 100. A null value means the value was
   // not manually defined and therefore the percentage should be calculated
   // on-the-fly.
-  google.protobuf.FloatValue progress_percentage = 5;
+  google.protobuf.FloatValue progress_percentage = 6;
 
   // The progress state of the tracker.
-  State state = 6;
+  State state = 7;
 }
 
 // TODO: this is represented as a group in authorization.
