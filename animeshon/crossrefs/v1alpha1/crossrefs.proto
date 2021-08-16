@@ -181,8 +181,8 @@ message ExportCrossRefRequest {
 
   Target target = 1;
 
-  // Prefix to restrict the crossrefs to export to a specific subset
-  string prefix = 2;
+  // Kind to restrict the crossrefs to export to a specific subset
+  string kind = 2;
 }
 
 message AnalyzeCrossRefRequest {
@@ -326,8 +326,8 @@ message UpdateCrossRefResponse {
 }
 
 message CrossRefsFilterRequest {
-  // specifies the prefix to search in 
-  string prefix = 1;
+  // specifies the kind of the CrossRefs to search in 
+  string kind = 1;
   
   // if true only crossreferences with pendings are returned
   bool pendingOnly = 2;
@@ -432,8 +432,8 @@ message ListWormholeCrossRefsRequest {
   // list of CrossRefs to exclude
   repeated string crossRefsExclusion = 6;
 
-  // prefix of the CrossRefs to search
-  string prefix = 7;
+  // kind of the CrossRefs to search
+  string kind = 7;
 }
 
 message ListWormholeCrossRefsResponse {
