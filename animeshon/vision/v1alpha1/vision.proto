@@ -187,6 +187,9 @@ message DeleteImageAnalysisRequest {
 message CreateImageAnnotationRequest {
   // The parent this image annotation belongs to.
   string parent = 1;
+
+  // The image annotation to create.
+  ImageAnnotation annotation = 2;
 }
 
 message ListImageAnnotationsRequest {
