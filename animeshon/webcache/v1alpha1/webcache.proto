@@ -51,13 +51,13 @@ service WebCache {
 // Cache contains meta information about a specific web resource.
 message Cache {
   // The name of the cache, idempotently generated from the scheme and uri.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The original scheme indicating the protocol used for the original request.
-  string scheme = 2;
+  string scheme = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The request uri stripped of the original scheme.
-  string uri = 3;
+  string uri = 3 [(google.api.field_behavior) = REQUIRED];
 
   // The response content type indicating the original media type.
   string mime_type = 4;
