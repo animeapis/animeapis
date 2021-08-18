@@ -117,23 +117,23 @@ enum State {
   STATE_UNSPECIFIED = 0;
 
   // The consumption of the media is still in progress.
-  STATE_IN_PROGRESS = 1;
+  IN_PROGRESS = 1;
 
   // The consumption of the media has been completed.
-  STATE_COMPLETED = 2;
+  COMPLETED = 2;
 
   // The consumption of the media is on hold.
-  STATE_ON_HOLD = 3;
+  ON_HOLD = 3;
 }
 
 enum Provider{
   PROVIDER_UNSPECIFIED = 0;
-  PROVIDER_MYANIMELIST  = 1;
-  PROVIDER_MANGADEX  = 2;
-  PROVIDER_ANILIST  = 3;
-  PROVIDER_ANIDB  = 4;
-  PROVIDER_MANGAUPDATES  = 5;
-  PROVIDER_VNDB  = 6;
+  MYANIMELIST  = 1;
+  MANGADEX  = 2;
+  ANILIST  = 3;
+  ANIDB  = 4;
+  MANGAUPDATES  = 5;
+  VNDB  = 6;
 };
 
 // Activities track the progress of a user related to readable or watchable
