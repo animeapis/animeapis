@@ -111,10 +111,6 @@ message ImageAnalysis {
   
   // The creation time indicating when this revision was created.
   google.protobuf.Timestamp revision_create_time = 5;
-
-  // The expiration time indicating when this revision should no longer be
-  // considered valid.
-  google.protobuf.Timestamp revision_expire_time = 6;
 }
 
 message ImageAnnotation {
