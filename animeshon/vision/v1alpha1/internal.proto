@@ -19,23 +19,17 @@ message ImageAnnotationEntry {
   int64 id = 1;
 
   // A reference to a parent resource.
-  oneof parent {
-    // The organization resource id. Example: `organizations/456`.
-    int64 organization_id = 2;
-
-    // The user resource id. Example: `users/789`.
-    int64 user_id = 3;
-  }
+  string parent = 2;
 
   // The annotated image.
-  string resource = 4;
+  string resource = 3;
 
   // The annotations of the image.
-  ImageAnnotations annotations = 5;
+  ImageAnnotations annotations = 4;
 
   // When the album was created.
-  google.protobuf.Timestamp create_time = 6;
+  google.protobuf.Timestamp create_time = 5;
 
   // When the album was updated.
-  google.protobuf.Timestamp update_time = 7;
+  google.protobuf.Timestamp update_time = 6;
 }
