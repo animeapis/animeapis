@@ -19,6 +19,7 @@ proto_library(
         "annotations.proto",
         "properties.proto",
         "vision.proto",
+        "internal.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",

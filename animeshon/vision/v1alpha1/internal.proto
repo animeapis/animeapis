@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+import "animeshon/vision/v1alpha1/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package animeshon.vision.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/vision/v1alpha1;vision";
+option java_package = "com.animeshon.vision.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Vision::v1Alpha1";
+
+
+// This is a private internal structure used to store metadata information
+// about a specific ImageAnnotation. This structure is never exposed to the
+// public.
+message ImageAnnotationEntry {
+  // The album resource id.
+  int64 id = 1;
+
+  // A reference to a parent resource.
+  oneof parent {
+    // The organization resource id. Example: `organizations/456`.
+    int64 organization_id = 2;
+
+    // The user resource id. Example: `users/789`.
+    int64 user_id = 3;
+  }
+
+  // The annotated image.
+  string resource = 4;
+
+  // The annotations of the image.
+  ImageAnnotations annotations = 5;
+
+  // When the album was created.
+  google.protobuf.Timestamp create_time = 6;
+
+  // When the album was updated.
+  google.protobuf.Timestamp update_time = 7;
+}
