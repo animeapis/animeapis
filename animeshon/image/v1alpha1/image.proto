@@ -226,9 +226,6 @@ message ImportImageResponse {
   message ImportImageResult {
     // The image resource name.
     string name = 1;
-
-    // Whether this image was found in the cache.
-    bool cache_hit = 2;
   }
 
   message ImportImageRemoteError {
@@ -249,6 +246,9 @@ message ImportImageResponse {
     // server this field will provide more details about the failure.
     ImportImageRemoteError error = 2;
   }
+
+  // Whether this image was found in the cache.
+  bool cache_hit = 3;
 }
 
 message GetImageRequest {
