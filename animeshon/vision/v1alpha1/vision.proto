@@ -198,6 +198,12 @@ message ListImageAnnotationsRequest {
 
   // The value returned from the previous call.
   string page_token = 3;
+
+  // A filter to be applied to results.
+  //
+  // Currently accepted filters include:
+  // - resource:{full resource name}
+  string filter = 4;
 }
 
 message ListImageAnnotationsResponse {
