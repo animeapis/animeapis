@@ -27,7 +27,7 @@ message ImageAnnotations {
   repeated WebSearchAnnotation web_search_annotations = 5;
 
   // The SafeSearch ratings detected in the image.
-  repeated SafeSearchAnnotation safe_search_annotations = 6;
+  SafeSearchAnnotation safe_search_annotation = 6;
 }
 
 message TextAnnotation {
@@ -53,7 +53,7 @@ message TextAnnotation {
   google.cloud.vision.v1.BoundingPoly bounding_box = 2;
 
   // UTF-8 text detected by the OCR.
-  repeated string texts = 3;
+  string text = 3;
 
   // Confidence of the OCR results for the paragraph. Range [0, 1].
   float confidence = 4;
