@@ -3,7 +3,7 @@ syntax = "proto3";
 package animeshon.vision.v1alpha1;
 
 import "google/api/annotations.proto";
-import "google/cloud/vision/v1/geometry.proto";
+import "animeshon/vision/v1alpha1/geometry.proto";
 
 option go_package = "github.com/animeapis/go-genproto/vision/v1alpha1;vision";
 option java_package = "com.animeshon.vision.v1alpha1";
@@ -50,7 +50,7 @@ message TextAnnotation {
   TextProperty property = 1;
 
   // The bounding box for the paragraph.
-  google.cloud.vision.v1.BoundingPoly bounding_box = 2;
+  BoundingPoly bounding_box = 2;
 
   // UTF-8 text detected by the OCR.
   string text = 3;
@@ -78,7 +78,7 @@ message EntityAnnotation {
   float score = 4;
 
   // Image region to which this entity belongs.
-  google.cloud.vision.v1.BoundingPoly bounding_box = 7;
+  BoundingPoly bounding_box = 7;
 }
 
 message KnowledgeGraphAnnotation {
@@ -89,7 +89,7 @@ message KnowledgeGraphAnnotation {
   float score = 2;
 
   // Image region to which this entity belongs.
-  google.cloud.vision.v1.BoundingPoly bounding_box = 3;
+  BoundingPoly bounding_box = 3;
 }
 
 message WebSearchAnnotation {
