@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "animeshon/vision/v1alpha1/annotations.proto";
+import "animeshon/vision/v1alpha1/properties.proto";
 import "google/protobuf/timestamp.proto";
 
 package animeshon.vision.v1alpha1;
