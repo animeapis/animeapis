@@ -93,6 +93,8 @@ service ImageAnnotator {
   }
 }
 
+// TODO: add information about the model used and whether the analysis is STABLE
+// TODO: or EXPERIMENTAL. NOTE: Latest should return the latest STABLE analysis.
 message ImageAnalysis {
   // The name of the image analysis.
   string name = 1;
@@ -103,14 +105,8 @@ message ImageAnalysis {
   // The annotations of the image.
   ImageAnnotations annotations = 3;
 
-  // The randomly generated revision identifier of this analysis.
-  // The format is an 8-character hexadecimal string.
-  string revision_id = 4 [
-    (google.api.field_behavior) = IMMUTABLE,
-    (google.api.field_behavior) = OUTPUT_ONLY];
-  
   // The creation time indicating when this revision was created.
-  google.protobuf.Timestamp revision_create_time = 5;
+  google.protobuf.Timestamp create_time = 4;
 }
 
 message ImageAnnotation {
