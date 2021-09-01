@@ -369,16 +369,7 @@ message OperationMetadata {
   string api_version = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only.
-  int32 step_count = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
-
-  // Output only.
-  int32 step_progress = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
-
-  // Output only.
-  int32 item_count = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
-
-  // Output only.
-  int32 item_progress = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 progress_percentage = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // TODO(christian-roggia): this is a workaround to solve the issue of GAPIC
