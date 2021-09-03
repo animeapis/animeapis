@@ -20,15 +20,26 @@ option ruby_package = "Animeshon::Tracker::v1Alpha1";
 service TrackerService {
   option (google.api.default_host) = "tracker.animeapis.com";
 
+  // Get a tracker by its unique identifier.
+  //
+  // To fetch a tracker by the resource, use `ListTrackers` instead with an
+  // appropriate filter. Example: `filter = "resource:animes/1245678"`.
   rpc GetTracker(GetTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/trackers/*/*}"
+      get: "/v1alpha1/{name=users/*/trackers/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=audiences/*/trackers/*}"
+      }
     };
   }
-  
+
+  // TODO: add documentation about supported filters.
   rpc ListTrackers(ListTrackersRequest) returns (ListTrackersResponse) {
     option (google.api.http) = {
       get: "/v1alpha1/{parent=users/*}/trackers"
+      additional_bindings {
+        get: "/v1alpha1/{parent=audiences/*}/trackers"
+      }
     };
   }
 
@@ -36,48 +47,76 @@ service TrackerService {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=users/*}/trackers"
       body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=audiences/*}/trackers"
+        body: "*"
+      }
     };
   }
 
   rpc UpdateTracker(UpdateTrackerRequest) returns (Tracker) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{tracker.name=users/*/trackers/*/*}"
+      patch: "/v1alpha1/{tracker.name=users/*/trackers/*}"
       body: "*"
+      additional_bindings {
+        patch: "/v1alpha1/{tracker.name=audiences/*/trackers/*}"
+        body: "*"
+      }
     };
   }
 
   rpc DeleteTracker(DeleteTrackerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=users/*/trackers/*/*}"
+      delete: "/v1alpha1/{name=users/*/trackers/*}"
       body: "*"
+      additional_bindings {
+        delete: "/v1alpha1/{name=audiences/*/trackers/*}"
+        body: "*"
+      }
     };
   }
 
-  // Only used for OAuth as we need to set up the flow
-  rpc GetOAuthInfo(OAuthInfoRequest) returns (OAuthInfoResponse) {
-    option (google.api.http) = {
-      get: "/v1alpha1/{parent=users/*}/trackers:authenticate"
-    };
-  }
-
-  rpc SetAuth(SetAuthRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*}/trackers:authenticate"
-      body: "*"
-    };
-  }
-
-  rpc ImportTrackers(ImportTrackersRequest) returns (google.protobuf.Empty) {
+  rpc ImportTrackers(ImportTrackersRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=users/*}/trackers:import"
       body: "*"
     };
+    option (google.longrunning.operation_info) = {
+      response_type: "ImportTrackersResponse"
+      metadata_type: "OperationMetadata"
+    };
   }
 
-  rpc ExportTrackers(ExportTrackersRequest) returns (google.protobuf.Empty) {
+  rpc ExportTrackers(ExportTrackersRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=users/*}/trackers:export"
       body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ExportTrackersResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
+  // TODO: add missing audience methods (list, get create, update, delete).
+
+  rpc CreateActivity(CreateActivityRequest) returns (Activity) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*/trackers/*}/activities"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=audiences/*/trackers/*}/activities"
+        body: "*"
+      }
+    };
+  }
+
+  rpc DeleteActivity(DeleteActivityRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/trackers/*/activities/*}"
+      additional_bindings {
+        delete: "/v1alpha1/{name=audiences/*/trackers/*/activities/*}"
+      }
     };
   }
 }
@@ -86,68 +125,155 @@ enum State {
   STATE_UNSPECIFIED = 0;
 
   // The consumption of the media is still in progress.
-  STATE_IN_PROGRESS = 1;
+  IN_PROGRESS = 1;
 
   // The consumption of the media has been completed.
-  STATE_COMPLETED = 2;
+  COMPLETED = 2;
 
   // The consumption of the media is on hold.
-  STATE_ON_HOLD = 3;
+  ON_HOLD = 3;
 }
 
 enum Provider{
   PROVIDER_UNSPECIFIED = 0;
-  PROVIDER_MYANIMELIST  = 1;
-  PROVIDER_MANGADEX  = 2;
-  PROVIDER_ANILIST  = 3;
-  PROVIDER_ANIDB  = 4;
-  PROVIDER_MANGAUPDATES  = 5;
-  PROVIDER_VNDB  = 6;
+  MYANIMELIST  = 1;
+  MANGADEX  = 2;
+  ANILIST  = 3;
+  ANIDB  = 4;
+  MANGAUPDATES  = 5;
+  VNDB  = 6;
 };
 
+// Activities track the progress of a user related to readable or watchable
+// resources such as light novel and graphic novel chapters, and anime episodes.
+//
+// Activities are immutable and store meta information such as when the activity
+// started, when it ended, from where the progress started and where it stopped.
+//
+// An example of activities might be a user watching on Netflix the Episode N of
+// the Anime XYZ from minute 5:47 to minute 15:32 on the 7th of July at 8:35 PM.
+//
+// In this specific case a Chrome extension might automatically create a new
+// activity every minute until the user pauses the video or closes the tab.
+//
+// The information collected allows the service to let the user know when was
+// the last "checkpoint" recorded, enabling the user to resume the episode at
+// the correct time on a different platform (i.e. continue from where I left).
+// Additionally, the information collected is useful to generate histograms and
+// to idenitify popular scenes within an episode (we all know Pornhub has an
+// identical feature already).
+//
+// There is no limit to the number of activities a user might generate and some
+// activities are automatically registered from Animeshon itself, for example
+// when a user is reading a graph novel directly on our platform. Activities can
+// also be repeated multiple times for the same range (e.g. if a user rewatches
+// the same scene in an episode 5 times).
+//
+// Whenever an activity is created that marks the end of a resource, its parent
+// tracker is updated to include it in the list of completed resource.
+message Activity {
+  // The id of the activity.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The content whose progress is being tracked.
+  string resource = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The platform that the user used to consume the resource.
+  string platform = 3;
+
+  // Where the activity started within the resource. This value represents the
+  // time in seconds within an episode or the page number within a graphic novel
+  // or light novel chapter.
+  int32 from = 4;
+
+  // Where the activity ended within the resource. This value represents the
+  // time in seconds within an episode or the page number within a graphic novel
+  // or light novel chapter.
+  int32 to = 5;
+
+  // When this activity started.
+  google.protobuf.Timestamp start_time = 6;
+
+  // When this activity ended.
+  google.protobuf.Timestamp end_time = 7;
+}
+
+// A tracker tracks the progress of one or more users related to releasable
+// resources such as animes, graphic novels, light novels, and visual novels.
+//
+// It is important to notice that users cannot `watch` an anime from a technical
+// perspective but rather they can watch one of its releases such as its pysical
+// DVD copy or its broadcast on Funimation. Nevertheless, for a better user
+// experience a releasable content is considered completed whenever a user
+// watched, played, or read all of its "regular" episodes, chapters, or
+// releases. This means that "recaps" and "specials" are ultimately ignored.
+//
+// Animes and novels are easier to track as they have a countable and defined
+// amount of resources that can be consumed (episodes and chapters). Their
+// progress is therefore automatically updated whenever a new user activity is
+// generated.
+//
+// Visual novels and video games in general do not always have a clear progress
+// and therefore must be updated manually by the user.
+//
+// A tracker accounts only for the overall progress on a releasable content,
+// this means that it won't provide any information about rewatches.
+//
+// Additionally, trackers can be shared among multiple users thorough audiences,
+// this is useful whenever a user is, for example, watching an anime together
+// with a group of friends and wants to keep track of the progress separately
+// from his/her own personal progress or from the progress on the same resource
+// with another group of friends (i.e. audience).
+//
+// The progress of audience trackers affects the personal progress, that is
+// whenever new resources are consumed by an audience the personal tracker of
+// each member belonging to that audience will be updated automatically as well.
+// This behavior makes sense as a group of people  watching the Episode N of the
+// Anime XYZ also means that each member of the group also watched the episode
+// and therefore their collective personal progress changed.
 message Tracker {
   // The id of the tracker.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The content whose progress is being tracked.
-  string item_name = 2 [(google.api.field_behavior) = REQUIRED];
-
-  // The items that belong to the content, if any.
-  repeated string subitem_names = 3;
+  string resource = 2 [(google.api.field_behavior) = REQUIRED];
 
   // When the progress started.
-  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp start_time = 3;
 
   // When the progress ended.
-  google.protobuf.Timestamp end_time = 5;
+  google.protobuf.Timestamp end_time = 4;
 
-  // The percentage of progress from 0 to 100.
-  // null means the percentage should be calculated based on the amount of
-  // subitems in the item being tracked.
+  // The list of completed sub-resources (e.g episodes or chapters).
+  repeated string completed_resources = 5;
+
+  // The percentage of progress from 0 to 100. A null value means the value was
+  // not manually defined and therefore the percentage should be calculated
+  // on-the-fly.
   google.protobuf.FloatValue progress_percentage = 6;
 
   // The progress state of the tracker.
   State state = 7;
 }
 
+// TODO: this is represented as a group in authorization.
+// TODO: who should be the owner of an audience? the user who created it?
+message Audience {
+  // The id of the audience.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The members of this audience.
+  repeated string members = 2;
+}
+
 message GetTrackerRequest {
   // The name of the tracker to retrieve.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "tracker.animeapis.com/Tracker"
-    }
-  ];
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ListTrackersRequest {
   // The user this tracker belongs to.
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   // If unspecified, server will pick an appropriate default.
   int32 page_size = 2;
@@ -168,21 +294,11 @@ message ListTrackersResponse {
 }
 
 message CreateTrackerRequest {
-  // The user this tracker belongs to.
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+  // The parent this tracker belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The tracker to create.
-  Tracker tracker = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "tracker.animeapis.com/Tracker"
-    }
-  ];
+  Tracker tracker = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateTrackerRequest {
@@ -196,95 +312,68 @@ message UpdateTrackerRequest {
 
 message DeleteTrackerRequest {
   // The name of the tracker to delete.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "tracker.animeapis.com/Tracker"
-    }
-  ];
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message OAuthInfoRequest {
-  // The OAuth provider to get the auth info from
-  Provider provider = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-  // The user associated with the external provider
-  string parent = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+message CreateActivityRequest {
+  // The parent this tracker belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The activity to create.
+  Activity activity = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
-message OAuthInfoResponse {
-    // The url to authenticate the user within the provider
-    string url = 1 [
-      (google.api.field_behavior) = REQUIRED
-    ];
-    bool authenticated = 2;
-}
-
-message OAuth {
-  // OAuth should reply with a code and a state,
-  // this should compete the auth flow
-  string code = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-  string state = 2 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-}
-
-message PlainAuth {
-  // The login info for websites that dont have API support
-  string username = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-  string password = 2 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-}
-
-message SetAuthRequest {
-  // The Auth provider
-  Provider provider = 1 [
-    (google.api.field_behavior) = REQUIRED
-  ];
-  string parent = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
-  // Providers either support OAuth or password/username, not both
-  oneof auth {
-    OAuth oauth = 3;
-    PlainAuth plain_auth = 4;
-  }
+message DeleteActivityRequest {
+  // The name of the activity to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Selecting what provider we want to import from
 message ImportTrackersRequest {
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   Provider provider = 2;
 }
 
 // Selecting what provider we want to export to
 message ExportTrackersRequest {
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   Provider provider = 2;
 }
+
+// Represents the metadata of the long-running operation.
+message OperationMetadata {
+  // Output only. The time the operation was created.
+  google.protobuf.Timestamp create_time = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. The time the operation finished running.
+  google.protobuf.Timestamp end_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Server-defined resource path for the target of the operation.
+  string target = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Name of the verb executed by the operation.
+  string verb = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Human-readable status of the operation, if any.
+  string status_message = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Identifies whether the user has requested cancellation
+  // of the operation. Operations that have successfully been cancelled
+  // have [Operation.error][] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1,
+  // corresponding to `Code.CANCELLED`.
+  bool requested_cancellation = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. API version used to start the operation.
+  string api_version = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only.
+  int32 progress_percentage = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// TODO(christian-roggia): this is a workaround to solve the issue of GAPIC
+// CLI where broken code is generated if google.protobuf.Empty is used in the
+// response_type of longrunning operations.
+message ImportTrackersResponse {}
+message ExportTrackersResponse {}
