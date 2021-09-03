@@ -21,67 +21,82 @@ option ruby_package = "Animeshon::Vision::v1Alpha1";
 service ImageAnnotator {
   option (google.api.default_host) = "vision.animeapis.com";
 
-  rpc CreateImageReport(CreateImageReportRequest) returns (ImageReport) {
+  rpc AnalyzeImage(AnalyzeImageRequest) returns (AnalyzeImageResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=galleries/*/images/*}/reports"
+      post: "/v1alpha1/{parent=users/*/albums/*/images/*}:analyze"
       body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=organizations/*/albums/*/images/*}:analyze"
+        body: "*"
+      }
     };
   }
 
-  rpc ListImageReports(ListImageReportsRequest) returns (ListImageReportsResponse) {
+  rpc ListImageAnalyses(ListImageAnalysesRequest) returns (ListImageAnalysesResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{parent=galleries/*/images/*}/reports"
+      get: "/v1alpha1/{parent=users/*/albums/*/images/*}/analyses"
+      additional_bindings {
+        get: "/v1alpha1/{parent=organizations/*/albums/*/images/*}/analyses"
+      }
     };
   }
 
   // Note: to fetch the latest available report use "latest" as report id.
-  rpc GetImageReport(GetImageReportRequest) returns (ImageReport) {
+  rpc GetImageAnalysis(GetImageAnalysisRequest) returns (ImageAnalysis) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=galleries/*/images/*/reports/*}"
+      get: "/v1alpha1/{name=users/*/albums/*/images/*/analyses/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=organizations/*/albums/*/images/*/analyses/*}"
+      }
     };
   }
   
-  rpc DeleteImageReport(DeleteImageReportRequest) returns (google.protobuf.Empty) {
+  rpc DeleteImageAnalysis(DeleteImageAnalysisRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=galleries/*/images/*/reports/*}"
+      delete: "/v1alpha1/{name=users/*/albums/*/images/*/analyses/*}"
+      additional_bindings {
+        delete: "/v1alpha1/{name=organizations/*/albums/*/images/*/analyses/*}"
+      }
     };
   }
 
-  rpc CreateImageAnnotationHint(CreateImageAnnotationHintRequest) returns (ImageAnnotationHint) {
+  rpc CreateImageAnnotation(CreateImageAnnotationRequest) returns (ImageAnnotation) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=galleries/*/images/*}/annotationHints"
+      post: "/v1alpha1/{parent=users/*}/imageAnnotations"
       body: "*"
     };
   }
 
-  rpc ListImageAnnotationHints(ListImageAnnotationHintsRequest) returns (ListImageAnnotationHintsResponse) {
+  rpc ListImageAnnotations(ListImageAnnotationsRequest) returns (ListImageAnnotationsResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{parent=galleries/*/images/*}/annotationHints"
+      get: "/v1alpha1/{parent=users/*}/imageAnnotations"
     };
   }
 
-  rpc GetImageAnnotationHint(GetImageAnnotationHintRequest) returns (ImageAnnotationHint) {
+  rpc GetImageAnnotation(GetImageAnnotationRequest) returns (ImageAnnotation) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=galleries/*/images/*/annotationHints/*}"
+      get: "/v1alpha1/{name=users/*/imageAnnotations/*}"
     };
   }
-  
-  rpc UpdateImageAnnotationHint(UpdateImageAnnotationHintRequest) returns (ImageAnnotationHint) {
+
+  rpc UpdateImageAnnotation(UpdateImageAnnotationRequest) returns (ImageAnnotation) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{hint.name=galleries/*/images/*/annotationHints/*}"
+      patch: "/v1alpha1/{annotation.name=users/*/imageAnnotations/*}"
       body: "*"
     };
   }
 
-  rpc DeleteImageAnnotationHint(DeleteImageAnnotationHintRequest) returns (google.protobuf.Empty) {
+  rpc DeleteImageAnnotation(DeleteImageAnnotationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=galleries/*/images/*/annotationHints/*}"
+      delete: "/v1alpha1/{name=users/*/imageAnnotations/*}"
     };
   }
 }
 
-message ImageReport {
-  // The image resource name.
+// TODO: add information about the model used and whether the analysis is STABLE
+// TODO: or EXPERIMENTAL. NOTE: Latest should return the latest STABLE analysis.
+message ImageAnalysis {
+  // The name of the image analysis.
   string name = 1;
 
   // The (immutable) properties of the image.
@@ -90,67 +105,126 @@ message ImageReport {
   // The annotations of the image.
   ImageAnnotations annotations = 3;
 
-  // The timestamp at which the report was created.
+  // The creation time indicating when this revision was created.
+  google.protobuf.Timestamp create_time = 4;
+}
+
+message ImageAnnotation {
+  // The annotation resource name.
+  string name = 1;
+
+  // The annotated image.
+  string resource = 2;
+
+  // The annotations of the image.
+  ImageAnnotations annotations = 3;
+
+  // The timestamp at which the annotation was created.
   google.protobuf.Timestamp create_time = 4
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The latest timestamp at which the annotation was updated.
+  google.protobuf.Timestamp update_time = 5
+    [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
-message ImageAnnotationHint {
-  // The hint resource name.
+message AnalyzeImageRequest {
+  // The parent image to be analyzed.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED];
+
+  // A list of features to analyze.
+  repeated string features = 2 [
+    (google.api.field_behavior) = REQUIRED];
+}
+
+message AnalyzeImageResponse {
+  // The analysis of the image.
+  ImageAnalysis analysis = 1;
+}
+
+message ListImageAnalysesRequest {
+  // The parent image to list analyses from.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+}
+
+message ListImageAnalysesResponse {
+  // The list of image analyses.
+  repeated ImageAnalysis analyses = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message GetImageAnalysisRequest {
+  // The name of the image analysis to retrieve.
   string name = 1;
 
-  // The annotation hints of the image.
-  ImageAnnotations hints = 2;
-
-  // The timestamp at which the hint was created.
-  google.protobuf.Timestamp create_time = 3
-      [(google.api.field_behavior) = OUTPUT_ONLY];
-
-  // The latest timestamp at which the hint was updated.
-  google.protobuf.Timestamp update_time = 4
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  // FieldMask that represents which fields should be retrieved.
+  google.protobuf.FieldMask field_mask = 5;
 }
 
-message CreateImageReportRequest {
-  string parent = 1;
-}
-
-message ListImageReportsRequest {
-  string parent = 1;
-}
-
-message ListImageReportsResponse {}
-
-message GetImageReportRequest {
+message DeleteImageAnalysisRequest {
+  // The name of the analysis to delete.
   string name = 1;
 }
 
-message DeleteImageReportRequest {
+message CreateImageAnnotationRequest {
+  // The parent this image annotation belongs to.
+  string parent = 1;
+
+  // The image annotation to create.
+  ImageAnnotation annotation = 2;
+}
+
+message ListImageAnnotationsRequest {
+  // The parent, which owns this collection of image annotations.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  //
+  // Currently accepted filters include:
+  // - resource:{full resource name}
+  string filter = 4;
+}
+
+message ListImageAnnotationsResponse {
+  // The list of image annotations.
+  repeated ImageAnnotation annotations = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message GetImageAnnotationRequest {
+  // The name of the image annotation to retrieve.
   string name = 1;
 }
 
-message CreateImageAnnotationHintRequest {
-  string parent = 1;
-}
-
-message ListImageAnnotationHintsRequest {
-  string parent = 1;
-}
-
-message ListImageAnnotationHintsResponse {}
-
-message GetImageAnnotationHintRequest {
-  string name = 1;
-}
-
-message UpdateImageAnnotationHintRequest {
-  ImageAnnotationHint hint = 1;
+message UpdateImageAnnotationRequest {
+  // The image annotation to update.
+  ImageAnnotation annotation = 1;
 
   // The field mask to determine which fields are to be updated. If empty, the
   // server will assume all fields are to be updated.
   google.protobuf.FieldMask update_mask = 2;
 }
 
-message DeleteImageAnnotationHintRequest {
+message DeleteImageAnnotationRequest {
+  // The image annotation to delete.
   string name = 1;
 }

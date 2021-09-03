@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package animeshon.vision.v1alpha1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/animeapis/go-genproto/vision/v1alpha1;vision";
+option java_package = "com.animeshon.vision.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Vision::v1Alpha1";
+
+// A vertex represents a 2D point in the image.
+// NOTE: the vertex coordinates are in the same scale as the original image.
+message Vertex {
+  // X coordinate.
+  int32 x = 1;
+
+  // Y coordinate.
+  int32 y = 2;
+}
+
+// A bounding polygon for the detected image annotation.
+message BoundingPoly {
+  // The bounding polygon vertices.
+  repeated Vertex vertices = 1;
+}

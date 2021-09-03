@@ -33,6 +33,7 @@ service WebCache {
     };
   }
 
+  // See https://google.aip.dev/162#referencing-revisions for more information.
   rpc GetCache(GetCacheRequest) returns (Cache) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=caches/*}"
@@ -49,46 +50,68 @@ service WebCache {
 
 // Cache contains meta information about a specific web resource.
 message Cache {
-  string name = 1;
+  // The name of the cache, idempotently generated from the scheme and uri.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The original scheme indicating the protocol used for the original request.
-  string scheme = 2;
+  string scheme = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The request uri stripped of the original scheme.
-  string uri = 3;
+  string uri = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // The response content type indicating the original media type (MIME type).
-  string content_type = 4;
+  // The response content type indicating the original media type.
+  string mime_type = 4;
 
-  // The response code indicating the status of the response.
+  // The response code indicating the status of the remote response.
   int32 status_code = 5;
 
-  // The redirect uri indicating any permanent or temporary redirect.
+  // The absolute redirect uri indicating any permanent or temporary redirect.
   string redirect_uri = 6;
 
-  // The cache time indicating when this cache was created.
-  google.protobuf.Timestamp create_time = 7;
-
-  // The cache TTL indicating how long this cache should be considered valid.
-  google.protobuf.Duration ttl = 8;
-
   // The full resource name of the cached resource.
-  string resource = 9;
+  string resource = 7;
+  
+  // The randomly generated revision identifier of this cache.
+  // The format is an 8-character hexadecimal string.
+  string revision_id = 8 [
+    (google.api.field_behavior) = IMMUTABLE,
+    (google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The creation time indicating when this revision was created.
+  google.protobuf.Timestamp revision_create_time = 9 [
+    (google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The expiration time indicating when this revision should no longer be
+  // considered valid.
+  google.protobuf.Timestamp revision_expire_time = 10 [
+    (google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 message CreateCacheRequest {
+  // The cache to be created.
   Cache cache = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The time-to-live indicating how long this cache should be considered valid.
+  // If set to zero, the cache will not have an expiration time.
+  google.protobuf.Duration ttl = 2 [(google.api.field_behavior) = INPUT_ONLY];
 }
 
 message ListCachesRequest {
   // If unspecified, server will pick an appropriate default.
-  int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 page_size = 1;
 
   // The value returned from the previous call.
   string page_token = 2;
 
   // A filter to be applied to results.
+  //
+  // Currently accepted filters include:
+  // - uri:{absolute uri}
+  // - resource:{full resource name}
   string filter = 3;
+
+  // Whether to return only the latest revision for each cache.
+  bool only_latest_revision = 4;
 }
 
 message ListCachesResponse {

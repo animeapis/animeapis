@@ -17,12 +17,12 @@ message ImageEntry {
 
   // A reference to a parent resource.
   oneof parent {
-    // The folder resource id. Example: `folders/123`.
-    int64 folder_id = 2;
+    // The album resource id. Example: `albums/123`.
+    int64 album_id = 2;
   }
 
   // The uri of the image file.
-  // Example: gs://my-bucket/my-folder/my-image.jpeg
+  // Example: gs://my-bucket/my-user/my-album/my-image.jpeg
   string uri = 3;
 
   // The MIME type of the image.
@@ -42,9 +42,9 @@ message ImageEntry {
 }
 
 // This is a private internal structure used to store metadata information
-// about a specific Folder. This structure is never exposed to the public.
-message FolderEntry {
-  // The folder resource id.
+// about a specific Album. This structure is never exposed to the public.
+message AlbumEntry {
+  // The album resource id.
   int64 id = 1;
 
   // A reference to a parent resource.
@@ -56,28 +56,48 @@ message FolderEntry {
     int64 user_id = 3;
   }
 
-  // The bucket where to store resources.
-  string bucket = 4;
+  // The album display name.
+  string display_name = 4;
 
-  // Whether the folder is system managed.
-  bool system_managed = 5;
+  // The bucket where to store resources.
+  string bucket = 5;
+
+  // Whether the album is system managed.
+  bool system_managed = 6;
 
   // Whether images should be available through the image search.
-  bool enable_search = 6;
+  bool enable_search = 7;
 
   // Whether images can be annotated.
-  bool enable_annotation = 7;
+  bool enable_annotation = 8;
 
   // Whether images should be client-side encrypted.
-  bool enable_encryption = 8;
+  bool enable_encryption = 9;
 
-  // Whether the content of this folder is highly visible by the public such as
+  // Whether the content of this album is highly visible by the public such as
   // profile pictures and banners.
-  bool high_visibility = 9;
+  bool high_visibility = 10;
 
-  // When the folder was created.
-  google.protobuf.Timestamp create_time = 10;
+  // When the album was created.
+  google.protobuf.Timestamp create_time = 11;
 
-  // When the folder was updated.
-  google.protobuf.Timestamp update_time = 11;
+  // When the album was updated.
+  google.protobuf.Timestamp update_time = 12;
+}
+
+message RouteEntry {
+  // A reference to a parent resource.
+  oneof parent {
+    // The organization resource id. Example: `organizations/456`.
+    int64 organization_id = 1;
+
+    // The user resource id. Example: `users/789`.
+    int64 user_id = 2;
+  }
+
+  // The album resource id.
+  int64 album_id = 3;
+
+  // The image resource id.
+  int64 image_id = 4;
 }
