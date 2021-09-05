@@ -19,64 +19,65 @@ service Knowledge {
 
   rpc CreateContribution(CreateContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      post: "/v1alpha1/contributions"
+      post: "/v1alpha1/{parent=users/*}/contributions"
       body: "*"
     };
   }
 
   rpc ListContributions(ListContributionsRequest) returns (ListContributionsResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/contributions"
+      get: "/v1alpha1/{parent=users/*}/contributions"
     };
   }
 
   rpc GetContribution(GetContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=contributions/*}"
+      get: "/v1alpha1/{name=users/*/contributions/*}"
     };
   }
 
   rpc ApproveContribution(ApproveContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=contributions/*}:approve"
+      post: "/v1alpha1/{name=users/*/contributions/*}:approve"
       body: "*"
     };
   }
 
   rpc RejectContribution(RejectContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=contributions/*}:reject"
+      post: "/v1alpha1/{name=users/*/contributions/*}:reject"
       body: "*"
     };
   }
 }
 
 message Contribution {
-  option (google.api.resource) = {
-    type: "knowledge.animeapis.com/Contribution"
-    pattern: "contributions/{contribution}"
-  };
-
   // The resource name of the contribution.
   string name = 1;
 }
 
 message CreateContributionRequest {
-  repeated EntryEntity additions = 1;
+  // The parent resource where this contribution will be created.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
-  repeated EntryEntity deletions = 2;
+  repeated EntryEntity additions = 2;
+
+  repeated EntryEntity deletions = 3;
 }
 
 message ListContributionsRequest {
+  // The parent, which owns this collection of contributions.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
   // The maximum number of users to return. Server may return fewer users
   // than requested. If unspecified, server will pick an appropriate default.
-  int32 page_size = 1;
+  int32 page_size = 2;
 
   // The value returned from the previous call.
-  string page_token = 2;
+  string page_token = 3;
 
   // A filter to be applied to results.
-  string filter = 3;
+  string filter = 4;
 }
 
 message ListContributionsResponse {
@@ -89,10 +90,7 @@ message ListContributionsResponse {
 
 message GetContributionRequest {
   // The resource name of the requested contribution.
-  string name = 1 [
-    (google.api.resource_reference).type = "knowledge.animeapis.com/Contribution",
-    (google.api.field_behavior) = REQUIRED
-  ];
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ApproveContributionRequest {
@@ -111,10 +109,6 @@ message EntryEntity {
 }
 
 message Anime {
-  option (google.api.resource) = {
-    type: "knowledge.animeapis.com/Anime"
-    pattern: "animes/{anime}"
-  };
   string name = 1;
   string type = 2;
   repeated Text names = 3;
@@ -123,10 +117,6 @@ message Anime {
 }
 
 message GraphicNovel {
-  option (google.api.resource) = {
-    type: "knowledge.animeapis.com/GraphicNovel"
-    pattern: "graphicnovels/{graphicnovel}"
-  };
   string name = 1;
   string type = 2;
   repeated Text names = 3;
@@ -146,9 +136,7 @@ message Running {
 }
 
 message Edge {
-  string name = 1 [(validate.rules).string = {
-    pattern:   "[animes/(\d+)|graphicnovels/(\d+)]",
- }];
+  string name = 1;
 }
 
 message ContentRelation {
