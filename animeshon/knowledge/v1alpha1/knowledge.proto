@@ -5,6 +5,7 @@ import "google/api/client.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 package animeshon.knowledge.v1alpha1;
 
@@ -103,23 +104,54 @@ message RejectContributionRequest {
 }
 
 message EntryEntity {
-  oneof instrument {
+  oneof entity {
     Anime anime = 1;
     GraphicNovel graphicNovel = 2;
   }
 }
 
 message Anime {
+  option (google.api.resource) = {
+    type: "knowledge.animeapis.com/Anime"
+    pattern: "animes/{anime}"
+  };
   string name = 1;
-  repeated Text names = 2;
+  string type = 2;
+  repeated Text names = 3;
+  repeated Running runnings = 4;
+  repeated ContentRelation contentRelations = 5;
 }
 
 message GraphicNovel {
+  option (google.api.resource) = {
+    type: "knowledge.animeapis.com/GraphicNovel"
+    pattern: "graphicnovels/{graphicnovel}"
+  };
   string name = 1;
-  repeated Text names = 2;
+  string type = 2;
+  repeated Text names = 3;
+  repeated Running runnings = 4;
+  repeated ContentRelation contentRelations = 5;
 }
 
 message Text {
-  string localization = 1;
-  string text = 2;
+  string text = 1;
+  string localization = 2;
+}
+
+message Running {
+  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp end_time = 2;
+  string localization = 3;
+}
+
+message Edge {
+  string name = 1 [(validate.rules).string = {
+    pattern:   "[animes/(\d+)|graphicnovels/(\d+)]",
+ }];
+}
+
+message ContentRelation {
+  Edge edge = 1;
+  string relation = 2;
 }
