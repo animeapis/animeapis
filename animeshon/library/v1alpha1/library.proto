@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package animeshon.library.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/library/v1alpha1;library";
+option java_package = "com.animeshon.library.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::library::v1Alpha1";
+
+service LibraryService {
+  option (google.api.default_host) = "library.animeapis.com";
+
+  // Get a library by its unique identifier.
+  //
+  // To fetch a library by the name, use `ListLibraries instead with an
+  // appropriate filter. Example: `filter = "name:libraryName"`.
+  rpc GetLibrary(GetLibraryRequest) returns (Library) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/libraries/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=audiences/*/libraries/*}"
+      }
+    };
+  }
+  // TODO: add documentation about supported filters.
+  rpc ListLibrary(ListLibrariesRequest) returns (ListLibrariesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/libraries"
+      additional_bindings {
+        get: "/v1alpha1/{parent=audiences/*}/libraries"
+      }
+    };
+  }
+
+  rpc CreateLibrary(CreateLibraryRequest) returns (Library) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*}/libraries"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=audiences/*}/libraries"
+        body: "*"
+      }
+    };
+  }
+
+  rpc UpdateLibrary(UpdateLibraryRequest) returns (Library) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{library.name=users/*/libraries/*}"
+      body: "*"
+      additional_bindings {
+        patch: "/v1alpha1/{library.name=audiences/*/libraries/*}"
+        body: "*"
+      }
+    };
+  }
+
+  rpc DeleteLibrary(DeleteLibraryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/libraries/*}"
+      body: "*"
+      additional_bindings {
+        delete: "/v1alpha1/{name=audiences/*/libraries/*}"
+        body: "*"
+      }
+    };
+  }
+
+  rpc AddResource(AddResourceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/libraries/*}:add"
+      additional_bindings {
+        get: "/v1alpha1/{name=audiences/*/libraries/*}:add"
+      }
+    };
+  }
+
+  rpc RemoveResource(RemoveResourceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/libraries/*}:remove"
+      additional_bindings {
+        get: "/v1alpha1/{name=audiences/*/libraries/*}:remove"
+      }
+    };
+  }
+
+  rpc ListResources(ListResourcesRequest) returns (ListResourcesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/libraries/*}:resources"
+      additional_bindings {
+        get: "/v1alpha1/{name=audiences/*/libraries/*}:resources"
+      }
+    };
+  }
+}
+
+// TODO: add missing audience methods (list, get create, update, delete).
+
+
+enum Type {
+  Type_UNSPECIFIED = 0;
+
+  // The consumption of the media is still in progress.
+  LATER = 1;
+
+  // The consumption of the media has been completed.
+  LIKED = 2;
+
+  // The consumption of the media is on hold.
+  CUSTOM = 3;
+}
+
+message Library {
+  // The id of the library.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The type of the library.
+  Type type = 2;
+
+  // The list of completed sub-resources (e.g episodes or chapters).
+  int32 count = 3;
+
+}
+
+// TODO: this is represented as a group in authorization.
+// TODO: who should be the owner of an audience? the user who created it?
+message Audience {
+  // The id of the audience.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The members of this audience.
+  repeated string members = 2;
+}
+
+message GetLibraryRequest {
+  // The name of the library to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListLibrariesRequest {
+  // The user this library belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListLibrariesResponse {
+  // The list of libraries.
+  repeated Library libraries = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateLibraryRequest {
+  // The parent this library belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The name of the library to create.
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateLibraryRequest {
+  // The library to update.
+  Library library = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteLibraryRequest {
+  // The name of the library to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message AddResourceRequest {
+  // The name of the library to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The resources to add
+  repeated string resources = 2;
+}
+
+message RemoveResourceRequest {
+  // The name of the library to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The resources to remove
+  repeated string resources = 2;
+}
+
+message ListResourcesRequest {
+  // The user this library belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListResourcesResponse {
+  // The list of resources.
+  repeated string resources = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
