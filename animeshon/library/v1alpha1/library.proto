@@ -55,10 +55,10 @@ service LibraryService {
 
   rpc UpdatePlaylist(UpdatePlaylistRequest) returns (Playlist) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{library.name=users/*/playlists/*}"
+      patch: "/v1alpha1/{playlist.name=users/*/playlists/*}"
       body: "*"
       additional_bindings {
-        patch: "/v1alpha1/{library.name=audiences/*/playlists/*}"
+        patch: "/v1alpha1/{playlist.name=audiences/*/playlists/*}"
         body: "*"
       }
     };
@@ -207,8 +207,8 @@ message RemoveResourceRequest {
 }
 
 message ListResourcesRequest {
-  // The user this playlist belongs to.
-  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+  // The name of the playlist to get the resources from
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // If unspecified, server will pick an appropriate default.
   int32 page_size = 2;
