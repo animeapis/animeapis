@@ -4,4 +4,4 @@ name: library.animeapis.com
 title: Library API
 
 apis:
-- name: animeshon.tracker.v1alpha1.Library
+- name: animeshon.library.v1alpha1.Library
