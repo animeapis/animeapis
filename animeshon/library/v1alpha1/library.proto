@@ -146,7 +146,7 @@ message GetPlaylistRequest {
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message ListPlaylistRequest {
+message ListPlaylistsRequest {
   // The user this playlist belongs to.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -160,7 +160,7 @@ message ListPlaylistRequest {
   string filter = 4;
 }
 
-message ListPlaylistResponse {
+message ListPlaylistsResponse {
   // The list of playlists.
   repeated Playlist playlists = 1;
 
