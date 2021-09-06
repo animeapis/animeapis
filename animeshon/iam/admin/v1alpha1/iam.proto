@@ -184,17 +184,20 @@ message ServiceAccount {
   // The name of the service account.
   string name = 1;
 
+  // The unique, stable numeric ID for the service account.
+  string uid = 2;
+
   // The display name of this service account.
-  string display_name = 2;
+  string display_name = 3;
 
   // A brief description of what this service account is used for.
-  string description = 3;
+  string description = 4;
 
   // OAuth2 client ID to use for the authentication flow.
-  string oauth2_client_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string oauth2_client_id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // OAuth2 client secret to use for the authentication flow.
-  string oauth2_client_secret = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string oauth2_client_secret = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 message Role {
