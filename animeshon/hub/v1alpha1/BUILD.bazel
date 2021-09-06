@@ -31,6 +31,7 @@ proto_library_with_info(
     deps = [
         ":hub_proto",
         "@com_google_googleapis//google/cloud:common_resources_proto",
+        "@com_google_googleapis//google/rpc:error_details_proto",
     ],
 )
 
