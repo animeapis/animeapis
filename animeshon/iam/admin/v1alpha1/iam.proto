@@ -182,10 +182,10 @@ service IAM {
 
 message ServiceAccount {
   // The name of the service account.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The unique, stable numeric ID for the service account.
-  string uid = 2;
+  string uid = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The display name of this service account.
   string display_name = 3;
