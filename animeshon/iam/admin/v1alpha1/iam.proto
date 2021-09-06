@@ -41,10 +41,10 @@ service IAM {
 
   rpc CreateServiceAccount(CreateServiceAccountRequest) returns (ServiceAccount) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*}/serviceAccounts"
+      post: "/v1alpha1/{service_account.name=users/*/serviceAccounts/*}"
       body: "*"
       additional_bindings {
-        post: "/v1alpha1/{parent=organizations/*}/serviceAccounts"
+        post: "/v1alpha1/{service_account.name=organizations/*/serviceAccounts/*}"
         body: "*"
       }
     };
@@ -122,7 +122,7 @@ service IAM {
 
   rpc CreateRole(CreateRoleRequest) returns (Role) {
     option (google.api.http) = {
-      post: "/v1alpha1/roles"
+      post: "/v1alpha1/{role.name=roles/*}"
       body: "*"
     };
   }
@@ -161,7 +161,7 @@ service IAM {
 
   rpc CreatePermission(CreatePermissionRequest) returns (Permission) {
     option (google.api.http) = {
-      post: "/v1alpha1/permissions"
+      post: "/v1alpha1/{permission.name=permissions/*}"
       body: "*"
     };
   }
@@ -266,16 +266,8 @@ message ListServiceAccountsResponse {
 }
 
 message CreateServiceAccountRequest {
-  // The parent resource where this service account will be created.
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "*"
-    }
-  ];
-
   // The service account to create.
-  ServiceAccount service_account = 2 [
+  ServiceAccount service_account = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
       type: "iam.animeapis.com/ServiceAccount"
