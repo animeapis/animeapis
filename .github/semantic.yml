@@ -12,6 +12,7 @@ scopes:
   - iam
   - image
   - knowledge
+  - library
   - search
   - resourcemanager
   - tracker
