@@ -22,54 +22,54 @@ service LibraryService {
 
   // Get a library by its unique identifier.
   //
-  // To fetch a library by the name, use `ListLibraries instead with an
-  // appropriate filter. Example: `filter = "name:libraryName"`.
-  rpc GetLibrary(GetLibraryRequest) returns (Library) {
+  // To fetch a playlist by the name, use `ListPlaylists instead with an
+  // appropriate filter. Example: `filter = "name:playlistName"`.
+  rpc GetPlaylist(GetPlaylistRequest) returns (Playlist) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/libraries/*}"
+      get: "/v1alpha1/{name=users/*/playlists/*}"
       additional_bindings {
-        get: "/v1alpha1/{name=audiences/*/libraries/*}"
+        get: "/v1alpha1/{name=audiences/*/playlists/*}"
       }
     };
   }
   // TODO: add documentation about supported filters.
-  rpc ListLibrary(ListLibrariesRequest) returns (ListLibrariesResponse) {
+  rpc ListPlaylists(ListPlaylistsRequest) returns (ListPlaylistsResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{parent=users/*}/libraries"
+      get: "/v1alpha1/{parent=users/*}/playlists"
       additional_bindings {
-        get: "/v1alpha1/{parent=audiences/*}/libraries"
+        get: "/v1alpha1/{parent=audiences/*}/playlists"
       }
     };
   }
 
-  rpc CreateLibrary(CreateLibraryRequest) returns (Library) {
+  rpc CreatePlaylist(CreatePlaylistRequest) returns (Playlist) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*}/libraries"
+      post: "/v1alpha1/{parent=users/*}/playlists"
       body: "*"
       additional_bindings {
-        post: "/v1alpha1/{parent=audiences/*}/libraries"
+        post: "/v1alpha1/{parent=audiences/*}/playlists"
         body: "*"
       }
     };
   }
 
-  rpc UpdateLibrary(UpdateLibraryRequest) returns (Library) {
+  rpc UpdatePlaylist(UpdatePlaylistRequest) returns (Playlist) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{library.name=users/*/libraries/*}"
+      patch: "/v1alpha1/{library.name=users/*/playlists/*}"
       body: "*"
       additional_bindings {
-        patch: "/v1alpha1/{library.name=audiences/*/libraries/*}"
+        patch: "/v1alpha1/{library.name=audiences/*/playlists/*}"
         body: "*"
       }
     };
   }
 
-  rpc DeleteLibrary(DeleteLibraryRequest) returns (google.protobuf.Empty) {
+  rpc DeletePlaylist(DeletePlaylistRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=users/*/libraries/*}"
+      delete: "/v1alpha1/{name=users/*/playlists/*}"
       body: "*"
       additional_bindings {
-        delete: "/v1alpha1/{name=audiences/*/libraries/*}"
+        delete: "/v1alpha1/{name=audiences/*/playlists/*}"
         body: "*"
       }
     };
@@ -77,27 +77,27 @@ service LibraryService {
 
   rpc AddResource(AddResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/libraries/*}:add"
+      post: "/v1alpha1/{name=users/*/playlists/*}:add"
       additional_bindings {
-        get: "/v1alpha1/{name=audiences/*/libraries/*}:add"
+        post: "/v1alpha1/{name=audiences/*/playlists/*}:add"
       }
     };
   }
 
   rpc RemoveResource(RemoveResourceRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/libraries/*}:remove"
+      delete: "/v1alpha1/{name=users/*/playlists/*}:remove"
       additional_bindings {
-        get: "/v1alpha1/{name=audiences/*/libraries/*}:remove"
+        delete: "/v1alpha1/{name=audiences/*/playlists/*}:remove"
       }
     };
   }
 
   rpc ListResources(ListResourcesRequest) returns (ListResourcesResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/libraries/*}:resources"
+      get: "/v1alpha1/{name=users/*/playlists/*}:resources"
       additional_bindings {
-        get: "/v1alpha1/{name=audiences/*/libraries/*}:resources"
+        get: "/v1alpha1/{name=audiences/*/playlists/*}:resources"
       }
     };
   }
@@ -109,24 +109,24 @@ service LibraryService {
 enum Type {
   Type_UNSPECIFIED = 0;
 
-  // The consumption of the media is still in progress.
+  // The playlist holds items intended to be consumed at a later date
   LATER = 1;
 
-  // The consumption of the media has been completed.
+  // The playlist holds liked items
   LIKED = 2;
 
-  // The consumption of the media is on hold.
+  // The playlist is custom made by the user
   CUSTOM = 3;
 }
 
-message Library {
-  // The id of the library.
+message Playlist {
+  // The id of the playlist.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The type of the library.
+  // The type of the playlist.
   Type type = 2;
 
-  // The list of completed sub-resources (e.g episodes or chapters).
+  // The count of items in the playlist
   int32 count = 3;
 
 }
@@ -141,13 +141,13 @@ message Audience {
   repeated string members = 2;
 }
 
-message GetLibraryRequest {
-  // The name of the library to retrieve.
+message GetPlaylistRequest {
+  // The name of the playlist to retrieve.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message ListLibrariesRequest {
-  // The user this library belongs to.
+message ListPlaylistRequest {
+  // The user this playlist belongs to.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   // If unspecified, server will pick an appropriate default.
@@ -160,38 +160,38 @@ message ListLibrariesRequest {
   string filter = 4;
 }
 
-message ListLibrariesResponse {
-  // The list of libraries.
-  repeated Library libraries = 1;
+message ListPlaylistResponse {
+  // The list of playlists.
+  repeated Playlist playlists = 1;
 
   // A token to retrieve next page of results.
   string next_page_token = 2;
 }
 
-message CreateLibraryRequest {
-  // The parent this library belongs to.
+message CreatePlaylistRequest {
+  // The parent this playlist belongs to.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of the library to create.
   string name = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
-message UpdateLibraryRequest {
-  // The library to update.
-  Library library = 1 [(google.api.field_behavior) = REQUIRED];
+message UpdatePlaylistRequest {
+  // The playlist to update.
+  Playlist playlist = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The field mask to determine which fields are to be updated. If empty, the
   // server will assume all fields are to be updated.
   google.protobuf.FieldMask update_mask = 2;
 }
 
-message DeleteLibraryRequest {
-  // The name of the library to delete.
+message DeletePlaylistRequest {
+  // The name of the playlist to delete.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message AddResourceRequest {
-  // The name of the library to delete.
+  // The name of the playlist to add items from.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The resources to add
@@ -199,7 +199,7 @@ message AddResourceRequest {
 }
 
 message RemoveResourceRequest {
-  // The name of the library to delete.
+  // The name of the playlist to delete items from.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The resources to remove
@@ -207,7 +207,7 @@ message RemoveResourceRequest {
 }
 
 message ListResourcesRequest {
-  // The user this library belongs to.
+  // The user this playlist belongs to.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   // If unspecified, server will pick an appropriate default.
