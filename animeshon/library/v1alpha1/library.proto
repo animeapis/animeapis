@@ -123,11 +123,14 @@ message Playlist {
   // The id of the playlist.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
+  // The display name of the playlist.
+  string display_name = 2;
+
   // The type of the playlist.
-  Type type = 2;
+  Type type = 3;
 
   // The count of items in the playlist
-  int32 count = 3;
+  int32 count = 4;
 
 }
 
