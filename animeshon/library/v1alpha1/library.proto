@@ -176,7 +176,7 @@ message CreatePlaylistRequest {
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of the library to create.
-  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  string display_name = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdatePlaylistRequest {
