@@ -54,6 +54,10 @@ service Knowledge {
 message Contribution {
   // The resource name of the contribution.
   string name = 1;
+
+  repeated EntryEntity additions = 2;
+
+  repeated EntryEntity deletions = 3;
 }
 
 message CreateContributionRequest {
