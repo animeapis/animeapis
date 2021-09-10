@@ -6,7 +6,6 @@ import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/any.proto";
 
 package animeshon.knowledge.v1alpha1;
 
@@ -56,18 +55,18 @@ message Contribution {
   // The resource name of the contribution.
   string name = 1;
 
-  repeated google.protobuf.Any additions = 2;
+  repeated EntryEntity additions = 2;
 
-  repeated google.protobuf.Any deletions = 3;
+  repeated EntryEntity deletions = 3;
 }
 
 message CreateContributionRequest {
   // The parent resource where this contribution will be created.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
-  repeated google.protobuf.Any additions = 2;
+  repeated EntryEntity additions = 2;
 
-  repeated google.protobuf.Any deletions = 3;
+  repeated EntryEntity deletions = 3;
 }
 
 message ListContributionsRequest {
