@@ -17,7 +17,7 @@ option java_package = "com.animeshon.library.v1alpha1";
 option java_multiple_files = true;
 option ruby_package = "Animeshon::library::v1Alpha1";
 
-service LibraryService {
+service Library {
   option (google.api.default_host) = "library.animeapis.com";
 
   rpc GetPlaylist(GetPlaylistRequest) returns (Playlist) {
