@@ -70,37 +70,6 @@ service IAM {
     };
   }
 
-  rpc GetIamPolicy(google.iam.v1.GetIamPolicyRequest) returns (google.iam.v1.Policy) {
-    option (google.api.http) = {
-      post: "/v1alpha1/{resource=users/*/serviceAccounts/*}:getIamPolicy"
-      additional_bindings {
-        post: "/v1alpha1/{resource=organizations/*/serviceAccounts/*}:getIamPolicy"
-      }
-    };
-  }
-
-  rpc SetIamPolicy(google.iam.v1.SetIamPolicyRequest) returns (google.iam.v1.Policy) {
-    option (google.api.http) = {
-      post: "/v1alpha1/{resource=users/*/serviceAccounts/*}:setIamPolicy"
-      body: "*"
-      additional_bindings {
-        post: "/v1alpha1/{resource=organizations/*/serviceAccounts/*}:setIamPolicy"
-        body: "*"
-      }
-    };
-  }
-
-  rpc TestIamPermissions(google.iam.v1.TestIamPermissionsRequest) returns (google.iam.v1.TestIamPermissionsResponse) {
-    option (google.api.http) = {
-      post: "/v1alpha1/{resource=users/*/serviceAccounts/*}:testIamPermissions"
-      body: "*"
-      additional_bindings {
-        post: "/v1alpha1/{resource=organizations/*/serviceAccounts/*}:testIamPermissions"
-        body: "*"
-      }
-    };
-  }
-
   // rpc QueryGrantableRoles(QueryGrantableRolesRequest) returns (QueryGrantableRolesResponse) {
   //   option (google.api.http) = {
   //     post: "/v1alpha1/roles:queryGrantableRoles"

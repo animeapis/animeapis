@@ -43,7 +43,6 @@ service WebCache {
   rpc DeleteCache(DeleteCacheRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=caches/*}"
-      body: "*"
     };
   }
 }
