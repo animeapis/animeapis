@@ -43,6 +43,13 @@ service Knowledge {
     };
   }
 
+  rpc ReviewContribution(ReviewContributionRequest) returns (Contribution) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{name=users/*/contributions/*}"
+      body: "*"
+    };
+  }
+
   rpc RejectContribution(RejectContributionRequest) returns (Contribution) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=users/*/contributions/*}:reject"
@@ -54,6 +61,15 @@ service Knowledge {
 message Contribution {
   // The resource name of the contribution.
   string name = 1;
+
+  repeated EntryEntity additions = 2;
+
+  repeated EntryEntity deletions = 3;
+}
+
+message ReviewContributionRequest {
+  // The parent resource where this contribution will be created.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   repeated EntryEntity additions = 2;
 
