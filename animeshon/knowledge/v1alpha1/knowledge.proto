@@ -79,9 +79,11 @@ message CreateContributionRequest {
   // The parent resource where this contribution will be created.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
-  repeated EntryEntity additions = 2;
+  string displayName = 2;
 
-  repeated EntryEntity deletions = 3;
+  repeated EntryEntity additions = 3;
+
+  repeated EntryEntity deletions = 4;
 }
 
 message ListContributionsRequest {
