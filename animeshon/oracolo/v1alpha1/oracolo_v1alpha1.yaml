@@ -1,7 +1,0 @@
-type: google.api.Service
-config_version: 3
-name: oracolo.animeapis.com
-title: Oracolo API
-
-apis:
-- name: animeshon.oracolo.v1alpha1.Oracolo
