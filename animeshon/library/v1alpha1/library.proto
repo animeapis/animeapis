@@ -91,12 +91,12 @@ service Library {
     };
   }
 
-  rpc BatchCreatePlaylistItems(BatchCreatePlaylistItemsRequest) returns (BatchPlaylistItemsResponse) {
+  rpc BatchCreatePlaylistItems(BatchCreatePlaylistItemsRequest) returns (BatchCreatePlaylistItemsResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*/playlists/*}/playlists:createBatch"
+      post: "/v1alpha1/{parent=users/*/playlists/*}/playlists:batchCreate"
       body: "*"
       additional_bindings {
-        post: "/v1alpha1/{parent=audiences/*/playlists/*}/playlists:createBatch"
+        post: "/v1alpha1/{parent=audiences/*/playlists/*}/playlists:batchCreate"
         body: "*"
       }
     };
@@ -141,8 +141,8 @@ message Playlist {
   Type type = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
-message BatchPlaylistItemsResponse {
-  // The id of the playlist.
+message BatchCreatePlaylistItemsResponse {
+  // The list of items added to the playlist
   repeated PlaylistItem items = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
@@ -256,7 +256,7 @@ message BatchCreatePlaylistItemsRequest {
   // The parent this playlist item belongs to.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The playlist item to create.
+  // The playlist items to create.
   repeated PlaylistItem item = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
