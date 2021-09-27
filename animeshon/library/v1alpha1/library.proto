@@ -73,7 +73,7 @@ service Library {
 
   rpc ListPlaylistItems(ListPlaylistItemsRequest) returns (ListPlaylistItemsResponse) {
     option (google.api.http) = {
-    get: "/v1alpha1/{parent=users/*/playlists/*}/items"
+      get: "/v1alpha1/{parent=users/*/playlists/*}/items"
       additional_bindings {
         get: "/v1alpha1/{parent=audiences/*/playlists/*}/items"
       }
@@ -86,6 +86,17 @@ service Library {
       body: "*"
       additional_bindings {
         post: "/v1alpha1/{parent=audiences/*/playlists/*}/playlists"
+        body: "*"
+      }
+    };
+  }
+
+  rpc BatchCreatePlaylistItems(BatchCreatePlaylistItemsRequest) returns (BatchCreatePlaylistItemsResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*/playlists/*}/playlists:batchCreate"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=audiences/*/playlists/*}/playlists:batchCreate"
         body: "*"
       }
     };
@@ -130,6 +141,11 @@ message Playlist {
   Type type = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
+message BatchCreatePlaylistItemsResponse {
+  // The list of items added to the playlist
+  repeated PlaylistItem items = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
 message PlaylistItem {
   // The id of the playlist.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
@@ -141,7 +157,7 @@ message PlaylistItem {
 
   // The timestamp at which the playlist item was created.
   google.protobuf.Timestamp create_time = 3
-    [(google.api.field_behavior) = OUTPUT_ONLY];
+  [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // TODO: this is represented as a group in authorization.
@@ -234,6 +250,14 @@ message CreatePlaylistItemRequest {
 
   // The playlist item to create.
   PlaylistItem item = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchCreatePlaylistItemsRequest {
+  // The parent this playlist item belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The playlist items to create.
+  repeated PlaylistItem item = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeletePlaylistItemRequest {
