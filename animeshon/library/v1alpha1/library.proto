@@ -82,10 +82,10 @@ service Library {
 
   rpc CreatePlaylistItem(CreatePlaylistItemRequest) returns (PlaylistItem) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*/playlists/*}/playlists"
+      post: "/v1alpha1/{parent=users/*/playlists/*}/items"
       body: "*"
       additional_bindings {
-        post: "/v1alpha1/{parent=audiences/*/playlists/*}/playlists"
+        post: "/v1alpha1/{parent=audiences/*/playlists/*}/items"
         body: "*"
       }
     };
@@ -93,10 +93,10 @@ service Library {
 
   rpc BatchCreatePlaylistItems(BatchCreatePlaylistItemsRequest) returns (BatchCreatePlaylistItemsResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*/playlists/*}/playlists:batchCreate"
+      post: "/v1alpha1/{parent=users/*/playlists/*}/items:batchCreate"
       body: "*"
       additional_bindings {
-        post: "/v1alpha1/{parent=audiences/*/playlists/*}/playlists:batchCreate"
+        post: "/v1alpha1/{parent=audiences/*/playlists/*}/items:batchCreate"
         body: "*"
       }
     };
