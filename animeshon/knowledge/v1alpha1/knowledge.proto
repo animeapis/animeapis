@@ -129,13 +129,261 @@ message EntryEntity {
   }
 }
 
-message Anime {
-  string name = 1;
-  string type = 2;
-  repeated Text names = 3;
-  repeated Running runnings = 4;
-  repeated ContentRelation contentRelations = 5;
+enum Boolean {
+  UNKNOWN = 1;
+  TRUE = 2;
+  FALSE = 3;
 }
+
+enum ContentStatus {
+  // Unknown status
+	CNT_STS_UNKNOWN = 1;
+	// Publishing or airing is still ongoing.
+	CNT_STS_ONGOING = 2;
+	// Publishing or airing has been completed.
+	CNT_STS_COMPLETED = 3;
+	// Publishing or airing has been scheduled.
+	CNT_STS_SCHEDULED = 4;
+	// Publishing or airing started but never finished.
+	CNT_STS_INTERRUPTED = 5;
+	// Publishing or airing was scheduled but later canceled.
+	CNT_STS_CANCELED = 6;
+	// Publishing or airing has been suspended / has been put on hold.
+  CNT_STS_SUSPENDED = 7;
+	// The content is in work in progress
+	CNT_STS_WORK_IN_PROGRESS = 8;
+}
+
+enum ContentPublishingType {
+  // Unknown status
+	CNT_PBL_UNKNOWN = 1;
+	// Self publishing
+	CNT_PBL_SELF = 2;
+	// Publisched by a corporation
+	CNT_PBL_CORPORATE = 3;
+}
+
+message Anime {
+  enum AnimeType {
+    // Unknown type
+    ANM_TYP_UNKNOWN = 1;
+    // Tv serie
+    ANM_TYP_TV = 2;
+    // Movie
+    ANM_TYP_MOVIE = 3;
+    // Original video animation
+    ANM_TYP_OVA = 4;
+    // Original Net Anime
+    ANM_TYP_ONA = 5;
+    // Special
+    ANM_TYP_SPECIAL = 6;
+    // Web anime
+    ANM_TYP_WEB = 7;
+    // Music video
+    ANM_TYP_MUSIC_VIDEO = 8;
+    // Other
+    ANM_TYP_OTHER = 9;
+  }
+
+  string name = 1;
+  AnimeType type = 2;
+  repeated Edge episodes = 3;
+  int32 EpisodeCount = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+  repeated Markeplace marketplaces = 11;
+  ContentStatus status = 12;
+  repeated ContentRelation content_relations = 13;
+  ContentPublishingType publishing_type = 14;
+  Boolean original = 15;
+  repeated Running runnings = 16;
+  google.protobuf.Timestamp release_date = 17;
+  repeated Cast starring = 18;
+  repeated Collaboration staff = 19;
+  repeated Edge genres = 20;
+  repeated Edge releases = 21;
+  repeated Soundtrack soundtracks = 22;
+  repeated VoiceActing voiceactings = 23;
+  repeated MaturityRating maturity_ratings = 24;
+  repeated RegionRestriction region_restrictions = 25;
+}
+
+message Canonical {
+  string name = 1;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+  repeated Markeplace marketplaces = 11;
+  repeated Edge contents = 12;
+}
+
+message Chapter {
+  enum ChapterType {
+    // Unknown type
+    CHT_TYP_UNKNOWN = 1;
+    // Regular chapter
+    CHT_TYP_REGULAR = 2;
+    // Extra chapter
+    CHT_TYP_EXTRA = 3;
+  }
+
+  string name = 1;
+  ChapterType type = 2;
+  repeated Edge episodes = 3;
+  int32 identifier = 4;
+  int32 page_count = 5;
+  google.protobuf.Timestamp release_date = 6;
+  repeated Text names = 7;
+  repeated Text aliases = 8;
+  repeated Text descriptions = 9;
+  string cover_image_id = 10;
+  string banner_image_id = 11;
+  repeated Website websites = 12;
+  repeated Markeplace marketplaces = 13;
+  repeated Cast starring = 14;
+  repeated Collaboration staff = 15;
+  repeated Edge releases = 16;
+  repeated MaturityRating maturity_ratings = 17;
+  repeated RegionRestriction region_restrictions = 18;
+}
+
+enum Genre {
+  // Unknown genre
+  GNR_TYP_UNKNOWN = 1;
+	// Male
+	GNR_TYP_MALE = 2;
+	// Female
+	GNR_TYP_FEMALE = 3;
+	// Male which seems a female
+	GNR_TYP_MALE_TRAP = 4;
+	// Female which seems a male
+	GNR_TYP_FEMALE_TRAP = 5;
+	// Both male and female
+	GNR_TYP_HERMAPHRODITIC = 6;
+	// None of the default gender applies
+	GNR_TYP_OTHER = 7;
+	// The gender is undefined
+	GNR_TYP_UNDEFINED = 8;
+	// The gender something between male and female
+	GNR_TYP_INTERSEXUAL = 9;
+}
+
+enum BloodType {
+  // Unknown blood type
+	BLD_TYP_UNKNOWN = 1;
+	// A (no Rh info)
+	BLD_TYP_A = 2;
+	// B (no Rh info)
+	BLD_TYP_B = 3;
+	// AB (no Rh info)
+	BLD_TYP_AB = 4;
+	// O (no Rh info)
+	BLD_TYP_O = 5;
+	// A+
+	BLD_TYP_A_PLUS = 6;
+	// B+
+	BLD_TYP_B_PLUS = 7;
+	// AB+
+	BLD_TYP_AB_PLUS = 8;
+	// O+
+	BLD_TYP_O_PLUS = 9;
+	// A-
+	BLD_TYP_A_MINUS = 10;
+	// B-
+	BLD_TYP_B_MINUS = 11;
+	// AB-
+	BLD_TYP_AB_MINUS = 12;
+	// O-
+	BLD_TYP_O_MINUS = 13;
+}
+
+message Character {
+  enum AgeRange {
+    // Unknown
+    CHR_AGE_UNKNOWN = 1;
+    // The character is an infant. 1-3
+    CHR_AGE_INFANT = 2;
+    // The character is a child. 4-12
+    CHR_AGE_CHILD = 3;
+    // The character is a teen. 13-17
+    CHR_AGE_TEEN = 4;
+    // The character is a young adult. 18-25
+    CHR_AGE_YOUNG_ADULT = 5;
+    // The character is a grown up adult. 26-59
+    CHR_AGE_ADULT = 6;
+    // The character is an eldery. 60+
+    CHR_AGE_ELDERY = 7;
+    // The character is an entity which the concept of age do not makes sense (robots, ...)
+    CHR_AGE_NOT_APPLICABLE = 8;
+    // The character can't be fit in any any of the other category. (Gods, planets, ...)
+    CHR_AGE_WITHOUT = 9;
+  }
+
+  enum CupSize {
+    CHR_CUP_UNKNOWN = 1;
+    CHR_CUP_AAA = 2;
+    CHR_CUP_AA = 3;
+    CHR_CUP_A = 4;
+    CHR_CUP_B = 5;
+    CHR_CUP_C = 6;
+    CHR_CUP_D = 7;
+    CHR_CUP_E = 8;
+    CHR_CUP_F = 9;
+    CHR_CUP_G = 10;
+    CHR_CUP_H = 11;
+    CHR_CUP_I = 12;
+    CHR_CUP_J = 13;
+    CHR_CUP_K = 14;
+    CHR_CUP_L = 15;
+    CHR_CUP_M = 16;
+    CHR_CUP_N = 17;
+    CHR_CUP_O = 18;
+    CHR_CUP_P = 19;
+    CHR_CUP_Q = 20;
+    CHR_CUP_R = 21;
+    CHR_CUP_S = 22;
+    CHR_CUP_T = 23;
+    CHR_CUP_U = 24;
+    CHR_CUP_V = 25;
+    CHR_CUP_W = 26;
+    CHR_CUP_X = 27;
+    CHR_CUP_Y = 28;
+    CHR_CUP_Z = 29;
+  }
+
+  string name = 1;
+  string birthday_day = 2;
+  string birthday_month = 3;
+  string birthday_year = 4;
+  repeated Text hometown = 5;
+  repeated Text birthplace = 6;
+  Genre genre = 7;
+  BloodType blood_type = 8;
+  CupSize cup_size = 9;
+  AgeRange age_range = 10;
+  int32 age = 11;
+  int32 height = 12;
+  int32 weight = 13;
+  int32 bust = 14;
+  int32 waist = 15;
+  int32 hips = 16;
+  repeated Text names = 17;
+  repeated Text aliases = 18;
+  repeated Text descriptions = 19;
+  string cover_image_id = 20;
+  string banner_image_id = 21;
+  repeated Website websites = 22;
+  repeated Markeplace marketplaces = 23;
+  repeated Edge guise_of = 24;
+}
+
 
 message GraphicNovel {
   string name = 1;
@@ -151,16 +399,264 @@ message Text {
 }
 
 message Running {
-  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp start_time = 1 [(google.api.field_behavior) = REQUIRED];
   google.protobuf.Timestamp end_time = 2;
-  string localization = 3;
+  string localization = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Edge {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+/*
+ContentRelation represent the relation between 2 different content.
+The ContentReleation field is common to both the content, therefore the server do not need
+to have both relations (from content A to B, and from B to A) because it will generate automatically
+the reverse relation.
+
+> Sending A sequel of B, the server will generate B prequel A
+
+The relation has to be read as
+entity -> has <relation> -> which is <related>
+EG: Naruto -> Sequel -> Naruto Shippuden = <Naruto> has <sequel>, which is <Naruto Shippuden>
+*/
 message ContentRelation {
-  Edge edge = 1;
-  string relation = 2;
+  enum ContentRelationType {
+    // ADAPTATION implies that the subject is the base from which the object has been adapted
+    // reverse = BASE
+    ADAPTATION = 1;
+    // BASE Adaptation
+    // reverse = Adaptation
+    BASE = 2;
+
+    // SAMESETTING Same universe/world/reality/timeline with completely different characters.
+    // reverse = SAMESETTING
+    SAME_SETTING = 3;
+
+    // ALTSETTING Same universe/world/reality/timeline same characters with different universe/world/reality/timeline.
+    // reverse = ALTVERSION
+    ALTERNATIVE_SETTING = 4;
+
+    // ALTVERSION alternative version Same setting, same characters, story is told differently.
+    // reverse = ALTVERSION
+    ALTERNATIVE_VERSION = 5;
+
+    // CHARACTER When characters appear in both series, but is not a spin-off
+    // reverse = CHARACTER
+    CHARACTER = 6;
+
+    // FULLSTORY the object is full story of the subject
+    // this implies that the subject is a summary of the object
+    // reverse = SUMMARY
+    FULL_STORY = 7;
+    // SUMMARY summary
+    // reverse = FULLSTORY
+    SUMMARY = 8;
+
+    // PARENTSTORY the object is the parent story of the subject
+    // this implies that the subject is a spin-off of the object
+    // reverse = SPINOFF
+    PARENT_STORY = 9;
+    // SpinOff spin off
+    // reverse = ParentStory
+    SPIN_OFF = 10;
+
+    // PREQUEL prequel
+    // reverse = SEQUEL
+    PREQUEL = 11;
+    // SEQUEL sequel
+    // reverse = PREQUEL
+    SEQUEL = 12;
+
+    // MAINSTORY the object is the main story from which the subject has been created
+    // this implies that the subject is a side story of the object
+    // reverse = SIDESTORY
+    MAIN_STORY = 13;
+    // SIDESTORY side story
+    // reverse = MAINSTORY
+    SIDE_STORY = 14;
+
+    // ORIGINAL the object is the original of the subject
+    // this implies that the subject is the parody or fan made object
+    // reverse = PARODY
+    ORIGINAL = 15;
+    // PARODY is parody
+    // reverse = ORIGINAL
+    PARODY = 16;
+  }
+
+  Edge related = 1 [(google.api.field_behavior) = REQUIRED];
+  ContentRelationType relation = 2 [(google.api.field_behavior) = REQUIRED];
 }
+
+/*
+Cast represnt the relation between a character and a content.
+The cast is always field of the content and the Edge points to the character.
+*/
+message Cast {
+  enum CastRelation {
+    MAIN = 1;
+    SUPPORT = 2;
+    APPEARS = 3;
+  }
+  Edge character = 1 [(google.api.field_behavior) = REQUIRED];
+  CastRelation relation = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Collaboration represent the relation between a content and a person or organization.
+The collaboration must be localizaed and it must carry the information about the role of the collaborator.
+The Collaboration is always field of the content and the Edge points to the collaborator.
+The localization must be a valid ISO3 localization which identifies the language/full localization of the content's version 
+for which the collaborator collaborated
+*/
+message Collaboration {
+  Edge collaborator = 1 [(google.api.field_behavior) = REQUIRED];
+  string localization = 2 [(google.api.field_behavior) = REQUIRED];
+  string role = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Voice Acting represent voice given by a person to a voiced entity in a specific content
+The Voice Acting is always field of the content and it must be localized.
+The localization must be a valid ISO3 localization which identifies the language/full localization of the content's version 
+for which the actor gave the voice to the entity
+*/
+message VoiceActing {
+  Edge voiced = 1 [(google.api.field_behavior) = REQUIRED];
+  Edge actor = 2 [(google.api.field_behavior) = REQUIRED];
+  string localization = 3 [(google.api.field_behavior) = REQUIRED];
+  Boolean primary = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Any kind of website related to the entity.
+Could be official website, twitter, or external resources such as wikipedia
+*/
+message Website {
+  string url = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Markeplace is where to consume the content.
+The name field must point to a valid valid marketplace id in order to load icon and name of the marketplace.
+If the marketplace is limited to some specific country, add them to the field region following the IOS3 standard
+*/
+message Markeplace {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  string url = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated string region = 3;
+}
+
+enum TrackVersion {
+  // Unknown version
+  TRK_VRS_UNKNOWN = 1;
+  // Normal version of the track
+  TRK_VRS_NORMAL = 2;
+  // Instrumental version
+  TRK_VRS_INSTRUMENTAL = 3;
+  // Only piano version
+  TRK_VRS_PIANO = 4;
+  // Japanese version
+  TRK_VRS_JAPANESE = 5;
+  // English version
+  TRK_VRS_ENGLISH = 6;
+  // TV version of the track
+  TRK_VRS_TV = 7;
+  // The track has been mixed with another
+  TRK_VRS_MIX = 8;
+  // The track has been remixed
+  TRK_VRS_REMIX = 9;
+  // Extended version of the track
+  TRK_VRS_EXTENDED = 10;
+  // other
+  TRK_VRS_OTHER = 11;
+}
+
+/*
+Soundtrack exposes the information about which Track has been used in which Content in which localization and for what.
+The localization must be a valid ISO3 localization which identifies the language/full localization of the content's version 
+for which the Track is used
+*/
+message Soundtrack {
+  enum SoundtrackType {
+    // Unknown type
+    SNDTRC_TYPE_UNKNOWN = 1;
+    // The track is used as ending
+    SNDTRC_TYPE_ENDING = 2;
+    // The track is used as opening
+    SNDTRC_TYPE_OPENING = 3;
+    // The track is used as insert song
+    SNDTRC_TYPE_INSERT = 4;
+    // The track is used as background song
+    SNDTRC_TYPE_BACKGROUND = 5;
+    // The track is used as image song
+    SNDTRC_TYPE_IMAGE = 6;
+    // The track is used as theme song
+    SNDTRC_TYPE_THEME = 7;
+  }
+  Edge track = 1 [(google.api.field_behavior) = REQUIRED];
+  SoundtrackType type = 2 [(google.api.field_behavior) = REQUIRED];
+  TrackVersion version = 3 [(google.api.field_behavior) = REQUIRED];
+  string localization = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+TrackListing exposes the information about which Track has been released from which MusicRelease in which version and in whic order.
+*/
+message TrackListing {
+  Edge musicRelease = 1 [(google.api.field_behavior) = REQUIRED];
+  TrackVersion version = 2 [(google.api.field_behavior) = REQUIRED];
+  int32 index = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+enum LanguageComplexity {
+  // Unknown complexity
+  LNG_CMPL_UNKNOWN = 1;
+  // For beginners
+	LNG_CMPL_BEGINNER = 2;
+	// For intermedium
+	LNG_CMPL_INTERMEDIUM = 3;
+	// For advanced
+	LNG_CMPL_ADVANCED = 4;
+	// For experts
+	LNG_CMPL_EXPERT = 5;
+}
+
+enum WritingSystem {
+  // Unknown writing system
+  WRT_SYS_UNKNOWN = 1;
+  // The opera is written with latin characters
+	WRT_SYS_ALPHABETIC = 2;
+	// The opera has the furigana transliteraion on each kanji
+	WRT_SYS_FURIGANA_FULL = 3;
+	// The opera has the furigana transliteraion only on advanced words or words used for the first time
+	WRT_SYS_FURIGANA_PARTIAL = 4;
+	// The opera has the furigana transliteraion only on non common words, if any
+	WRT_SYS_KANJI = 5;
+}
+
+enum RegionRestriction {
+  // Unknown Region Restriction
+  RGN_RST_UNKNOWN = 1;
+  // No Region Restriction
+  RGN_RST_NONE = 2;
+  // The Entity is illegal following the U.N. guidelines
+  RGN_RST_ILLEGAL = 3;
+}
+
+enum MaturityRating {
+  // Unknown Maturity Rating
+  MTR_RTN_UNKNOWN = 1;
+  // Over 18 in USA
+  MTR_RTN_USA_NC17 = 2;
+  // Over 18 in USA
+  MTR_RTN_USA_R = 3;
+  // Over 13 in USA
+  MTR_RTN_USA_PG13 = 4;
+  // Over 3 in USA
+  MTR_RTN_USA_PG = 5;
+  // Safe in USA
+  MTR_RTN_USA_G = 6;
+}
+
