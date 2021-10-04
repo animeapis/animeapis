@@ -125,7 +125,18 @@ message RejectContributionRequest {
 message EntryEntity {
   oneof entity {
     Anime anime = 1;
-    GraphicNovel graphicNovel = 2;
+    Canonical canonical = 2;
+    Chapter chapter = 3;
+    Character character = 4;
+    Episode episode = 5;
+    GameRelease game_release = 6;
+    GraphicNovel graphic_novel = 7;
+    LightNovel light_novel = 8;
+    Organization organization = 9;
+    Person person = 10;
+    Track track = 11;
+    Universe universe = 12;
+    Volume volume = 13;
   }
 }
 
@@ -213,15 +224,15 @@ message Anime {
 }
 
 message Canonical {
-  string name = 0;
-  repeated Text names = 1;
-  repeated Text aliases = 2;
-  repeated Text descriptions = 3;
-  string cover_image_id = 4;
-  string banner_image_id = 5;
-  repeated Website websites = 6;
-  repeated Markeplace marketplaces = 7;
-  repeated Edge contents = 8;
+  string name = 1;
+  repeated Text names = 2;
+  repeated Text aliases = 3;
+  repeated Text descriptions = 4;
+  string cover_image_id = 5;
+  string banner_image_id = 6;
+  repeated Website websites = 7;
+  repeated Markeplace marketplaces = 8;
+  repeated Edge contents = 9;
 }
 
 message Chapter {
@@ -603,7 +614,6 @@ message GameRelease {
   repeated MaturityRating maturity_ratings = 30;
   repeated RegionRestriction region_restrictions = 31;
 }
-
 
 message GraphicNovel {
   enum GraphicNovelType {
