@@ -254,25 +254,25 @@ message Chapter {
   repeated RegionRestriction region_restrictions = 18;
 }
 
-enum Genre {
-  // Unknown genre
-  GNR_TYP_UNKNOWN = 1;
+enum Gender {
+  // Unknown gender
+  GND_TYP_UNKNOWN = 1;
 	// Male
-	GNR_TYP_MALE = 2;
+	GND_TYP_MALE = 2;
 	// Female
-	GNR_TYP_FEMALE = 3;
+	GND_TYP_FEMALE = 3;
 	// Male which seems a female
-	GNR_TYP_MALE_TRAP = 4;
+	GND_TYP_MALE_TRAP = 4;
 	// Female which seems a male
-	GNR_TYP_FEMALE_TRAP = 5;
+	GND_TYP_FEMALE_TRAP = 5;
 	// Both male and female
-	GNR_TYP_HERMAPHRODITIC = 6;
+	GND_TYP_HERMAPHRODITIC = 6;
 	// None of the default gender applies
-	GNR_TYP_OTHER = 7;
+	GND_TYP_OTHER = 7;
 	// The gender is undefined
-	GNR_TYP_UNDEFINED = 8;
+	GND_TYP_UNDEFINED = 8;
 	// The gender something between male and female
-	GNR_TYP_INTERSEXUAL = 9;
+	GND_TYP_INTERSEXUAL = 9;
 }
 
 enum BloodType {
@@ -364,7 +364,7 @@ message Character {
   string birthday_year = 4;
   repeated Text hometown = 5;
   repeated Text birthplace = 6;
-  Genre genre = 7;
+  Gender genre = 7;
   BloodType blood_type = 8;
   CupSize cup_size = 9;
   AgeRange age_range = 10;
@@ -384,14 +384,446 @@ message Character {
   repeated Edge guise_of = 24;
 }
 
+message Episode {
+  enum EpisodeType {
+    // Unknown episode type
+    EPS_TYP_UNKNOWN = 1;
+    // Regular episode
+    EPS_TYP_REGULAR = 2;
+    // Recapitolation episode
+    EPS_TYP_RECAP = 3;
+    // Parody
+    EPS_TYP_PARODY = 4;
+    // Promo episode
+    EPS_TYP_PROMO = 5;
+    // Special episode
+    EPS_TYP_SPECIAL = 6;
+    // Opening / ending episode
+    EPS_TYP_OPENING_ENDING = 7;
+    // Other
+    EPS_TYP_OTHER = 8;
+  }
+
+  string name = 1;
+  EpisodeType type = 2;
+  int32 identifier = 3;
+  google.protobuf.Timestamp release_date = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+  repeated Markeplace marketplaces = 11;
+  repeated Cast starring = 12;
+  repeated Collaboration staff = 13;
+  repeated Soundtrack soundtracks = 14;
+  repeated VoiceActing voiceactings = 15;
+  repeated MaturityRating maturity_ratings = 16;
+  repeated RegionRestriction region_restrictions = 17;
+}
+
+enum Censorship {
+	// Unknown censorship
+	CNS_TYP_UNKNOWN = 1;
+	// No censorship
+	CNS_TYP_NONE = 2;
+	// Censorship applied
+	CNS_TYP_CENSORED = 3;
+}
+
+message GameRelease {
+  enum GameReleaseType {
+    // Unknown game release type
+    GMR_TYP_UNKNOWN = 1;
+    // The release is complete
+    GMR_TYP_COMPLETE = 2;
+    // The release is only a part of the content
+    GMR_TYP_PARTIAL = 3;
+    // The release is just trial
+    GMR_TYP_TRIAL = 4;
+    // The release is a dlc
+    GMR_TYP_DLC = 5;
+  }
+
+  enum GameDubDegree {
+    // Unknown DUB degree
+    DUB_DGR_UNKNOWN = 1;
+    // Not dubbed
+    DUB_DGR_NONE = 2;
+    // Only erotic scenes are dubbed
+    DUB_DGR_ERO_ONLY = 3;
+    // Partially dubbed
+    DUB_DGR_PARTIAL = 4;
+    // Full dubbed
+    DUB_DGR_FULL = 5;
+  }
+
+  enum GameAnimationDegree {
+    // Unknown animation degree
+    ANM_DGR_UNKNOWN = 1;
+    // No animation
+    ANM_DGR_NONE = 2;
+    // Simple animations
+    ANM_DGR_SIMPLE = 3;
+    // Partial animation -  Some fully animated scenes
+    ANM_DGR_PARTIAL = 4;
+    // Fully animated
+    ANM_DGR_FULL = 5;
+  }
+
+  enum Platform {
+    // Windows
+    PLT_TYP_WINDOWS = 1;
+    // DOS
+    PLT_TYP_DOS = 2;
+    // LINUX
+    PLT_TYP_LINUX = 3;
+    // Mac
+    PLT_TYP_MAC = 4;
+    // IOs devices
+    PLT_TYP_IOS = 5;
+    // Android
+    PLT_TYP_ANDROID = 6;
+    // DVD player
+    PLT_TYP_DVD_PLAYER = 7;
+    // Blu-ray Player
+    PLT_TYP_BLU_RAY_PLAYER = 8;
+    // FM Towns https://en.wikipedia.org/wiki/FM_Towns
+    PLT_TYP_FM_TOWNS = 9;
+    // FM-7 Towns https://en.wikipedia.org/wiki/FM-7
+    PLT_TYP_FM7_TOWNS = 10;
+    // FM-8 Towns https://en.wikipedia.org/wiki/FM-8
+    PLT_TYP_FM8_TOWNS = 11;
+    // Gameboy advance
+    PLT_TYP_GAMEBOY_ADVANCE = 12;
+    // Gameboy color
+    PLT_TYP_GAMEBOY_COLOR = 13;
+    // MSX Computer https://en.wikipedia.org/wiki/MSX
+    PLT_TYP_MSX = 14;
+    // Nintendo DS
+    PLT_TYP_NINTENDO_DS = 15;
+    // NES platform
+    PLT_TYP_NES = 16;
+    // C88 https://en.wikipedia.org/wiki/PC-8800_series
+    PLT_TYP_P88 = 17;
+    // PC98 https://en.wikipedia.org/wiki/PC-9800_series
+    PLT_TYP_P98 = 18;
+    // PC Engine
+    PLT_TYP_PC_ENGINE = 19;
+    // Pc-FX https://en.wikipedia.org/wiki/PC-FX
+    PLT_TYP_PC_FX = 20;
+    // Playstation portable
+    PLT_TYP_PSP = 21;
+    // Playstation 1
+    PLT_TYP_PS1 = 22;
+    // Playstation 2
+    PLT_TYP_PS2 = 23;
+    // Playstation 3
+    PLT_TYP_PS3 = 24;
+    // Playstation 4
+    PLT_TYP_PS4 = 25;
+    // Playstation 5
+    PLT_TYP_PS5 = 26;
+    // Playstation vita
+    PLT_TYP_PS_VITA = 27;
+    // Dgramcast https://en.wikipedia.org/wiki/Dreamcast
+    PLT_TYP_DGRAMCAST = 28;
+    // Sega Staurn
+    PLT_TYP_SEGA_SATURN = 29;
+    // Sega Mega-CD
+    PLT_TYP_SEGA_MEGACD = 30;
+    // Super Nintendo
+    PLT_TYP_SUPER_NINTENDO = 31;
+    // Nintendo Switch
+    PLT_TYP_NINTENDO_SWITCH = 32;
+    // Ninentdo WII
+    PLT_TYP_NINTENDO_WII = 33;
+    // Nintendo WI
+    PLT_TYP_NINTENDO_WII_U = 34;
+    // Nintendo 3Ds
+    PLT_TYP_NINTENDO_3DS = 35;
+    // X68000 https://en.wikipedia.org/wiki/X68000
+    PLT_TYP_X68000 = 36;
+    // Xbox One
+    PLT_TYP_XBOX_ONE = 37;
+    // Xbox 360
+    PLT_TYP_XBOX_360 = 38;
+    // Xbox
+    PLT_TYP_XBOX = 39;
+    // Xbox Series X
+    PLT_TYP_XBOX_X = 40;
+    // Website
+    PLT_TYP_WEBSITE = 41;
+    // Visual Novel DS https://github.com/BASLQC/vnds/wiki
+    PLT_TYP_VN_DS = 42;
+    // Sharp X1 https://en.wikipedia.org/wiki/Sharp_X1
+    PLT_TYP_SHARP_X1 = 43;
+    // 3DO Interactive Multiplayer
+    PLT_TYP_INTERACTIVE_3DO = 44;
+    // Other
+    PLT_TYP_OTHER = 45;
+    // Mobile Other
+    PLT_TYP_MOBILE_OTHER = 46;
+  }
+
+  string name = 1;
+  repeated string languages = 2;
+  google.protobuf.Timestamp release_date = 3;
+  //repeated Media media = 4;
+  Censorship censorship = 5;
+  ContentPublishingType publishing_type = 6; 
+  string asin = 7;
+  string gtin = 8;
+
+  GameReleaseType type = 9;
+  int32 WidthResolution = 10;
+  int32 HeightResolution = 11;
+  Boolean IsPatch = 12;
+  Boolean IsFree = 13;
+  GameDubDegree dub_degree = 14;
+  GameAnimationDegree story_animation_degree = 15;
+  GameAnimationDegree ero_animation_degree = 16;
+  string engine = 17;
+  repeated Platform platforms = 18;
+
+  repeated Text names = 19;
+  repeated Text aliases = 20;
+  repeated Text descriptions = 21;
+  string cover_image_id = 22;
+  string banner_image_id = 23;
+  repeated Website websites = 24;
+  repeated Markeplace marketplaces = 25;
+  repeated Cast starring = 26;
+  repeated Collaboration staff = 27;
+  repeated Soundtrack soundtracks = 28;
+  repeated VoiceActing voiceactings = 29;
+  repeated MaturityRating maturity_ratings = 30;
+  repeated RegionRestriction region_restrictions = 31;
+}
+
 
 message GraphicNovel {
+  enum GraphicNovelType {
+    // Unknown graphic novel type
+    UNKNOWN = 1;
+    // Japanese GraphicNovel
+    MANGA = 2;
+    // One shot (only one volume)
+    ONE_SHOT = 3;
+    // Cinese GraphicNovel
+    MANHUA = 4;
+    // Korean GraphicNovel
+    MANHWA = 5;
+    // Original English Language
+    OEL = 6;
+    // Web native comic (webtoon)
+    WEB_COMIC = 7;
+    // GraphicNovel consisting of 4 pannels
+    YON_KOMA = 8;
+    // Other
+    OTHER = 9;
+  }
+
   string name = 1;
-  string type = 2;
-  repeated Text names = 3;
-  repeated Running runnings = 4;
-  repeated ContentRelation contentRelations = 5;
+  GraphicNovelType type = 2;
+  repeated Edge chapters = 3;
+  int32 ChapterCount = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+  repeated Markeplace marketplaces = 11;
+  ContentStatus status = 12;
+  repeated ContentRelation content_relations = 13;
+  ContentPublishingType publishing_type = 14;
+  Boolean original = 15;
+  repeated Running runnings = 16;
+  google.protobuf.Timestamp release_date = 17;
+  repeated Cast starring = 18;
+  repeated Collaboration staff = 19;
+  repeated Edge genres = 20;
+  repeated Edge releases = 21;
+  repeated MaturityRating maturity_ratings = 22;
+  repeated RegionRestriction region_restrictions = 23;
+  repeated Edge volumes = 24;
 }
+
+message LightNovel {
+  string name = 1;
+  repeated Edge chapters = 2;
+  int32 ChapterCount = 3;
+  repeated Text names = 4;
+  repeated Text aliases = 5;
+  repeated Text descriptions = 6;
+  string cover_image_id = 7;
+  string banner_image_id = 8;
+  repeated Website websites = 9;
+  repeated Markeplace marketplaces = 10;
+  ContentStatus status = 11;
+  repeated ContentRelation content_relations = 12;
+  ContentPublishingType publishing_type = 13;
+  Boolean original = 14;
+  repeated Running runnings = 15;
+  google.protobuf.Timestamp release_date = 16;
+  repeated Cast starring = 17;
+  repeated Collaboration staff = 18;
+  repeated Edge genres = 19;
+  repeated Edge releases = 20;
+  repeated MaturityRating maturity_ratings = 21;
+  repeated RegionRestriction region_restrictions = 22;
+  repeated Edge volumes = 23;
+}
+
+enum ContentFocus {
+  // Unknown focus
+	CNT_FCS_UNKNOWN = 1;
+	// Main content handled are games
+	CNT_FCS_GAME = 2;
+	// Main content handled are anime
+	CNT_FCS_ANIME = 3;
+	// Main content handled are manga
+	CNT_FCS_MANGA = 4;
+	// Main content handled are light novels
+	CNT_FCS_LIGHT_NOVEL = 5;
+	// ContentFocusOther other
+	CNT_FCS_OTHER = 6;
+}
+
+message Organization {
+  enum OrganizationType {
+    // Uunknown organization type
+    ORG_TYP_UNKNOWN = 1;
+    // Coorporation / company
+    ORG_TYP_CORPORATE = 2;
+    // Circle of people
+    ORG_TYP_CIRCLE = 3;
+  }
+
+  string name = 1;
+  OrganizationType type = 2;
+  google.protobuf.Timestamp foundation_date = 3;
+  ContentFocus focus = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+}
+
+message Person {
+  string name = 1;
+  repeated string nationalities = 2;
+  repeated string languages = 3;
+  google.protobuf.Timestamp birthday = 4;
+  Gender gender = 5;
+  BloodType blood_type = 6;
+  repeated Text names = 7;
+  repeated Text aliases = 8;
+  repeated Text descriptions = 9;
+  string cover_image_id = 10;
+  string banner_image_id = 11;
+  repeated Website websites = 12;
+}
+
+message Track {
+  string name = 1;
+  google.protobuf.Timestamp release_date = 2;
+  repeated Text names = 3;
+  repeated Text aliases = 4;
+  repeated Text descriptions = 5;
+  string cover_image_id = 6;
+  string banner_image_id = 7;
+  repeated Website websites = 8;
+  repeated Markeplace marketplaces = 9;
+  repeated Collaboration staff = 10;
+  repeated Edge genres = 11;
+  repeated Edge releases = 12;
+}
+
+message Universe {
+  string name = 1;
+  repeated Text names = 2;
+  repeated Text aliases = 3;
+  repeated Text descriptions = 4;
+  string cover_image_id = 5;
+  string banner_image_id = 6;
+  repeated Website websites = 7;
+  repeated Markeplace marketplaces = 8;
+  repeated Edge contents = 9;
+  repeated Edge canonicals = 10;
+}
+
+message VisualNovel {
+  enum VisualNovelLength {
+    // Unknown length
+    VSN_LNG_UNKNOWN = 1;
+    // < 2 hours
+    VSN_LNG_VERY_SHORT = 2;
+    // 20 - 10 hours
+    VSN_LNG_SHORT = 3;
+    // 10 - 30 hours
+    VSN_LNG_MEDIUM = 4;
+    // 30 - 50 hours
+    VSN_LNG_LONG= 5;
+    // > 50 hours
+    VSN_LNG_VERY_LONG = 6;
+  }
+
+  string name = 1;
+  VisualNovelLength length = 2;
+  repeated Text names = 3;
+  repeated Text aliases = 4;
+  repeated Text descriptions = 5;
+  string cover_image_id = 6;
+  string banner_image_id = 7;
+  repeated Website websites = 8;
+  repeated Markeplace marketplaces = 9;
+  ContentStatus status = 10;
+  repeated ContentRelation content_relations = 11;
+  ContentPublishingType publishing_type = 12;
+  Boolean original = 13;
+  repeated Running runnings = 14;
+  google.protobuf.Timestamp release_date = 15;
+  repeated Cast starring = 16;
+  repeated Collaboration staff = 17;
+  repeated Edge genres = 18;
+  repeated Edge releases = 19;
+  repeated Soundtrack soundtracks = 20;
+  repeated VoiceActing voiceactings = 21;
+  repeated MaturityRating maturity_ratings = 22;
+  repeated RegionRestriction region_restrictions = 23;
+}
+
+message Volume {
+  string name = 1;
+  repeated string languages = 2;
+  google.protobuf.Timestamp release_date = 3;
+  //repeated Media media = 4;
+  Censorship censorship = 5;
+  ContentPublishingType publishing_type = 6; 
+  string asin = 7;
+  string gtin = 8;
+
+  int32 identifier = 9;
+  // ReadingComplexity reading_complexity = 10;
+
+  repeated Text names = 11;
+  repeated Text aliases = 12;
+  repeated Text descriptions = 13;
+  string cover_image_id = 14;
+  string banner_image_id = 15;
+  repeated Website websites = 16;
+  repeated Markeplace marketplaces = 17;
+  repeated Cast starring = 18;
+  repeated Collaboration staff = 19;
+  repeated MaturityRating maturity_ratings = 20;
+  repeated RegionRestriction region_restrictions = 21;
+}
+
 
 message Text {
   string text = 1;
