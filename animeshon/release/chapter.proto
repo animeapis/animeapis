@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package animeshon.release.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/release/v1alpha1;release";
+option java_package = "com.animeshon.release.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Release::v1Alpha1";
+
+message Page {
+  // The page resource name.
+  string name = 1;
+
+  // The resource name of the page image.
+  string image = 2;
+
+  // The linked list pointer to the previous page.
+  string previous = 3;
+
+  // The linked list pointer to the next page.
+  string next = 4;
+
+  // TODO: smart-reading annotations.
+}
+
+message Chapter {
+  // The chapter resource name.
+  string name = 1;
+
+  // The resource name of the cover image.
+  string cover_image = 2;
+
+  // The resource name of the banner image.
+  string banner_image = 3;
+
+  // The title to be displayed.
+  string title = 4;
+
+  // The description in markdown language.
+  string description = 5;
+
+  // The localization of the chapter represented as a BPC-47 language tag.
+  string localization = 6;
+
+  // The image album which holds all the images included in the chapter.
+  string album = 7;
+}
