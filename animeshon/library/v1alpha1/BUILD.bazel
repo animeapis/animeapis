@@ -14,9 +14,9 @@ package(default_visibility = ["//visibility:public"])
 exports_files(glob(["*.json"]))
 
 proto_library(
-    name = "oracolo_proto",
+    name = "library_proto",
     srcs = [
-        "oracolo.proto",
+        "library.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",
@@ -25,15 +25,18 @@ proto_library(
         "@com_google_googleapis//google/api:resource_proto",
         "@com_google_googleapis//google/longrunning:operations_proto",
         "@com_google_protobuf//:empty_proto",
+        "@com_google_protobuf//:field_mask_proto",
         "@com_google_protobuf//:timestamp_proto",
+        "@com_google_protobuf//:wrappers_proto",
     ],
 )
 
 proto_library_with_info(
-    name = "oracolo_proto_with_info",
+    name = "library_proto_with_info",
     deps = [
-        ":oracolo_proto",
+        ":library_proto",
         "@com_google_googleapis//google/cloud:common_resources_proto",
+        "@com_google_googleapis//google/rpc:error_details_proto",
     ],
 )
 
@@ -41,10 +44,10 @@ proto_library_with_info(
 # Go
 ##############################################################################
 go_proto_library(
-    name = "oracolo_go_proto",
+    name = "library_go_proto",
     compilers = ["@io_bazel_rules_go//proto:go_grpc"],
-    importpath = "github.com/animeapis/go-genproto/oracolo/v1alpha1",
-    protos = [":oracolo_proto"],
+    importpath = "github.com/animeapis/go-genproto/library/v1alpha1",
+    protos = [":library_proto"],
     deps = [
         "@go_googleapis//google/api:annotations_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
@@ -52,14 +55,14 @@ go_proto_library(
 )
 
 go_gapic_library(
-    name = "oracolo_go_gapic",
-    srcs = [":oracolo_proto_with_info"],
-    grpc_service_config = "oracolo_grpc_service_config.json",
-    importpath = "github.com/animeapis/api-go-client/oracolo/v1alpha1;oracolo",
-    service_yaml = "oracolo_v1alpha1.yaml",
+    name = "library_go_gapic",
+    srcs = [":library_proto_with_info"],
+    grpc_service_config = "library_grpc_service_config.json",
+    importpath = "github.com/animeapis/api-go-client/library/v1alpha1;library",
+    service_yaml = "library_v1alpha1.yaml",
     metadata = True,
     deps = [
-        ":oracolo_go_proto",
+        ":library_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
         "@com_google_cloud_go//longrunning:go_default_library",
         "@com_google_cloud_go//longrunning/autogen:go_default_library",
@@ -67,18 +70,18 @@ go_gapic_library(
 )
 
 go_test(
-    name = "oracolo_go_gapic_test",
-    srcs = [":oracolo_go_gapic_srcjar_test"],
-    embed = [":oracolo_go_gapic"],
-    importpath = "github.com/animeapis/api-go-client/oracolo/v1alpha1",
+    name = "library_go_gapic_test",
+    srcs = [":library_go_gapic_srcjar_test"],
+    embed = [":library_go_gapic"],
+    importpath = "github.com/animeapis/api-go-client/library/v1alpha1",
 )
 
 # Open Source Packages
 go_gapic_assembly_pkg(
-    name = "gapi-oracolo-v1alpha1-go",
+    name = "gapi-library-v1alpha1-go",
     deps = [
-        ":oracolo_go_gapic",
-        ":oracolo_go_gapic_srcjar-test.srcjar",
-        ":oracolo_go_proto",
+        ":library_go_gapic",
+        ":library_go_gapic_srcjar-test.srcjar",
+        ":library_go_proto",
     ],
 )
