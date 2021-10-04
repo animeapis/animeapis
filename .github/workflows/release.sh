@@ -41,6 +41,14 @@ do
   cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_main.go/github.com/animeapis" .
   cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_test.go/github.com/animeapis" .
 
+  # animeapis/api-typescript-client
+  echo "copying gapics to animeapis/api-typescript-client..."
+
+  rm -rf "animeapis/api-typescript-client/${i}/v1alpha1"
+  mkdir -p "animeapis/api-typescript-client/${i}/v1alpha1"
+
+  tar -xvf "bazel-bin/animeshon/${i}/v1alpha1/gapi-${services[$i]}-v1alpha1-nodejs.tar.gz" -C "animeapis/api-typescript-client/${i}/v1alpha1" --strip-components=1
+
   # animeapis/go-genproto
   echo "copying *.pb.go files to animeapis/go-genproto..."
 
