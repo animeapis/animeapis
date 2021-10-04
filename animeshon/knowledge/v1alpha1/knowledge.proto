@@ -436,11 +436,11 @@ message Episode {
 
 enum Censorship {
 	// Unknown censorship
-	CNS_TYP_UNKNOWN = 1;
+	CNS_TYP_UNKNOWN = 0;
 	// No censorship
-	CNS_TYP_NONE = 2;
+	CNS_TYP_NONE = 1;
 	// Censorship applied
-	CNS_TYP_CENSORED = 3;
+	CNS_TYP_CENSORED = 2;
 }
 
 message GameRelease {
@@ -868,65 +868,65 @@ message ContentRelation {
   enum ContentRelationType {
     // ADAPTATION implies that the subject is the base from which the object has been adapted
     // reverse = BASE
-    ADAPTATION = 1;
+    ADAPTATION = 0;
     // BASE Adaptation
     // reverse = Adaptation
-    BASE = 2;
+    BASE = 1;
 
     // SAMESETTING Same universe/world/reality/timeline with completely different characters.
     // reverse = SAMESETTING
-    SAME_SETTING = 3;
+    SAME_SETTING = 2;
 
     // ALTSETTING Same universe/world/reality/timeline same characters with different universe/world/reality/timeline.
     // reverse = ALTVERSION
-    ALTERNATIVE_SETTING = 4;
+    ALTERNATIVE_SETTING = 3;
 
     // ALTVERSION alternative version Same setting, same characters, story is told differently.
     // reverse = ALTVERSION
-    ALTERNATIVE_VERSION = 5;
+    ALTERNATIVE_VERSION = 4;
 
     // CHARACTER When characters appear in both series, but is not a spin-off
     // reverse = CHARACTER
-    CHARACTER = 6;
+    CHARACTER = 5;
 
     // FULLSTORY the object is full story of the subject
     // this implies that the subject is a summary of the object
     // reverse = SUMMARY
-    FULL_STORY = 7;
+    FULL_STORY = 6;
     // SUMMARY summary
     // reverse = FULLSTORY
-    SUMMARY = 8;
+    SUMMARY = 7;
 
     // PARENTSTORY the object is the parent story of the subject
     // this implies that the subject is a spin-off of the object
     // reverse = SPINOFF
-    PARENT_STORY = 9;
+    PARENT_STORY = 8;
     // SpinOff spin off
     // reverse = ParentStory
-    SPIN_OFF = 10;
+    SPIN_OFF = 9;
 
     // PREQUEL prequel
     // reverse = SEQUEL
-    PREQUEL = 11;
+    PREQUEL = 10;
     // SEQUEL sequel
     // reverse = PREQUEL
-    SEQUEL = 12;
+    SEQUEL = 11;
 
     // MAINSTORY the object is the main story from which the subject has been created
     // this implies that the subject is a side story of the object
     // reverse = SIDESTORY
-    MAIN_STORY = 13;
+    MAIN_STORY = 12;
     // SIDESTORY side story
     // reverse = MAINSTORY
-    SIDE_STORY = 14;
+    SIDE_STORY = 13;
 
     // ORIGINAL the object is the original of the subject
     // this implies that the subject is the parody or fan made object
     // reverse = PARODY
-    ORIGINAL = 15;
+    ORIGINAL = 14;
     // PARODY is parody
     // reverse = ORIGINAL
-    PARODY = 16;
+    PARODY = 15;
   }
 
   Edge related = 1 [(google.api.field_behavior) = REQUIRED];
@@ -939,9 +939,9 @@ The cast is always field of the content and the Edge points to the character.
 */
 message Cast {
   enum CastRelation {
-    MAIN = 1;
-    SUPPORT = 2;
-    APPEARS = 3;
+    MAIN = 0;
+    SUPPORT = 1;
+    APPEARS = 2;
   }
   Edge character = 1 [(google.api.field_behavior) = REQUIRED];
   CastRelation relation = 2 [(google.api.field_behavior) = REQUIRED];
@@ -994,27 +994,27 @@ message Markeplace {
 
 enum TrackVersion {
   // Unknown version
-  TRK_VRS_UNKNOWN = 1;
+  TRK_VRS_UNKNOWN = 0;
   // Normal version of the track
-  TRK_VRS_NORMAL = 2;
+  TRK_VRS_NORMAL = 1;
   // Instrumental version
-  TRK_VRS_INSTRUMENTAL = 3;
+  TRK_VRS_INSTRUMENTAL = 2;
   // Only piano version
-  TRK_VRS_PIANO = 4;
+  TRK_VRS_PIANO = 3;
   // Japanese version
-  TRK_VRS_JAPANESE = 5;
+  TRK_VRS_JAPANESE = 4;
   // English version
-  TRK_VRS_ENGLISH = 6;
+  TRK_VRS_ENGLISH = 5;
   // TV version of the track
-  TRK_VRS_TV = 7;
+  TRK_VRS_TV = 6;
   // The track has been mixed with another
-  TRK_VRS_MIX = 8;
+  TRK_VRS_MIX = 7;
   // The track has been remixed
-  TRK_VRS_REMIX = 9;
+  TRK_VRS_REMIX = 8;
   // Extended version of the track
-  TRK_VRS_EXTENDED = 10;
+  TRK_VRS_EXTENDED = 9;
   // other
-  TRK_VRS_OTHER = 11;
+  TRK_VRS_OTHER = 10;
 }
 
 /*
@@ -1025,19 +1025,19 @@ for which the Track is used
 message Soundtrack {
   enum SoundtrackType {
     // Unknown type
-    SNDTRC_TYPE_UNKNOWN = 1;
+    SND_TRC_TYP_UNKNOWN = 0;
     // The track is used as ending
-    SNDTRC_TYPE_ENDING = 2;
+    SND_TRC_TYP_ENDING = 1;
     // The track is used as opening
-    SNDTRC_TYPE_OPENING = 3;
+    SND_TRC_TYP_OPENING = 2;
     // The track is used as insert song
-    SNDTRC_TYPE_INSERT = 4;
+    SND_TRC_TYP_INSERT = 3;
     // The track is used as background song
-    SNDTRC_TYPE_BACKGROUND = 5;
+    SND_TRC_TYP_BACKGROUND = 4;
     // The track is used as image song
-    SNDTRC_TYPE_IMAGE = 6;
+    SND_TRC_TYP_IMAGE = 5;
     // The track is used as theme song
-    SNDTRC_TYPE_THEME = 7;
+    SND_TRC_TYP_THEME = 6;
   }
   Edge track = 1 [(google.api.field_behavior) = REQUIRED];
   SoundtrackType type = 2 [(google.api.field_behavior) = REQUIRED];
@@ -1056,51 +1056,51 @@ message TrackListing {
 
 enum LanguageComplexity {
   // Unknown complexity
-  LNG_CMPL_UNKNOWN = 1;
+  LNG_CMPL_UNKNOWN = 0;
   // For beginners
-	LNG_CMPL_BEGINNER = 2;
+	LNG_CMPL_BEGINNER = 1;
 	// For intermedium
-	LNG_CMPL_INTERMEDIUM = 3;
+	LNG_CMPL_INTERMEDIUM = 2;
 	// For advanced
-	LNG_CMPL_ADVANCED = 4;
+	LNG_CMPL_ADVANCED = 3;
 	// For experts
-	LNG_CMPL_EXPERT = 5;
+	LNG_CMPL_EXPERT = 4;
 }
 
 enum WritingSystem {
   // Unknown writing system
-  WRT_SYS_UNKNOWN = 1;
+  WRT_SYS_UNKNOWN = 0;
   // The opera is written with latin characters
-	WRT_SYS_ALPHABETIC = 2;
+	WRT_SYS_ALPHABETIC = 1;
 	// The opera has the furigana transliteraion on each kanji
-	WRT_SYS_FURIGANA_FULL = 3;
+	WRT_SYS_FURIGANA_FULL = 2;
 	// The opera has the furigana transliteraion only on advanced words or words used for the first time
-	WRT_SYS_FURIGANA_PARTIAL = 4;
+	WRT_SYS_FURIGANA_PARTIAL = 3;
 	// The opera has the furigana transliteraion only on non common words, if any
-	WRT_SYS_KANJI = 5;
+	WRT_SYS_KANJI = 4;
 }
 
 enum RegionRestriction {
   // Unknown Region Restriction
-  RGN_RST_UNKNOWN = 1;
+  RGN_RST_UNKNOWN = 0;
   // No Region Restriction
-  RGN_RST_NONE = 2;
+  RGN_RST_NONE = 1;
   // The Entity is illegal following the U.N. guidelines
-  RGN_RST_ILLEGAL = 3;
+  RGN_RST_ILLEGAL = 2;
 }
 
 enum MaturityRating {
   // Unknown Maturity Rating
-  MTR_RTN_UNKNOWN = 1;
+  MTR_RTN_UNKNOWN = 0;
   // Over 18 in USA
-  MTR_RTN_USA_NC17 = 2;
+  MTR_RTN_USA_NC17 = 1;
   // Over 18 in USA
-  MTR_RTN_USA_R = 3;
+  MTR_RTN_USA_R = 2;
   // Over 13 in USA
-  MTR_RTN_USA_PG13 = 4;
+  MTR_RTN_USA_PG13 = 3;
   // Over 3 in USA
-  MTR_RTN_USA_PG = 5;
+  MTR_RTN_USA_PG = 4;
   // Safe in USA
-  MTR_RTN_USA_G = 6;
+  MTR_RTN_USA_G = 5;
 }
 
