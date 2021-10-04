@@ -34,6 +34,13 @@ jobs:
         path: animeapis/go-genproto
         token: ${{ env.TOKEN }}
 
+    - name: Clone animeapis/api-nodejs-client
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/api-nodejs-client
+        path: animeapis/api-nodejs-client
+        token: ${{ env.TOKEN }}
+
     - name: Delete branch ${{ github.event.ref }} from animeapis/proto-binary
       working-directory: animeapis/proto-binary
       run: |-
@@ -46,5 +53,10 @@ jobs:
 
     - name: Delete branch ${{ github.event.ref }} from animeapis/go-genproto
       working-directory: animeapis/go-genproto
+      run: |-
+        git push origin --delete ${{ github.event.ref }}
+
+    - name: Delete branch ${{ github.event.ref }} from animeapis/api-nodejs-client
+      working-directory: animeapis/api-nodejs-client
       run: |-
         git push origin --delete ${{ github.event.ref }}
