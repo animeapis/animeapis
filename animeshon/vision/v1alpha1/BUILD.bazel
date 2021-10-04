@@ -16,9 +16,11 @@ exports_files(glob(["*.json"]))
 proto_library(
     name = "vision_proto",
     srcs = [
+        "geometry.proto",
         "annotations.proto",
         "properties.proto",
         "vision.proto",
+        "internal.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",
@@ -26,7 +28,6 @@ proto_library(
         "@com_google_googleapis//google/api:field_behavior_proto",
         "@com_google_googleapis//google/api:resource_proto",
         "@com_google_googleapis//google/longrunning:operations_proto",
-        "@com_google_googleapis//google/cloud/vision/v1:vision_proto",
         "@com_google_googleapis//google/type:color_proto",
         "@com_google_protobuf//:empty_proto",
         "@com_google_protobuf//:field_mask_proto",
@@ -39,6 +40,7 @@ proto_library_with_info(
     deps = [
         ":vision_proto",
         "@com_google_googleapis//google/cloud:common_resources_proto",
+        "@com_google_googleapis//google/rpc:error_details_proto",
     ],
 )
 
@@ -52,7 +54,6 @@ go_proto_library(
     protos = [":vision_proto"],
     deps = [
         "@go_googleapis//google/api:annotations_go_proto",
-        "@go_googleapis//google/cloud/vision/v1:vision_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
         "@go_googleapis//google/type:color_go_proto",
     ],

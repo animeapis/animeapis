@@ -17,6 +17,7 @@ proto_library(
     name = "tracker_proto",
     srcs = [
         "tracker.proto",
+        "credentials.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",
@@ -36,6 +37,7 @@ proto_library_with_info(
     deps = [
         ":tracker_proto",
         "@com_google_googleapis//google/cloud:common_resources_proto",
+        "@com_google_googleapis//google/rpc:error_details_proto",
     ],
 )
 

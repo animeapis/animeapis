@@ -14,6 +14,7 @@ declare -A services=(
   ["knowledge"]="knowledge"
   ["resourcemanager"]="resourcemanager"
   ["tracker"]="tracker"
+  ["library"]="library"
   ["vision"]="vision"
   ["webcache"]="webcache"
 )

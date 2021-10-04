@@ -1,0 +1,266 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package animeshon.library.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/library/v1alpha1;library";
+option java_package = "com.animeshon.library.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::library::v1Alpha1";
+
+service Library {
+  option (google.api.default_host) = "library.animeapis.com";
+
+  rpc GetPlaylist(GetPlaylistRequest) returns (Playlist) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/playlists/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=audiences/*/playlists/*}"
+      }
+    };
+  }
+
+  rpc ListPlaylists(ListPlaylistsRequest) returns (ListPlaylistsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/playlists"
+      additional_bindings {
+        get: "/v1alpha1/{parent=audiences/*}/playlists"
+      }
+    };
+  }
+
+  rpc CreatePlaylist(CreatePlaylistRequest) returns (Playlist) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*}/playlists"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=audiences/*}/playlists"
+        body: "*"
+      }
+    };
+  }
+
+  rpc UpdatePlaylist(UpdatePlaylistRequest) returns (Playlist) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{playlist.name=users/*/playlists/*}"
+      body: "*"
+      additional_bindings {
+        patch: "/v1alpha1/{playlist.name=audiences/*/playlists/*}"
+        body: "*"
+      }
+    };
+  }
+
+  rpc DeletePlaylist(DeletePlaylistRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/playlists/*}"
+      body: "*"
+      additional_bindings {
+        delete: "/v1alpha1/{name=audiences/*/playlists/*}"
+        body: "*"
+      }
+    };
+  }
+
+  rpc ListPlaylistItems(ListPlaylistItemsRequest) returns (ListPlaylistItemsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*/playlists/*}/items"
+      additional_bindings {
+        get: "/v1alpha1/{parent=audiences/*/playlists/*}/items"
+      }
+    };
+  }
+
+  rpc CreatePlaylistItem(CreatePlaylistItemRequest) returns (PlaylistItem) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*/playlists/*}/items"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=audiences/*/playlists/*}/items"
+        body: "*"
+      }
+    };
+  }
+
+  rpc BatchCreatePlaylistItems(BatchCreatePlaylistItemsRequest) returns (BatchCreatePlaylistItemsResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*/playlists/*}/items:batchCreate"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=audiences/*/playlists/*}/items:batchCreate"
+        body: "*"
+      }
+    };
+  }
+
+  rpc DeletePlaylistItem(DeletePlaylistItemRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/playlists/*/items/*}"
+      body: "*"
+      additional_bindings {
+        delete: "/v1alpha1/{name=audiences/*/playlists/*/items/*}"
+        body: "*"
+      }
+    };
+  }
+}
+
+// TODO: add missing audience methods (list, get create, update, delete).
+// TODO: migrate audiences to another service (resourcemanager?, identity?).
+
+enum Type {
+  TYPE_UNSPECIFIED = 0;
+
+  // The playlist holds items intended to be consumed at a later date
+  LATER = 1;
+
+  // The playlist holds liked items
+  LIKED = 2;
+
+  // The playlist is custom made by the user
+  CUSTOM = 3;
+}
+
+message Playlist {
+  // The id of the playlist.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The display name of the playlist.
+  string display_name = 2;
+
+  // The type of the playlist.
+  Type type = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchCreatePlaylistItemsResponse {
+  // The list of items added to the playlist
+  repeated PlaylistItem items = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message PlaylistItem {
+  // The id of the playlist.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The full resource name that identifies the resource.
+  string resource = 2 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.field_behavior) = IMMUTABLE];
+
+  // The timestamp at which the playlist item was created.
+  google.protobuf.Timestamp create_time = 3
+  [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// TODO: this is represented as a group in authorization.
+// TODO: who should be the owner of an audience? the user who created it?
+message Audience {
+  // The id of the audience.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The members of this audience.
+  repeated string members = 2;
+}
+
+message GetPlaylistRequest {
+  // The name of the playlist to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListPlaylistsRequest {
+  // The user this playlist belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListPlaylistsResponse {
+  // The list of playlists.
+  repeated Playlist playlists = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreatePlaylistRequest {
+  // The parent this playlist belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The playlist to create.
+  Playlist playlist = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdatePlaylistRequest {
+  // The playlist to update.
+  Playlist playlist = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeletePlaylistRequest {
+  // The name of the playlist to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListPlaylistItemsRequest {
+  // The playlist this item belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListPlaylistItemsResponse {
+  // The list of playlist items.
+  repeated PlaylistItem items = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+
+  // The total number of items available in this playlist.
+  int32 total_size = 3;
+}
+
+message CreatePlaylistItemRequest {
+  // The parent this playlist item belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The playlist item to create.
+  PlaylistItem item = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchCreatePlaylistItemsRequest {
+  // The parent this playlist item belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The playlist items to create.
+  repeated PlaylistItem item = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeletePlaylistItemRequest {
+  // The name of the playlist item to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
