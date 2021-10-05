@@ -5,6 +5,8 @@ load(
     "go_gapic_library",
     "go_proto_library",
     "go_test",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
     "proto_library_with_info",
 )
 
