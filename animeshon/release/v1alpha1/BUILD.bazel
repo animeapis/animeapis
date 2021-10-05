@@ -89,3 +89,25 @@ go_gapic_assembly_pkg(
         ":release_go_proto",
     ],
 )
+
+##############################################################################
+# Node.js
+##############################################################################
+nodejs_gapic_library(
+    name = "release_nodejs_gapic",
+    package_name = "@animeshon/release",
+    src = ":release_proto_with_info",
+    extra_protoc_parameters = ["metadata"],
+    grpc_service_config = "release_grpc_service_config.json",
+    package = "animeshon.release.v1alpha1",
+    service_yaml = "release_v1alpha1.yaml",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "gapi-release-v1alpha1-nodejs",
+    deps = [
+        ":release_nodejs_gapic",
+        ":release_proto",
+    ],
+)

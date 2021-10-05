@@ -28,9 +28,10 @@ declare -A gapi=(
   ["identity"]="identity"
   ["image"]="image"
   ["knowledge"]="knowledge"
+  ["library"]="library"
+  ["release"]="release"
   ["resourcemanager"]="resourcemanager"
   ["tracker"]="tracker"
-  ["library"]="library"
   ["vision"]="vision"
   ["webcache"]="webcache"
 )
