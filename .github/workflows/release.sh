@@ -12,9 +12,10 @@ declare -A services=(
   ["identity"]="identity"
   ["image"]="image"
   ["knowledge"]="knowledge"
+  ["library"]="library"
+  ["release"]="release"
   ["resourcemanager"]="resourcemanager"
   ["tracker"]="tracker"
-  ["library"]="library"
   ["vision"]="vision"
   ["webcache"]="webcache"
 )
