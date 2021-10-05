@@ -5,6 +5,8 @@ load(
     "go_gapic_library",
     "go_proto_library",
     "go_test",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
     "proto_library_with_info",
 )
 
@@ -88,5 +90,27 @@ go_gapic_assembly_pkg(
         ":vision_go_gapic",
         ":vision_go_gapic_srcjar-test.srcjar",
         ":vision_go_proto",
+    ],
+)
+
+##############################################################################
+# Node.js
+##############################################################################
+nodejs_gapic_library(
+    name = "vision_nodejs_gapic",
+    package_name = "@animeshon/vision",
+    src = ":vision_proto_with_info",
+    extra_protoc_parameters = ["metadata"],
+    grpc_service_config = "vision_grpc_service_config.json",
+    package = "animeshon.vision.v1alpha1",
+    service_yaml = "vision_v1alpha1.yaml",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "gapi-vision-v1alpha1-nodejs",
+    deps = [
+        ":vision_nodejs_gapic",
+        ":vision_proto",
     ],
 )

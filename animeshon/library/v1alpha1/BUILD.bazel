@@ -5,6 +5,8 @@ load(
     "go_gapic_library",
     "go_proto_library",
     "go_test",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
     "proto_library_with_info",
 )
 
@@ -83,5 +85,27 @@ go_gapic_assembly_pkg(
         ":library_go_gapic",
         ":library_go_gapic_srcjar-test.srcjar",
         ":library_go_proto",
+    ],
+)
+
+##############################################################################
+# Node.js
+##############################################################################
+nodejs_gapic_library(
+    name = "library_nodejs_gapic",
+    package_name = "@animeshon/library",
+    src = ":library_proto_with_info",
+    extra_protoc_parameters = ["metadata"],
+    grpc_service_config = "library_grpc_service_config.json",
+    package = "animeshon.library.v1alpha1",
+    service_yaml = "library_v1alpha1.yaml",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "gapi-library-v1alpha1-nodejs",
+    deps = [
+        ":library_nodejs_gapic",
+        ":library_proto",
     ],
 )

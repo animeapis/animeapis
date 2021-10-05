@@ -40,6 +40,13 @@ jobs:
         path: animeapis/go-genproto
         token: ${{ env.TOKEN }}
 
+    - name: Clone animeapis/api-nodejs-client
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/api-nodejs-client
+        path: animeapis/api-nodejs-client
+        token: ${{ env.TOKEN }}
+
     - name: Switch branch for animeapis/proto-binary (pull requests only)
       working-directory: animeapis/proto-binary
       if: github.event_name == 'pull_request'
@@ -64,6 +71,17 @@ jobs:
 
     - name: Switch branch for animeapis/go-genproto (pull requests only)
       working-directory: animeapis/go-genproto
+      if: github.event_name == 'pull_request'
+      run: |-
+        if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+        else
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        fi
+
+    - name: Switch branch for animeapis/api-nodejs-client (pull requests only)
+      working-directory: animeapis/api-nodejs-client
       if: github.event_name == 'pull_request'
       run: |-
         if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
@@ -129,4 +147,18 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate .pb.go files"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
+        git push -u origin HEAD
+
+    - name: Push commit to animeapis/api-nodejs-client
+      working-directory: animeapis/api-nodejs-client
+      run: |-
+        git config --local user.email "${{ env.EMAIL }}"
+        git config --local user.name "${{ env.USERNAME }}"
+
+        git config --local core.filemode false
+
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
+
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-nodejs-client.git
         git push -u origin HEAD
