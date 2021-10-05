@@ -20,6 +20,21 @@ declare -A services=(
   ["webcache"]="webcache"
 )
 
+declare -A gapi=(
+  ["crossrefs"]="crossrefs"
+  ["grbac"]="grbac"
+  ["hub"]="hub"
+  ["iam/admin"]="iam-admin"
+  ["identity"]="identity"
+  ["image"]="image"
+  ["knowledge"]="knowledge"
+  ["resourcemanager"]="resourcemanager"
+  ["tracker"]="tracker"
+  ["library"]="library"
+  ["vision"]="vision"
+  ["webcache"]="webcache"
+)
+
 for i in "${!services[@]}"
 do
   echo $i
@@ -41,6 +56,14 @@ do
   cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_metadata.json/github.com/animeapis" .
   cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_main.go/github.com/animeapis" .
   cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_test.go/github.com/animeapis" .
+
+  # animeapis/api-nodejs-client
+  echo "copying gapics to animeapis/api-nodejs-client..."
+
+  rm -rf "animeapis/api-nodejs-client/${i}/v1alpha1"
+  mkdir -p "animeapis/api-nodejs-client/${i}/v1alpha1"
+
+  tar -xvf "bazel-bin/animeshon/${i}/v1alpha1/gapi-${gapi[$i]}-v1alpha1-nodejs.tar.gz" -C "animeapis/api-nodejs-client/${i}/v1alpha1" --strip-components=1
 
   # animeapis/go-genproto
   echo "copying *.pb.go files to animeapis/go-genproto..."

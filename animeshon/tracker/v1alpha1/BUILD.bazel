@@ -5,6 +5,8 @@ load(
     "go_gapic_library",
     "go_proto_library",
     "go_test",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
     "proto_library_with_info",
 )
 
@@ -84,5 +86,27 @@ go_gapic_assembly_pkg(
         ":tracker_go_gapic",
         ":tracker_go_gapic_srcjar-test.srcjar",
         ":tracker_go_proto",
+    ],
+)
+
+##############################################################################
+# Node.js
+##############################################################################
+nodejs_gapic_library(
+    name = "tracker_nodejs_gapic",
+    package_name = "@animeshon/tracker",
+    src = ":tracker_proto_with_info",
+    extra_protoc_parameters = ["metadata"],
+    grpc_service_config = "tracker_grpc_service_config.json",
+    package = "animeshon.tracker.v1alpha1",
+    service_yaml = "tracker_v1alpha1.yaml",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "gapi-tracker-v1alpha1-nodejs",
+    deps = [
+        ":tracker_nodejs_gapic",
+        ":tracker_proto",
     ],
 )
