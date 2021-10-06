@@ -59,7 +59,7 @@ do
   # animeapis/api-nodejs-client
   echo "copying gapics to animeapis/api-nodejs-client..."
 
-  WORKDIR=`mkdir -p nodejs-generator/${i}"`
+  WORKDIR=`mkdir -p "nodejs-generator/${i}"`
 
   if [ -f "animeapis/api-nodejs-client/src/apis/${i}/CHANGELOG.md" ]; then
     mv "animeapis/api-nodejs-client/src/apis/${i}/CHANGELOG.md" "${WORKDIR}/CHANGELOG.md"
