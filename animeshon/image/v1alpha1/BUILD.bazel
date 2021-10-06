@@ -100,7 +100,7 @@ go_gapic_assembly_pkg(
 ##############################################################################
 nodejs_gapic_library(
     name = "image_nodejs_gapic",
-    package_name = "@animeshon/image",
+    package_name = "@animeapis/image",
     src = ":image_proto_with_info",
     extra_protoc_parameters = ["metadata"],
     grpc_service_config = "image_grpc_service_config.json",

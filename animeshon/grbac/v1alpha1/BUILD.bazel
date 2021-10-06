@@ -90,7 +90,7 @@ go_gapic_assembly_pkg(
 ##############################################################################
 nodejs_gapic_library(
     name = "grbac_nodejs_gapic",
-    package_name = "@animeshon/grbac",
+    package_name = "@animeapis/grbac",
     src = ":grbac_proto_with_info",
     extra_protoc_parameters = ["metadata"],
     grpc_service_config = "grbac_grpc_service_config.json",

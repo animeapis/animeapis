@@ -85,7 +85,7 @@ go_gapic_assembly_pkg(
 ##############################################################################
 nodejs_gapic_library(
     name = "knowledge_nodejs_gapic",
-    package_name = "@animeshon/knowledge",
+    package_name = "@animeapis/knowledge",
     src = ":knowledge_proto_with_info",
     extra_protoc_parameters = ["metadata"],
     grpc_service_config = "knowledge_grpc_service_config.json",
