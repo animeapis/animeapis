@@ -59,10 +59,10 @@ do
   # animeapis/api-nodejs-client
   echo "copying gapics to animeapis/api-nodejs-client..."
 
-  rm -rf "animeapis/api-nodejs-client/${i}/v1alpha1"
-  mkdir -p "animeapis/api-nodejs-client/${i}/v1alpha1"
+  rm -rf "animeapis/api-nodejs-client/src/apis/${i}"
+  mkdir -p "animeapis/api-nodejs-client/src/apis/${i}"
 
-  tar -xvf "bazel-bin/animeshon/${i}/v1alpha1/gapi-${gapi[$i]}-v1alpha1-nodejs.tar.gz" -C "animeapis/api-nodejs-client/${i}/v1alpha1" --strip-components=1
+  tar -xvf "bazel-bin/animeshon/${i}/v1alpha1/gapi-${gapi[$i]}-v1alpha1-nodejs.tar.gz" -C "animeapis/api-nodejs-client/src/apis/${i}" --strip-components=1
 
   # animeapis/go-genproto
   echo "copying *.pb.go files to animeapis/go-genproto..."
