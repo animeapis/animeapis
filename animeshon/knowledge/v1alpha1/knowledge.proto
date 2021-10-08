@@ -5,6 +5,7 @@ import "google/api/client.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 package animeshon.knowledge.v1alpha1;
 
@@ -18,66 +19,116 @@ service Knowledge {
 
   rpc CreateContribution(CreateContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      post: "/v1alpha1/contributions"
+      post: "/v1alpha1/{parent=users/*}/contributions"
       body: "*"
     };
   }
 
   rpc ListContributions(ListContributionsRequest) returns (ListContributionsResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/contributions"
+      get: "/v1alpha1/{parent=users/*}/contributions"
     };
   }
 
   rpc GetContribution(GetContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=contributions/*}"
+      get: "/v1alpha1/{name=users/*/contributions/*}"
+    };
+  }
+
+  rpc GetContributionChanges(GetContributionChangesRequest) returns (ContributionChanges) {
+    option (google.api.http) = {
+    get: "/v1alpha1/{name=users/*/contributions/*/changes}"
     };
   }
 
   rpc ApproveContribution(ApproveContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=contributions/*}:approve"
+      post: "/v1alpha1/{name=users/*/contributions/*}:approve"
+      body: "*"
+    };
+  }
+
+  rpc ReviewContribution(ReviewContributionRequest) returns (Contribution) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/contributions/*}:review"
       body: "*"
     };
   }
 
   rpc RejectContribution(RejectContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=contributions/*}:reject"
+      post: "/v1alpha1/{name=users/*/contributions/*}:reject"
       body: "*"
     };
   }
 }
 
-message Contribution {
-  option (google.api.resource) = {
-    type: "knowledge.animeapis.com/Contribution"
-    pattern: "contributions/{contribution}"
-  };
+message ContributionChanges {
+  repeated EntryEntity additions = 2;
 
+  repeated EntryEntity deletions = 3;
+}
+
+message Contribution {
+  enum State {
+    PENDING = 0;
+    APPROVED = 1;
+    REJECTED = 2;
+    DRAFT = 3;
+  }
   // The resource name of the contribution.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  string reviewer = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  State state = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  string display_name = 5;
+
+  // Incremental value which specifies how many times the contribution has been reviewed.
+  int32 generation = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // When the album was created.
+  google.protobuf.Timestamp create_time = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // When the album was updated.
+  google.protobuf.Timestamp update_time = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // When the album was reviewed.
+  google.protobuf.Timestamp review_time = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ReviewContributionRequest {
   string name = 1;
+
+  string comment = 2;
+
+  ContributionChanges changes = 3;
 }
 
 message CreateContributionRequest {
-  // The resource name.
-  string name = 1;
+  // The parent resource where this contribution will be created.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The resurce payload.
-  bytes payload = 2;
+  Contribution contribution = 2;
+
+  ContributionChanges changes = 3;
 }
 
 message ListContributionsRequest {
+  // The parent, which owns this collection of contributions.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
   // The maximum number of users to return. Server may return fewer users
   // than requested. If unspecified, server will pick an appropriate default.
-  int32 page_size = 1;
+  int32 page_size = 2;
 
   // The value returned from the previous call.
-  string page_token = 2;
+  string page_token = 3;
 
   // A filter to be applied to results.
-  string filter = 3;
+  string filter = 4;
 }
 
 message ListContributionsResponse {
@@ -88,18 +139,1005 @@ message ListContributionsResponse {
   string next_page_token = 2;
 }
 
+message GetContributionChangesRequest {
+  // The resource name of the requested contribution.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
 message GetContributionRequest {
   // The resource name of the requested contribution.
-  string name = 1 [
-    (google.api.resource_reference).type = "knowledge.animeapis.com/Contribution",
-    (google.api.field_behavior) = REQUIRED
-  ];
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ApproveContributionRequest {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message RejectContributionRequest {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
+
+message EntryEntity {
+  oneof entity {
+    Anime anime = 1;
+    Canonical canonical = 2;
+    Chapter chapter = 3;
+    Character character = 4;
+    Episode episode = 5;
+    GameRelease game_release = 6;
+    GraphicNovel graphic_novel = 7;
+    LightNovel light_novel = 8;
+    Organization organization = 9;
+    Person person = 10;
+    Track track = 11;
+    Universe universe = 12;
+    Volume volume = 13;
+  }
+}
+
+enum Boolean {
+  UNKNOWN = 0;
+  TRUE = 1;
+  FALSE = 2;
+}
+
+enum ContentStatus {
+  // Unknown status
+	CNT_STS_UNKNOWN = 0;
+	// Publishing or airing is still ongoing.
+	CNT_STS_ONGOING = 1;
+	// Publishing or airing has been completed.
+	CNT_STS_COMPLETED = 2;
+	// Publishing or airing has been scheduled.
+	CNT_STS_SCHEDULED = 3;
+	// Publishing or airing started but never finished.
+	CNT_STS_INTERRUPTED = 4;
+	// Publishing or airing was scheduled but later canceled.
+	CNT_STS_CANCELED = 5;
+	// Publishing or airing has been suspended / has been put on hold.
+  CNT_STS_SUSPENDED = 6;
+	// The content is in work in progress
+	CNT_STS_WORK_IN_PROGRESS = 7;
+}
+
+enum ContentPublishingType {
+  // Unknown status
+	CNT_PBL_UNKNOWN = 0;
+	// Self publishing
+	CNT_PBL_SELF = 1;
+	// Publisched by a corporation
+	CNT_PBL_CORPORATE = 2;
+}
+
+message Anime {
+  enum AnimeType {
+    // Unknown type
+    ANM_TYP_UNKNOWN = 0;
+    // Tv serie
+    ANM_TYP_TV = 1;
+    // Movie
+    ANM_TYP_MOVIE = 2;
+    // Original video animation
+    ANM_TYP_OVA = 3;
+    // Original Net Anime
+    ANM_TYP_ONA = 4;
+    // Special
+    ANM_TYP_SPECIAL = 5;
+    // Web anime
+    ANM_TYP_WEB = 6;
+    // Music video
+    ANM_TYP_MUSIC_VIDEO = 7;
+    // Other
+    ANM_TYP_OTHER = 8;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  AnimeType type = 2;
+  repeated Edge episodes = 3;
+  int32 EpisodeCount = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+  repeated Markeplace marketplaces = 11;
+  ContentStatus status = 12;
+  repeated ContentRelation content_relations = 13;
+  ContentPublishingType publishing_type = 14;
+  Boolean original = 15;
+  repeated Running runnings = 16;
+  google.protobuf.Timestamp release_date = 17;
+  repeated Cast starring = 18;
+  repeated Collaboration staff = 19;
+  repeated Edge genres = 20;
+  repeated Edge releases = 21;
+  repeated Soundtrack soundtracks = 22;
+  repeated VoiceActing voiceactings = 23;
+  repeated MaturityRating maturity_ratings = 24;
+  repeated RegionRestriction region_restrictions = 25;
+}
+
+message Canonical {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated Text names = 2;
+  repeated Text aliases = 3;
+  repeated Text descriptions = 4;
+  string cover_image_id = 5;
+  string banner_image_id = 6;
+  repeated Website websites = 7;
+  repeated Markeplace marketplaces = 8;
+  repeated Edge contents = 9;
+}
+
+message Chapter {
+  enum ChapterType {
+    // Unknown type
+    CHT_TYP_UNKNOWN = 0;
+    // Regular chapter
+    CHT_TYP_REGULAR = 1;
+    // Extra chapter
+    CHT_TYP_EXTRA = 2;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  ChapterType type = 2;
+  repeated Edge episodes = 3;
+  int32 identifier = 4;
+  int32 page_count = 5;
+  google.protobuf.Timestamp release_date = 6;
+  repeated Text names = 7;
+  repeated Text aliases = 8;
+  repeated Text descriptions = 9;
+  string cover_image_id = 10;
+  string banner_image_id = 11;
+  repeated Website websites = 12;
+  repeated Markeplace marketplaces = 13;
+  repeated Cast starring = 14;
+  repeated Collaboration staff = 15;
+  repeated Edge releases = 16;
+  repeated MaturityRating maturity_ratings = 17;
+  repeated RegionRestriction region_restrictions = 18;
+}
+
+enum Gender {
+  // Unknown gender
+  GND_TYP_UNKNOWN = 0;
+	// Male
+	GND_TYP_MALE = 1;
+	// Female
+	GND_TYP_FEMALE = 2;
+	// Male which seems a female
+	GND_TYP_MALE_TRAP = 3;
+	// Female which seems a male
+	GND_TYP_FEMALE_TRAP = 4;
+	// Both male and female
+	GND_TYP_HERMAPHRODITIC = 5;
+	// None of the default gender applies
+	GND_TYP_OTHER = 6;
+	// The gender is undefined
+	GND_TYP_UNDEFINED = 7;
+	// The gender something between male and female
+	GND_TYP_INTERSEXUAL = 8;
+}
+
+enum BloodType {
+  // Unknown blood type
+	BLD_TYP_UNKNOWN = 0;
+	// A (no Rh info)
+	BLD_TYP_A = 1;
+	// B (no Rh info)
+	BLD_TYP_B = 2;
+	// AB (no Rh info)
+	BLD_TYP_AB = 3;
+	// O (no Rh info)
+	BLD_TYP_O = 4;
+	// A+
+	BLD_TYP_A_PLUS = 5;
+	// B+
+	BLD_TYP_B_PLUS = 6;
+	// AB+
+	BLD_TYP_AB_PLUS = 7;
+	// O+
+	BLD_TYP_O_PLUS = 8;
+	// A-
+	BLD_TYP_A_MINUS = 9;
+	// B-
+	BLD_TYP_B_MINUS = 10;
+	// AB-
+	BLD_TYP_AB_MINUS = 11;
+	// O-
+	BLD_TYP_O_MINUS = 12;
+}
+
+message Character {
+  enum AgeRange {
+    // Unknown
+    CHR_AGE_UNKNOWN = 0;
+    // The character is an infant. 1-3
+    CHR_AGE_INFANT = 1;
+    // The character is a child. 4-12
+    CHR_AGE_CHILD = 2;
+    // The character is a teen. 13-17
+    CHR_AGE_TEEN = 3;
+    // The character is a young adult. 18-25
+    CHR_AGE_YOUNG_ADULT = 4;
+    // The character is a grown up adult. 26-59
+    CHR_AGE_ADULT = 5;
+    // The character is an eldery. 60+
+    CHR_AGE_ELDERY = 6;
+    // The character is an entity which the concept of age do not makes sense (robots, ...)
+    CHR_AGE_NOT_APPLICABLE = 7;
+    // The character can't be fit in any any of the other category. (Gods, planets, ...)
+    CHR_AGE_WITHOUT = 8;
+  }
+
+  enum CupSize {
+    CHR_CUP_UNKNOWN = 0;
+    CHR_CUP_AAA = 1;
+    CHR_CUP_AA = 2;
+    CHR_CUP_A = 3;
+    CHR_CUP_B = 4;
+    CHR_CUP_C = 5;
+    CHR_CUP_D = 6;
+    CHR_CUP_E = 7;
+    CHR_CUP_F = 8;
+    CHR_CUP_G = 9;
+    CHR_CUP_H = 10;
+    CHR_CUP_I = 11;
+    CHR_CUP_J = 12;
+    CHR_CUP_K = 13;
+    CHR_CUP_L = 14;
+    CHR_CUP_M = 15;
+    CHR_CUP_N = 16;
+    CHR_CUP_O = 17;
+    CHR_CUP_P = 18;
+    CHR_CUP_Q = 19;
+    CHR_CUP_R = 20;
+    CHR_CUP_S = 21;
+    CHR_CUP_T = 22;
+    CHR_CUP_U = 23;
+    CHR_CUP_V = 24;
+    CHR_CUP_W = 25;
+    CHR_CUP_X = 26;
+    CHR_CUP_Y = 27;
+    CHR_CUP_Z = 28;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  string birthday_day = 2;
+  string birthday_month = 3;
+  string birthday_year = 4;
+  repeated Text hometown = 5;
+  repeated Text birthplace = 6;
+  Gender genre = 7;
+  BloodType blood_type = 8;
+  CupSize cup_size = 9;
+  AgeRange age_range = 10;
+  int32 age = 11;
+  int32 height = 12;
+  int32 weight = 13;
+  int32 bust = 14;
+  int32 waist = 15;
+  int32 hips = 16;
+  repeated Text names = 17;
+  repeated Text aliases = 18;
+  repeated Text descriptions = 19;
+  string cover_image_id = 20;
+  string banner_image_id = 21;
+  repeated Website websites = 22;
+  repeated Markeplace marketplaces = 23;
+  repeated Edge guise_of = 24;
+}
+
+message Episode {
+  enum EpisodeType {
+    // Unknown episode type
+    EPS_TYP_UNKNOWN = 0;
+    // Regular episode
+    EPS_TYP_REGULAR = 1;
+    // Recapitolation episode
+    EPS_TYP_RECAP = 2;
+    // Parody
+    EPS_TYP_PARODY = 3;
+    // Promo episode
+    EPS_TYP_PROMO = 4;
+    // Special episode
+    EPS_TYP_SPECIAL = 5;
+    // Opening / ending episode
+    EPS_TYP_OPENING_ENDING = 6;
+    // Other
+    EPS_TYP_OTHER = 7;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  EpisodeType type = 2;
+  int32 identifier = 3;
+  google.protobuf.Timestamp release_date = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+  repeated Markeplace marketplaces = 11;
+  repeated Cast starring = 12;
+  repeated Collaboration staff = 13;
+  repeated Soundtrack soundtracks = 14;
+  repeated VoiceActing voiceactings = 15;
+  repeated MaturityRating maturity_ratings = 16;
+  repeated RegionRestriction region_restrictions = 17;
+}
+
+enum Censorship {
+	// Unknown censorship
+	CNS_TYP_UNKNOWN = 0;
+	// No censorship
+	CNS_TYP_NONE = 1;
+	// Censorship applied
+	CNS_TYP_CENSORED = 2;
+}
+
+message GameRelease {
+  enum GameReleaseType {
+    // Unknown game release type
+    GMR_TYP_UNKNOWN = 0;
+    // The release is complete
+    GMR_TYP_COMPLETE = 1;
+    // The release is only a part of the content
+    GMR_TYP_PARTIAL = 2;
+    // The release is just trial
+    GMR_TYP_TRIAL = 3;
+    // The release is a dlc
+    GMR_TYP_DLC = 4;
+  }
+
+  enum GameDubDegree {
+    // Unknown DUB degree
+    DUB_DGR_UNKNOWN = 0;
+    // Not dubbed
+    DUB_DGR_NONE = 1;
+    // Only erotic scenes are dubbed
+    DUB_DGR_ERO_ONLY = 2;
+    // Partially dubbed
+    DUB_DGR_PARTIAL = 3;
+    // Full dubbed
+    DUB_DGR_FULL = 4;
+  }
+
+  enum GameAnimationDegree {
+    // Unknown animation degree
+    ANM_DGR_UNKNOWN = 0;
+    // No animation
+    ANM_DGR_NONE = 1;
+    // Simple animations
+    ANM_DGR_SIMPLE = 2;
+    // Partial animation -  Some fully animated scenes
+    ANM_DGR_PARTIAL = 3;
+    // Fully animated
+    ANM_DGR_FULL = 4;
+  }
+
+  enum Platform {
+    // Unknown platform
+    PLT_TYP_UNKNOWN = 0;
+    // Windows
+    PLT_TYP_WINDOWS = 1;
+    // DOS
+    PLT_TYP_DOS = 2;
+    // LINUX
+    PLT_TYP_LINUX = 3;
+    // Mac
+    PLT_TYP_MAC = 4;
+    // IOs devices
+    PLT_TYP_IOS = 5;
+    // Android
+    PLT_TYP_ANDROID = 6;
+    // DVD player
+    PLT_TYP_DVD_PLAYER = 7;
+    // Blu-ray Player
+    PLT_TYP_BLU_RAY_PLAYER = 8;
+    // FM Towns https://en.wikipedia.org/wiki/FM_Towns
+    PLT_TYP_FM_TOWNS = 9;
+    // FM-7 Towns https://en.wikipedia.org/wiki/FM-7
+    PLT_TYP_FM7_TOWNS = 10;
+    // FM-8 Towns https://en.wikipedia.org/wiki/FM-8
+    PLT_TYP_FM8_TOWNS = 11;
+    // Gameboy advance
+    PLT_TYP_GAMEBOY_ADVANCE = 12;
+    // Gameboy color
+    PLT_TYP_GAMEBOY_COLOR = 13;
+    // MSX Computer https://en.wikipedia.org/wiki/MSX
+    PLT_TYP_MSX = 14;
+    // Nintendo DS
+    PLT_TYP_NINTENDO_DS = 15;
+    // NES platform
+    PLT_TYP_NES = 16;
+    // C88 https://en.wikipedia.org/wiki/PC-8800_series
+    PLT_TYP_P88 = 17;
+    // PC98 https://en.wikipedia.org/wiki/PC-9800_series
+    PLT_TYP_P98 = 18;
+    // PC Engine
+    PLT_TYP_PC_ENGINE = 19;
+    // Pc-FX https://en.wikipedia.org/wiki/PC-FX
+    PLT_TYP_PC_FX = 20;
+    // Playstation portable
+    PLT_TYP_PSP = 21;
+    // Playstation 1
+    PLT_TYP_PS1 = 22;
+    // Playstation 2
+    PLT_TYP_PS2 = 23;
+    // Playstation 3
+    PLT_TYP_PS3 = 24;
+    // Playstation 4
+    PLT_TYP_PS4 = 25;
+    // Playstation 5
+    PLT_TYP_PS5 = 26;
+    // Playstation vita
+    PLT_TYP_PS_VITA = 27;
+    // Dgramcast https://en.wikipedia.org/wiki/Dreamcast
+    PLT_TYP_DGRAMCAST = 28;
+    // Sega Staurn
+    PLT_TYP_SEGA_SATURN = 29;
+    // Sega Mega-CD
+    PLT_TYP_SEGA_MEGACD = 30;
+    // Super Nintendo
+    PLT_TYP_SUPER_NINTENDO = 31;
+    // Nintendo Switch
+    PLT_TYP_NINTENDO_SWITCH = 32;
+    // Ninentdo WII
+    PLT_TYP_NINTENDO_WII = 33;
+    // Nintendo WI
+    PLT_TYP_NINTENDO_WII_U = 34;
+    // Nintendo 3Ds
+    PLT_TYP_NINTENDO_3DS = 35;
+    // X68000 https://en.wikipedia.org/wiki/X68000
+    PLT_TYP_X68000 = 36;
+    // Xbox One
+    PLT_TYP_XBOX_ONE = 37;
+    // Xbox 360
+    PLT_TYP_XBOX_360 = 38;
+    // Xbox
+    PLT_TYP_XBOX = 39;
+    // Xbox Series X
+    PLT_TYP_XBOX_X = 40;
+    // Website
+    PLT_TYP_WEBSITE = 41;
+    // Visual Novel DS https://github.com/BASLQC/vnds/wiki
+    PLT_TYP_VN_DS = 42;
+    // Sharp X1 https://en.wikipedia.org/wiki/Sharp_X1
+    PLT_TYP_SHARP_X1 = 43;
+    // 3DO Interactive Multiplayer
+    PLT_TYP_INTERACTIVE_3DO = 44;
+    // Other
+    PLT_TYP_OTHER = 45;
+    // Mobile Other
+    PLT_TYP_MOBILE_OTHER = 46;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string languages = 2;
+  google.protobuf.Timestamp release_date = 3;
+  //repeated Media media = 4;
+  Censorship censorship = 5;
+  ContentPublishingType publishing_type = 6; 
+  string asin = 7;
+  string gtin = 8;
+
+  GameReleaseType type = 9;
+  int32 WidthResolution = 10;
+  int32 HeightResolution = 11;
+  Boolean IsPatch = 12;
+  Boolean IsFree = 13;
+  GameDubDegree dub_degree = 14;
+  GameAnimationDegree story_animation_degree = 15;
+  GameAnimationDegree ero_animation_degree = 16;
+  string engine = 17;
+  repeated Platform platforms = 18;
+
+  repeated Text names = 19;
+  repeated Text aliases = 20;
+  repeated Text descriptions = 21;
+  string cover_image_id = 22;
+  string banner_image_id = 23;
+  repeated Website websites = 24;
+  repeated Markeplace marketplaces = 25;
+  repeated Cast starring = 26;
+  repeated Collaboration staff = 27;
+  repeated Soundtrack soundtracks = 28;
+  repeated VoiceActing voiceactings = 29;
+  repeated MaturityRating maturity_ratings = 30;
+  repeated RegionRestriction region_restrictions = 31;
+}
+
+message GraphicNovel {
+  enum GraphicNovelType {
+    // Unknown graphic novel type
+    GRN_TYP_UNKNOWN = 0;
+    // Japanese GraphicNovel
+    GRN_TYP_MANGA = 1;
+    // One shot (only one volume)
+    GRN_TYP_ONE_SHOT = 2;
+    // Cinese GraphicNovel
+    GRN_TYP_MANHUA = 3;
+    // Korean GraphicNovel
+    GRN_TYP_MANHWA = 4;
+    // Original English Language
+    GRN_TYP_OEL = 5;
+    // Web native comic (webtoon)
+    GRN_TYP_WEB_COMIC = 6;
+    // GraphicNovel consisting of 4 pannels
+    GRN_TYP_YON_KOMA = 7;
+    // Other
+    GRN_TYP_OTHER = 8;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  GraphicNovelType type = 2;
+  repeated Edge chapters = 3;
+  int32 ChapterCount = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+  repeated Markeplace marketplaces = 11;
+  ContentStatus status = 12;
+  repeated ContentRelation content_relations = 13;
+  ContentPublishingType publishing_type = 14;
+  Boolean original = 15;
+  repeated Running runnings = 16;
+  google.protobuf.Timestamp release_date = 17;
+  repeated Cast starring = 18;
+  repeated Collaboration staff = 19;
+  repeated Edge genres = 20;
+  repeated Edge releases = 21;
+  repeated MaturityRating maturity_ratings = 22;
+  repeated RegionRestriction region_restrictions = 23;
+  repeated Edge volumes = 24;
+}
+
+message LightNovel {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated Edge chapters = 2;
+  int32 ChapterCount = 3;
+  repeated Text names = 4;
+  repeated Text aliases = 5;
+  repeated Text descriptions = 6;
+  string cover_image_id = 7;
+  string banner_image_id = 8;
+  repeated Website websites = 9;
+  repeated Markeplace marketplaces = 10;
+  ContentStatus status = 11;
+  repeated ContentRelation content_relations = 12;
+  ContentPublishingType publishing_type = 13;
+  Boolean original = 14;
+  repeated Running runnings = 15;
+  google.protobuf.Timestamp release_date = 16;
+  repeated Cast starring = 17;
+  repeated Collaboration staff = 18;
+  repeated Edge genres = 19;
+  repeated Edge releases = 20;
+  repeated MaturityRating maturity_ratings = 21;
+  repeated RegionRestriction region_restrictions = 22;
+  repeated Edge volumes = 23;
+}
+
+enum ContentFocus {
+  // Unknown focus
+	CNT_FCS_UNKNOWN = 0;
+	// Main content handled are games
+	CNT_FCS_GAME = 1;
+	// Main content handled are anime
+	CNT_FCS_ANIME = 2;
+	// Main content handled are manga
+	CNT_FCS_MANGA = 3;
+	// Main content handled are light novels
+	CNT_FCS_LIGHT_NOVEL = 4;
+	// ContentFocusOther other
+	CNT_FCS_OTHER = 5;
+}
+
+message Organization {
+  enum OrganizationType {
+    // Uunknown organization type
+    ORG_TYP_UNKNOWN = 0;
+    // Coorporation / company
+    ORG_TYP_CORPORATE = 1;
+    // Circle of people
+    ORG_TYP_CIRCLE = 2;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  OrganizationType type = 2;
+  google.protobuf.Timestamp foundation_date = 3;
+  ContentFocus focus = 4;
+  repeated Text names = 5;
+  repeated Text aliases = 6;
+  repeated Text descriptions = 7;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
+  repeated Website websites = 10;
+}
+
+message Person {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string nationalities = 2;
+  repeated string languages = 3;
+  google.protobuf.Timestamp birthday = 4;
+  Gender gender = 5;
+  BloodType blood_type = 6;
+  repeated Text names = 7;
+  repeated Text aliases = 8;
+  repeated Text descriptions = 9;
+  string cover_image_id = 10;
+  string banner_image_id = 11;
+  repeated Website websites = 12;
+}
+
+message Track {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Timestamp release_date = 2;
+  repeated Text names = 3;
+  repeated Text aliases = 4;
+  repeated Text descriptions = 5;
+  string cover_image_id = 6;
+  string banner_image_id = 7;
+  repeated Website websites = 8;
+  repeated Markeplace marketplaces = 9;
+  repeated Collaboration staff = 10;
+  repeated Edge genres = 11;
+  repeated Edge releases = 12;
+}
+
+message Universe {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated Text names = 2;
+  repeated Text aliases = 3;
+  repeated Text descriptions = 4;
+  string cover_image_id = 5;
+  string banner_image_id = 6;
+  repeated Website websites = 7;
+  repeated Markeplace marketplaces = 8;
+  repeated Edge contents = 9;
+  repeated Edge canonicals = 10;
+}
+
+message VisualNovel {
+  enum VisualNovelLength {
+    // Unknown length
+    VSN_LNG_UNKNOWN = 0;
+    // < 2 hours
+    VSN_LNG_VERY_SHORT = 1;
+    // 20 - 10 hours
+    VSN_LNG_SHORT = 2;
+    // 10 - 30 hours
+    VSN_LNG_MEDIUM = 3;
+    // 30 - 50 hours
+    VSN_LNG_LONG= 4;
+    // > 50 hours
+    VSN_LNG_VERY_LONG = 5;
+  }
+
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  VisualNovelLength length = 2;
+  repeated Text names = 3;
+  repeated Text aliases = 4;
+  repeated Text descriptions = 5;
+  string cover_image_id = 6;
+  string banner_image_id = 7;
+  repeated Website websites = 8;
+  repeated Markeplace marketplaces = 9;
+  ContentStatus status = 10;
+  repeated ContentRelation content_relations = 11;
+  ContentPublishingType publishing_type = 12;
+  Boolean original = 13;
+  repeated Running runnings = 14;
+  google.protobuf.Timestamp release_date = 15;
+  repeated Cast starring = 16;
+  repeated Collaboration staff = 17;
+  repeated Edge genres = 18;
+  repeated Edge releases = 19;
+  repeated Soundtrack soundtracks = 20;
+  repeated VoiceActing voiceactings = 21;
+  repeated MaturityRating maturity_ratings = 22;
+  repeated RegionRestriction region_restrictions = 23;
+}
+
+message Volume {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string languages = 2;
+  google.protobuf.Timestamp release_date = 3;
+  //repeated Media media = 4;
+  Censorship censorship = 5;
+  ContentPublishingType publishing_type = 6; 
+  string asin = 7;
+  string gtin = 8;
+
+  int32 identifier = 9;
+  // ReadingComplexity reading_complexity = 10;
+
+  repeated Text names = 11;
+  repeated Text aliases = 12;
+  repeated Text descriptions = 13;
+  string cover_image_id = 14;
+  string banner_image_id = 15;
+  repeated Website websites = 16;
+  repeated Markeplace marketplaces = 17;
+  repeated Cast starring = 18;
+  repeated Collaboration staff = 19;
+  repeated MaturityRating maturity_ratings = 20;
+  repeated RegionRestriction region_restrictions = 21;
+}
+
+
+message Text {
+  string text = 1;
+  string localization = 2;
+}
+
+message Running {
+  google.protobuf.Timestamp start_time = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Timestamp end_time = 2;
+  string localization = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message Edge {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+ContentRelation represent the relation between 2 different content.
+The ContentReleation field is common to both the content, therefore the server do not need
+to have both relations (from content A to B, and from B to A) because it will generate automatically
+the reverse relation.
+
+> Sending A sequel of B, the server will generate B prequel A
+
+The relation has to be read as
+entity -> has <relation> -> which is <related>
+EG: Naruto -> Sequel -> Naruto Shippuden = <Naruto> has <sequel>, which is <Naruto Shippuden>
+*/
+message ContentRelation {
+  enum ContentRelationType {
+    CONTENT_RELATION_TYPE_UNSPECIFIED = 0;
+    // ADAPTATION implies that the subject is the base from which the object has been adapted
+    // reverse = BASE
+    ADAPTATION = 1;
+    // BASE Adaptation
+    // reverse = Adaptation
+    BASE = 2;
+
+    // SAMESETTING Same universe/world/reality/timeline with completely different characters.
+    // reverse = SAMESETTING
+    SAME_SETTING = 3;
+
+    // ALTSETTING Same universe/world/reality/timeline same characters with different universe/world/reality/timeline.
+    // reverse = ALTVERSION
+    ALTERNATIVE_SETTING = 4;
+
+    // ALTVERSION alternative version Same setting, same characters, story is told differently.
+    // reverse = ALTVERSION
+    ALTERNATIVE_VERSION = 5;
+
+    // CHARACTER When characters appear in both series, but is not a spin-off
+    // reverse = CHARACTER
+    CHARACTER = 6;
+
+    // FULLSTORY the object is full story of the subject
+    // this implies that the subject is a summary of the object
+    // reverse = SUMMARY
+    FULL_STORY = 7;
+    // SUMMARY summary
+    // reverse = FULLSTORY
+    SUMMARY = 8;
+
+    // PARENTSTORY the object is the parent story of the subject
+    // this implies that the subject is a spin-off of the object
+    // reverse = SPINOFF
+    PARENT_STORY = 9;
+    // SpinOff spin off
+    // reverse = ParentStory
+    SPIN_OFF = 10;
+
+    // PREQUEL prequel
+    // reverse = SEQUEL
+    PREQUEL = 11;
+    // SEQUEL sequel
+    // reverse = PREQUEL
+    SEQUEL = 12;
+
+    // MAINSTORY the object is the main story from which the subject has been created
+    // this implies that the subject is a side story of the object
+    // reverse = SIDESTORY
+    MAIN_STORY = 13;
+    // SIDESTORY side story
+    // reverse = MAINSTORY
+    SIDE_STORY = 14;
+
+    // ORIGINAL the object is the original of the subject
+    // this implies that the subject is the parody or fan made object
+    // reverse = PARODY
+    ORIGINAL = 15;
+    // PARODY is parody
+    // reverse = ORIGINAL
+    PARODY = 16;
+  }
+
+  Edge related = 1 [(google.api.field_behavior) = REQUIRED];
+  ContentRelationType relation = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Cast represnt the relation between a character and a content.
+The cast is always field of the content and the Edge points to the character.
+*/
+message Cast {
+  enum CastRelation {
+    CAST_RELATION_UNSPECIFIED = 0;
+    MAIN = 1;
+    SUPPORT = 2;
+    APPEARS = 3;
+  }
+  Edge character = 1 [(google.api.field_behavior) = REQUIRED];
+  CastRelation relation = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Collaboration represent the relation between a content and a person or organization.
+The collaboration must be localizaed and it must carry the information about the role of the collaborator.
+The Collaboration is always field of the content and the Edge points to the collaborator.
+The localization must be a valid ISO3 localization which identifies the language/full localization of the content's version 
+for which the collaborator collaborated
+*/
+message Collaboration {
+  Edge collaborator = 1 [(google.api.field_behavior) = REQUIRED];
+  string localization = 2 [(google.api.field_behavior) = REQUIRED];
+  string role = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Voice Acting represent voice given by a person to a voiced entity in a specific content
+The Voice Acting is always field of the content and it must be localized.
+The localization must be a valid ISO3 localization which identifies the language/full localization of the content's version 
+for which the actor gave the voice to the entity
+*/
+message VoiceActing {
+  Edge voiced = 1 [(google.api.field_behavior) = REQUIRED];
+  Edge actor = 2 [(google.api.field_behavior) = REQUIRED];
+  string localization = 3 [(google.api.field_behavior) = REQUIRED];
+  Boolean primary = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Any kind of website related to the entity.
+Could be official website, twitter, or external resources such as wikipedia
+*/
+message Website {
+  string url = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+Markeplace is where to consume the content.
+The name field must point to a valid valid marketplace id in order to load icon and name of the marketplace.
+If the marketplace is limited to some specific country, add them to the field region following the IOS3 standard
+*/
+message Markeplace {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  string url = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated string region = 3;
+}
+
+enum TrackVersion {
+  // Unknown version
+  TRK_VRS_UNKNOWN = 0;
+  // Normal version of the track
+  TRK_VRS_NORMAL = 1;
+  // Instrumental version
+  TRK_VRS_INSTRUMENTAL = 2;
+  // Only piano version
+  TRK_VRS_PIANO = 3;
+  // Japanese version
+  TRK_VRS_JAPANESE = 4;
+  // English version
+  TRK_VRS_ENGLISH = 5;
+  // TV version of the track
+  TRK_VRS_TV = 6;
+  // The track has been mixed with another
+  TRK_VRS_MIX = 7;
+  // The track has been remixed
+  TRK_VRS_REMIX = 8;
+  // Extended version of the track
+  TRK_VRS_EXTENDED = 9;
+  // other
+  TRK_VRS_OTHER = 10;
+}
+
+/*
+Soundtrack exposes the information about which Track has been used in which Content in which localization and for what.
+The localization must be a valid ISO3 localization which identifies the language/full localization of the content's version 
+for which the Track is used
+*/
+message Soundtrack {
+  enum SoundtrackType {
+    // Unknown type
+    SND_TRC_TYP_UNKNOWN = 0;
+    // The track is used as ending
+    SND_TRC_TYP_ENDING = 1;
+    // The track is used as opening
+    SND_TRC_TYP_OPENING = 2;
+    // The track is used as insert song
+    SND_TRC_TYP_INSERT = 3;
+    // The track is used as background song
+    SND_TRC_TYP_BACKGROUND = 4;
+    // The track is used as image song
+    SND_TRC_TYP_IMAGE = 5;
+    // The track is used as theme song
+    SND_TRC_TYP_THEME = 6;
+  }
+  Edge track = 1 [(google.api.field_behavior) = REQUIRED];
+  SoundtrackType type = 2 [(google.api.field_behavior) = REQUIRED];
+  TrackVersion version = 3 [(google.api.field_behavior) = REQUIRED];
+  string localization = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+/*
+TrackListing exposes the information about which Track has been released from which MusicRelease in which version and in whic order.
+*/
+message TrackListing {
+  Edge musicRelease = 1 [(google.api.field_behavior) = REQUIRED];
+  TrackVersion version = 2 [(google.api.field_behavior) = REQUIRED];
+  int32 index = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+enum LanguageComplexity {
+  // Unknown complexity
+  LNG_CMPL_UNKNOWN = 0;
+  // For beginners
+	LNG_CMPL_BEGINNER = 1;
+	// For intermedium
+	LNG_CMPL_INTERMEDIUM = 2;
+	// For advanced
+	LNG_CMPL_ADVANCED = 3;
+	// For experts
+	LNG_CMPL_EXPERT = 4;
+}
+
+enum WritingSystem {
+  // Unknown writing system
+  WRT_SYS_UNKNOWN = 0;
+  // The opera is written with latin characters
+	WRT_SYS_ALPHABETIC = 1;
+	// The opera has the furigana transliteraion on each kanji
+	WRT_SYS_FURIGANA_FULL = 2;
+	// The opera has the furigana transliteraion only on advanced words or words used for the first time
+	WRT_SYS_FURIGANA_PARTIAL = 3;
+	// The opera has the furigana transliteraion only on non common words, if any
+	WRT_SYS_KANJI = 4;
+}
+
+enum RegionRestriction {
+  // Unknown Region Restriction
+  RGN_RST_UNKNOWN = 0;
+  // No Region Restriction
+  RGN_RST_NONE = 1;
+  // The Entity is illegal following the U.N. guidelines
+  RGN_RST_ILLEGAL = 2;
+}
+
+enum MaturityRating {
+  // Unknown Maturity Rating
+  MTR_RTN_UNKNOWN = 0;
+  // Over 18 in USA
+  MTR_RTN_USA_NC17 = 1;
+  // Over 18 in USA
+  MTR_RTN_USA_R = 2;
+  // Over 13 in USA
+  MTR_RTN_USA_PG13 = 3;
+  // Over 3 in USA
+  MTR_RTN_USA_PG = 4;
+  // Safe in USA
+  MTR_RTN_USA_G = 5;
+}
+
