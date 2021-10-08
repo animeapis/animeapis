@@ -149,8 +149,9 @@ jobs:
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/go-genproto.git
         git push -u origin HEAD
 
-    - name: Push commit to animeapis/api-nodejs-client
+    - name: Push commit to animeapis/api-nodejs-client (master only)
       working-directory: animeapis/api-nodejs-client
+      if: github.ref == 'ref/head/master'
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
         git config --local user.name "${{ env.USERNAME }}"
@@ -158,7 +159,7 @@ jobs:
         git config --local core.filemode false
 
         git add -A
-        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate gapics"
+        git diff-index --quiet HEAD || git commit -m "${{ github.event.head_commit.message }}"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-nodejs-client.git
         git push -u origin HEAD

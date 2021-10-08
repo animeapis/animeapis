@@ -94,7 +94,7 @@ go_gapic_assembly_pkg(
 ##############################################################################
 nodejs_gapic_library(
     name = "tracker_nodejs_gapic",
-    package_name = "@animeshon/tracker",
+    package_name = "@animeapis/tracker",
     src = ":tracker_proto_with_info",
     extra_protoc_parameters = ["metadata"],
     grpc_service_config = "tracker_grpc_service_config.json",
