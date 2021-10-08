@@ -36,6 +36,12 @@ service Knowledge {
     };
   }
 
+  rpc GetContributionChanges(GetContributionChangesRequest) returns (ContributionChanges) {
+    option (google.api.http) = {
+    get: "/v1alpha1/{name=users/*/contributions/*/changes}"
+    };
+  }
+
   rpc ApproveContribution(ApproveContributionRequest) returns (Contribution) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=users/*/contributions/*}:approve"
@@ -58,28 +64,59 @@ service Knowledge {
   }
 }
 
+message ContributionChanges {
+  repeated EntryEntity additions = 1;
+
+  repeated EntryEntity deletions = 2;
+}
+
 message Contribution {
+  enum State {
+    PENDING = 0;
+    APPROVED = 1;
+    REJECTED = 2;
+    DRAFT = 3;
+  }
   // The resource name of the contribution.
   string name = 1;
 
-  repeated EntryEntity additions = 2;
+  // The parent resource where this contribution will be created.
+  string parent = 2 [(google.api.field_behavior) = REQUIRED];
 
-  repeated EntryEntity deletions = 3;
+  string reviewer = 3;
+
+  State state = 4;
+
+  string display_name = 5;
+
+  int32 revision = 6;
+
+  // When the album was created.
+  google.protobuf.Timestamp create_time = 7;
+
+  // When the album was updated.
+  google.protobuf.Timestamp update_time = 8;
+
+  // When the album was reviewd.
+  google.protobuf.Timestamp review_time = 9;
 }
 
 message ReviewContributionRequest {
-  string name = 1;
+  // The parent resource where this contribution will be created.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
-  repeated EntryEntity additions = 2;
+  string name = 2;
 
-  repeated EntryEntity deletions = 3;
+  repeated EntryEntity additions = 3;
+
+  repeated EntryEntity deletions = 4;
 }
 
 message CreateContributionRequest {
   // The parent resource where this contribution will be created.
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
-  string displayName = 2;
+  string display_name = 2;
 
   repeated EntryEntity additions = 3;
 
@@ -107,6 +144,11 @@ message ListContributionsResponse {
 
   // A token to retrieve next page of results.
   string next_page_token = 2;
+}
+
+message GetContributionChangesRequest {
+  // The resource name of the requested contribution.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message GetContributionRequest {
