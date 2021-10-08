@@ -5,6 +5,8 @@ load(
     "go_gapic_library",
     "go_proto_library",
     "go_test",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
     "proto_library_with_info",
 )
 
@@ -82,5 +84,27 @@ go_gapic_assembly_pkg(
         ":knowledge_go_gapic",
         ":knowledge_go_gapic_srcjar-test.srcjar",
         ":knowledge_go_proto",
+    ],
+)
+
+##############################################################################
+# Node.js
+##############################################################################
+nodejs_gapic_library(
+    name = "knowledge_nodejs_gapic",
+    package_name = "@animeapis/knowledge",
+    src = ":knowledge_proto_with_info",
+    extra_protoc_parameters = ["metadata"],
+    grpc_service_config = "knowledge_grpc_service_config.json",
+    package = "animeshon.knowledge.v1alpha1",
+    service_yaml = "knowledge_v1alpha1.yaml",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "gapi-knowledge-v1alpha1-nodejs",
+    deps = [
+        ":knowledge_nodejs_gapic",
+        ":knowledge_proto",
     ],
 )

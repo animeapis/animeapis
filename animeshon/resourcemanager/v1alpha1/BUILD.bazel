@@ -5,6 +5,8 @@ load(
     "go_gapic_library",
     "go_proto_library",
     "go_test",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
     "proto_library_with_info",
 )
 
@@ -82,5 +84,27 @@ go_gapic_assembly_pkg(
         ":resourcemanager_go_gapic",
         ":resourcemanager_go_gapic_srcjar-test.srcjar",
         ":resourcemanager_go_proto",
+    ],
+)
+
+##############################################################################
+# Node.js
+##############################################################################
+nodejs_gapic_library(
+    name = "resourcemanager_nodejs_gapic",
+    package_name = "@animeapis/resourcemanager",
+    src = ":resourcemanager_proto_with_info",
+    extra_protoc_parameters = ["metadata"],
+    grpc_service_config = "resourcemanager_grpc_service_config.json",
+    package = "animeshon.resourcemanager.v1alpha1",
+    service_yaml = "resourcemanager_v1alpha1.yaml",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "gapi-resourcemanager-v1alpha1-nodejs",
+    deps = [
+        ":resourcemanager_nodejs_gapic",
+        ":resourcemanager_proto",
     ],
 )
