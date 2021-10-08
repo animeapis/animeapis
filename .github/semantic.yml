@@ -13,7 +13,7 @@ scopes:
   - image
   - knowledge
   - library
-  - search
+  - release
   - resourcemanager
   - tracker
   - vision
