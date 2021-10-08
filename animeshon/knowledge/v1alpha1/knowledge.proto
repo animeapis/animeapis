@@ -78,7 +78,7 @@ message Contribution {
     DRAFT = 3;
   }
   // The resource name of the contribution.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The parent resource where this contribution will be created.
   string parent = 2 [(google.api.field_behavior) = REQUIRED];
@@ -157,11 +157,11 @@ message GetContributionRequest {
 }
 
 message ApproveContributionRequest {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message RejectContributionRequest {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message EntryEntity {
@@ -238,7 +238,7 @@ message Anime {
     ANM_TYP_OTHER = 8;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   AnimeType type = 2;
   repeated Edge episodes = 3;
   int32 EpisodeCount = 4;
@@ -266,7 +266,7 @@ message Anime {
 }
 
 message Canonical {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated Text names = 2;
   repeated Text aliases = 3;
   repeated Text descriptions = 4;
@@ -287,7 +287,7 @@ message Chapter {
     CHT_TYP_EXTRA = 2;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   ChapterType type = 2;
   repeated Edge episodes = 3;
   int32 identifier = 4;
@@ -411,7 +411,7 @@ message Character {
     CHR_CUP_Z = 28;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   string birthday_day = 2;
   string birthday_month = 3;
   string birthday_year = 4;
@@ -457,7 +457,7 @@ message Episode {
     EPS_TYP_OTHER = 7;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   EpisodeType type = 2;
   int32 identifier = 3;
   google.protobuf.Timestamp release_date = 4;
@@ -622,7 +622,7 @@ message GameRelease {
     PLT_TYP_MOBILE_OTHER = 46;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated string languages = 2;
   google.protobuf.Timestamp release_date = 3;
   //repeated Media media = 4;
@@ -679,7 +679,7 @@ message GraphicNovel {
     GRN_TYP_OTHER = 8;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   GraphicNovelType type = 2;
   repeated Edge chapters = 3;
   int32 ChapterCount = 4;
@@ -706,7 +706,7 @@ message GraphicNovel {
 }
 
 message LightNovel {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated Edge chapters = 2;
   int32 ChapterCount = 3;
   repeated Text names = 4;
@@ -756,7 +756,7 @@ message Organization {
     ORG_TYP_CIRCLE = 2;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   OrganizationType type = 2;
   google.protobuf.Timestamp foundation_date = 3;
   ContentFocus focus = 4;
@@ -769,7 +769,7 @@ message Organization {
 }
 
 message Person {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated string nationalities = 2;
   repeated string languages = 3;
   google.protobuf.Timestamp birthday = 4;
@@ -784,7 +784,7 @@ message Person {
 }
 
 message Track {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   google.protobuf.Timestamp release_date = 2;
   repeated Text names = 3;
   repeated Text aliases = 4;
@@ -799,7 +799,7 @@ message Track {
 }
 
 message Universe {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated Text names = 2;
   repeated Text aliases = 3;
   repeated Text descriptions = 4;
@@ -827,7 +827,7 @@ message VisualNovel {
     VSN_LNG_VERY_LONG = 5;
   }
 
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   VisualNovelLength length = 2;
   repeated Text names = 3;
   repeated Text aliases = 4;
@@ -853,7 +853,7 @@ message VisualNovel {
 }
 
 message Volume {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated string languages = 2;
   google.protobuf.Timestamp release_date = 3;
   //repeated Media media = 4;
