@@ -18,7 +18,6 @@ exports_files(glob(["*.json"]))
 proto_library(
     name = "release_proto",
     srcs = [
-        "chapter.proto",
         "release.proto",
     ],
     deps = [
@@ -29,6 +28,7 @@ proto_library(
         "@com_google_googleapis//google/iam/v1:iam_policy_proto",
         "@com_google_googleapis//google/iam/v1:policy_proto",
         "@com_google_googleapis//google/longrunning:operations_proto",
+        "@com_google_protobuf//:duration_proto",
         "@com_google_protobuf//:empty_proto",
         "@com_google_protobuf//:field_mask_proto",
         "@com_google_protobuf//:timestamp_proto",
