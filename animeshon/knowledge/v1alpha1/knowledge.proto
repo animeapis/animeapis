@@ -65,9 +65,12 @@ service Knowledge {
 }
 
 message ContributionChanges {
-  repeated EntryEntity additions = 1;
+  // The resource name of the contribution.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  repeated EntryEntity deletions = 2;
+  repeated EntryEntity additions = 2;
+
+  repeated EntryEntity deletions = 3;
 }
 
 message Contribution {
