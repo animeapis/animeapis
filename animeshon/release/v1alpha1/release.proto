@@ -1,0 +1,319 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+package animeshon.release.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/release/v1alpha1;release";
+option java_package = "com.animeshon.release.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Release::v1Alpha1";
+
+service Publisher {
+  option (google.api.default_host) = "release.animeapis.com";
+
+  rpc GetRelease(GetReleaseRequest) returns (Release) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/releases/*}"
+    };
+  }
+
+  rpc ListReleases(ListReleasesRequest) returns (ListReleasesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/releases"
+    };
+  }
+
+  rpc CreateRelease(CreateReleaseRequest) returns (Release) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*}/releases"
+      body: "*"
+    };
+  }
+
+  rpc UpdateRelease(UpdateReleaseRequest) returns (Release) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{release.name=users/*/releases/*}"
+      body: "*"
+    };
+  }
+
+  // The release is soft-deleted and a grace period is granted before complete
+  // deletion. During this grace period the release can be recovered.
+  rpc DeleteRelease(DeleteReleaseRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/releases/*}"
+    };
+  }
+
+  // This method allows to recover a release while still in the grace period.
+  rpc UndeleteRelease(UndeleteReleaseRequest) returns (Release) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/releases/*}:undelete"
+    };
+  }
+
+  // The release is marked as immediately available to the public.
+  rpc PublishRelease(PublishReleaseRequest) returns (PublishReleaseResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/releases/*}:publish"
+      body: "*"
+    };
+  }
+
+  // The release is unpublished and marked as a draft, associated
+  // non-authoritative will automatically be marked as suspended and hidden from
+  // the general public.
+  rpc UnpublishRelease(UnpublishReleaseRequest) returns (UnpublishReleaseResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/releases/*}:unpublish"
+      body: "*"
+    };
+  }
+
+  // The release is scheduled to be released at a specific future date and time.
+  rpc ScheduleRelease(ScheduleReleaseRequest) returns (ScheduleReleaseResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/releases/*}:schedule"
+      body: "*"
+    };
+  }
+
+  // This method can only be called on scheduled releases. The scheduling is
+  // cancelled and the release is marked as a draft.
+  rpc CancelRelease(CancelReleaseRequest) returns (CancelReleaseResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/releases/*}:cancel"
+      body: "*"
+    };
+  }
+
+  // This method can only be called on published releases marked as active. Any
+  // non-authoritative release associated to the specified release will also be
+  // automatically marked as suspended.
+  rpc SuspendRelease(SuspendReleaseRequest) returns (SuspendReleaseResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/releases/*}:suspend"
+      body: "*"
+    };
+  }
+}
+
+enum Visibility {
+  // The default value. This value is used if the state is omitted.
+  VISIBILITY_UNSPECIFIED = 0;
+
+  // The release is private and can only be accessed by users and service
+  // accounts that have been granted direct access to the release resource via
+  // explicit or inherited IAM policies.
+  PRIVATE = 1;
+
+  // The release has been published and access to its assets is limited to
+  // members that have paid the membership fee (e.g. a user who has bought the
+  // release).
+  MEMBERSHIP = 2;
+
+  // The release has been published and all of its assets are publicly available
+  // to all users.
+  PUBLIC = 3;
+}
+
+// Example (early access): a product X is released with scheduled time 31/12/21,
+// no authoritative release is set as this is the first release and it must be
+// authoritative. The product is furthermore released with 3 days of free access
+// for all users, as such a second non-authoritative release is scheduled on the
+// 31/12/21 with time-to-live set to 3 days and visibility set to PUBLIC. After
+// the expiration of the second release the visibility will fallback to
+// MEMBERSHIP and only the users in the access group (who have previously
+// purchased the product) will be allowed to keep access to the resource.
+
+// Example (translation): a product X is published with an authoritative release
+// by the organization Y. A user Z subsequently decides to publish a translation
+// of the original release, creating a new product and releasing it as a
+// non-authoritative release with an explicit reference to the original release.
+
+message Release {
+  enum State {
+    // The default value. This value is used if the state is omitted.
+    STATE_UNSPECIFIED = 0;
+
+    // The release has been published and is available to the general public.
+    ACTIVE = 1;
+
+    // The release has been scheduled and will be made automatically available
+    // to the public according to the scheduling conditions.
+    SCHEDULED = 2;
+
+    // The release is a draft and is still being worked on.
+    DRAFT = 3;
+
+    // The release has been suspended. This state might automatically being set
+    // for non-authoritative releases when their authoritative release is also
+    // suspended, unpublished, or deleted. This state might also be set when a
+    // release is breaching general terms and conditions or is in conflict with
+    // community guidelines or internal governing policies.
+    SUSPENDED = 4;
+
+    // The release has been marked for deletion.
+    DELETED = 5;
+  }
+
+  // The release resource name.
+  string name = 1;
+
+  // The authoritative release is set only for sub-licensed releases that do not
+  // hold any publishing rights on the content being distributed.
+  //
+  // A common case where the release is to be considered non-authoritative is
+  // a translation released by third-parties. In such scenario the original
+  // author(s) is to be considered the only publishing authority over the
+  // content.
+  //
+  // If for any reason the authoritative release were to be unpublished or
+  // deleted from Animeshon all associated non-authoritative releases will
+  // be automatically hidden from public consumption and marked as suspended.
+  //
+  // Furthermore, there can only be one authoritative release per asset, which
+  // means that you can have unlimited non-authoritative releases for one asset
+  // but it must have at most one, and only one, authoritative release.
+  string authoritative_release = 2;
+
+  // The product included in the release.
+  string asset = 4;
+
+  // The group of users authorized to access the asset.
+  string access_group = 5;
+
+  // The visibility of the resources included in the asset.
+  Visibility visibility = 6;
+
+  // The current release state.
+  State state = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The timestamp at which the release was created.
+  google.protobuf.Timestamp create_time = 8
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The latest timestamp at which the release was updated.
+  google.protobuf.Timestamp update_time = 9
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The timestamp at which the release will expire.
+  google.protobuf.Timestamp expire_time = 10
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The timestamp at which the release was deleted.
+  google.protobuf.Timestamp delete_time = 11
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetReleaseRequest {
+  // The name of the release to retrieve.
+  string name = 1;
+}
+
+message ListReleasesRequest {
+  // The parent to list releases from.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListReleasesResponse {
+  // The list of releases.
+  repeated Release releases = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateReleaseRequest {
+  // The parent this release belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The release to create.
+  Release release = 2;
+
+  // The time-to-live indicating for how long this release should be published.
+  // If set to zero, the release will not have an expiration time.
+  google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = INPUT_ONLY];
+}
+
+message UpdateReleaseRequest {
+  // The release to update.
+  Release release = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteReleaseRequest {
+  // The name of the release to delete.
+  string name = 1;
+}
+
+message UndeleteReleaseRequest {
+  // The name of the release to undelete.
+  string name = 1;
+}
+
+message PublishReleaseRequest {
+  // The name of the release to publish.
+  string name = 1;
+}
+
+message PublishReleaseResponse {
+}
+
+message UnpublishReleaseRequest {
+  // The name of the release to publish.
+  string name = 1;
+}
+
+message UnpublishReleaseResponse {
+}
+
+message ScheduleReleaseRequest {
+  // The name of the release to schedule.
+  string name = 1;
+}
+
+message ScheduleReleaseResponse {
+}
+
+message CancelReleaseRequest {
+  // The name of the release to cancel.
+  string name = 1;
+}
+
+message CancelReleaseResponse {
+}
+
+message SuspendReleaseRequest {
+  // The name of the release to suspend.
+  string name = 1;
+
+  // The reason why the release has been suspended.
+  string reason = 2;
+}
+
+message SuspendReleaseResponse {
+}

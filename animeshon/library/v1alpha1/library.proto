@@ -63,10 +63,8 @@ service Library {
   rpc DeletePlaylist(DeletePlaylistRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*/playlists/*}"
-      body: "*"
       additional_bindings {
         delete: "/v1alpha1/{name=audiences/*/playlists/*}"
-        body: "*"
       }
     };
   }
@@ -105,10 +103,8 @@ service Library {
   rpc DeletePlaylistItem(DeletePlaylistItemRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*/playlists/*/items/*}"
-      body: "*"
       additional_bindings {
         delete: "/v1alpha1/{name=audiences/*/playlists/*/items/*}"
-        body: "*"
       }
     };
   }

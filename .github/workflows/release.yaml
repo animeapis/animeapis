@@ -151,7 +151,7 @@ jobs:
 
     - name: Push commit to animeapis/api-nodejs-client (master only)
       working-directory: animeapis/api-nodejs-client
-      if: github.ref == 'ref/head/master'
+      if: github.ref == 'refs/heads/master'
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
         git config --local user.name "${{ env.USERNAME }}"

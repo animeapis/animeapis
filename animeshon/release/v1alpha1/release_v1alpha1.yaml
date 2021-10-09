@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: release.animeapis.com
+title: Release API
+
+apis:
+- name: animeshon.release.v1alpha1.Publisher
