@@ -38,7 +38,7 @@ service Knowledge {
 
   rpc GetContributionChanges(GetContributionChangesRequest) returns (ContributionChanges) {
     option (google.api.http) = {
-    get: "/v1alpha1/{name=users/*/contributions/*/changes}"
+    get: "/v1alpha1/{name=users/*/contributions/*}/changes"
     };
   }
 
@@ -241,7 +241,7 @@ message Anime {
   string cover_image_id = 8;
   string banner_image_id = 9;
   repeated Website websites = 10;
-  repeated Markeplace marketplaces = 11;
+  repeated Marketplace marketplaces = 11;
   ContentStatus status = 12;
   repeated ContentRelation content_relations = 13;
   ContentPublishingType publishing_type = 14;
@@ -266,7 +266,7 @@ message Canonical {
   string cover_image_id = 5;
   string banner_image_id = 6;
   repeated Website websites = 7;
-  repeated Markeplace marketplaces = 8;
+  repeated Marketplace marketplaces = 8;
   repeated Edge contents = 9;
 }
 
@@ -292,7 +292,7 @@ message Chapter {
   string cover_image_id = 10;
   string banner_image_id = 11;
   repeated Website websites = 12;
-  repeated Markeplace marketplaces = 13;
+  repeated Marketplace marketplaces = 13;
   repeated Cast starring = 14;
   repeated Collaboration staff = 15;
   repeated Edge releases = 16;
@@ -426,7 +426,7 @@ message Character {
   string cover_image_id = 20;
   string banner_image_id = 21;
   repeated Website websites = 22;
-  repeated Markeplace marketplaces = 23;
+  repeated Marketplace marketplaces = 23;
   repeated Edge guise_of = 24;
 }
 
@@ -460,7 +460,7 @@ message Episode {
   string cover_image_id = 8;
   string banner_image_id = 9;
   repeated Website websites = 10;
-  repeated Markeplace marketplaces = 11;
+  repeated Marketplace marketplaces = 11;
   repeated Cast starring = 12;
   repeated Collaboration staff = 13;
   repeated Soundtrack soundtracks = 14;
@@ -641,7 +641,7 @@ message GameRelease {
   string cover_image_id = 22;
   string banner_image_id = 23;
   repeated Website websites = 24;
-  repeated Markeplace marketplaces = 25;
+  repeated Marketplace marketplaces = 25;
   repeated Cast starring = 26;
   repeated Collaboration staff = 27;
   repeated Soundtrack soundtracks = 28;
@@ -682,7 +682,7 @@ message GraphicNovel {
   string cover_image_id = 8;
   string banner_image_id = 9;
   repeated Website websites = 10;
-  repeated Markeplace marketplaces = 11;
+  repeated Marketplace marketplaces = 11;
   ContentStatus status = 12;
   repeated ContentRelation content_relations = 13;
   ContentPublishingType publishing_type = 14;
@@ -708,7 +708,7 @@ message LightNovel {
   string cover_image_id = 7;
   string banner_image_id = 8;
   repeated Website websites = 9;
-  repeated Markeplace marketplaces = 10;
+  repeated Marketplace marketplaces = 10;
   ContentStatus status = 11;
   repeated ContentRelation content_relations = 12;
   ContentPublishingType publishing_type = 13;
@@ -785,7 +785,7 @@ message Track {
   string cover_image_id = 6;
   string banner_image_id = 7;
   repeated Website websites = 8;
-  repeated Markeplace marketplaces = 9;
+  repeated Marketplace marketplaces = 9;
   repeated Collaboration staff = 10;
   repeated Edge genres = 11;
   repeated Edge releases = 12;
@@ -799,7 +799,7 @@ message Universe {
   string cover_image_id = 5;
   string banner_image_id = 6;
   repeated Website websites = 7;
-  repeated Markeplace marketplaces = 8;
+  repeated Marketplace marketplaces = 8;
   repeated Edge contents = 9;
   repeated Edge canonicals = 10;
 }
@@ -828,7 +828,7 @@ message VisualNovel {
   string cover_image_id = 6;
   string banner_image_id = 7;
   repeated Website websites = 8;
-  repeated Markeplace marketplaces = 9;
+  repeated Marketplace marketplaces = 9;
   ContentStatus status = 10;
   repeated ContentRelation content_relations = 11;
   ContentPublishingType publishing_type = 12;
@@ -864,7 +864,7 @@ message Volume {
   string cover_image_id = 14;
   string banner_image_id = 15;
   repeated Website websites = 16;
-  repeated Markeplace marketplaces = 17;
+  repeated Marketplace marketplaces = 17;
   repeated Cast starring = 18;
   repeated Collaboration staff = 19;
   repeated MaturityRating maturity_ratings = 20;
@@ -1019,14 +1019,14 @@ message Website {
 }
 
 /*
-Markeplace is where to consume the content.
+Marketplace is where to consume the content.
 The name field must point to a valid valid marketplace id in order to load icon and name of the marketplace.
 If the marketplace is limited to some specific country, add them to the field region following the IOS3 standard
 */
-message Markeplace {
+message Marketplace {
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   string url = 2 [(google.api.field_behavior) = REQUIRED];
-  repeated string region = 3;
+  string region = 3;
 }
 
 enum TrackVersion {
