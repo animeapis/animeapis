@@ -232,22 +232,22 @@ message Anime {
   }
 
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-  optional AnimeType type = 2;
+  AnimeType type = 2;
   repeated Edge episodes = 3;
-  optional int32 EpisodeCount = 4;
+  int32 EpisodeCount = 4;
   repeated Text names = 5;
   repeated Text aliases = 6;
   repeated Text descriptions = 7;
-  optional string cover_image_id = 8;
-  optional string banner_image_id = 9;
+  string cover_image_id = 8;
+  string banner_image_id = 9;
   repeated Website websites = 10;
   repeated Marketplace marketplaces = 11;
-  optional ContentStatus status = 12;
+  ContentStatus status = 12;
   repeated ContentRelation content_relations = 13;
   ContentPublishingType publishing_type = 14;
-  optional Boolean original = 15;
+  Boolean original = 15;
   repeated Running runnings = 16;
-  optional google.protobuf.Timestamp release_date = 17;
+  google.protobuf.Timestamp release_date = 17;
   repeated Cast starring = 18;
   repeated Collaboration staff = 19;
   repeated Edge genres = 20;
