@@ -10,6 +10,7 @@ import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
+import "google/type/date.proto";
 
 package animeshon.identity.v1alpha1;
 
@@ -20,6 +21,12 @@ option ruby_package = "Animeshon::Identity::v1Alpha1";
 
 service Identity {
   option (google.api.default_host) = "identity.animeapis.com";
+
+  rpc GetUserProfile(GetUserProfileRequest) returns (UserProfile) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*}:profile"
+    };
+  }
 
   rpc GetUser(GetUserRequest) returns (User) {
     option (google.api.http) = {
@@ -50,6 +57,19 @@ service Identity {
   rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*}"
+    };
+  }
+
+  rpc GetUserSettings(GetUserSettingsRequest) returns (UserSettings) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*}:settings"
+    };
+  }
+
+  rpc UpdateUserSettings(UpdateUserSettingsRequest) returns (UserSettings) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{settings.name=users/*}:settings"
+      body: "*"
     };
   }
 
@@ -86,6 +106,47 @@ service Identity {
   }
 }
 
+enum Gender {
+  // Not specified.
+  GENDER_UNSPECIFIED = 0;
+
+  // Male.
+  MALE = 1;
+
+  // Female.
+  FEMALE = 2;
+
+  // Undetermined gender.
+  UNDETERMINED = 3;
+}
+
+// This message is returned only when a user wants to fetch information about
+// another user and the amount of information returned is greatly reduced to
+// ensure that personal and confidential information is never disclosed by
+// accident to other users. The user profile is read-only.
+message UserProfile {
+  // The resource name of the user.
+  string name = 1;
+
+  // The profile image of the user.
+  string profile_image = 2;
+
+  // The banner image of the user.
+  string banner_image = 3;
+
+  // The public username of the user.
+  string username = 4;
+
+  // The public discriminator of the user.
+  string discriminator = 5;
+
+  // The birthday of the user, this value is hidden for private profiles.
+  google.type.Date birthday = 6;
+
+  // The gender of the user, this value is hidden for private profiles.
+  Gender gender = 7;
+}
+
 message User {
   // The resource name of the user.
   string name = 1;
@@ -113,6 +174,49 @@ message User {
 
   // The name of the user.
   string display_name = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The country where the user is located at, must be a valid ISO-3166 code.
+  string country_code = 10;
+
+  // The locale preferred by the user, must be a valid BCP-47 code.
+  string locale = 11;
+
+  // The fallback locale preferred by the user, must be a valid BCP-47 code.
+  // The only allowed values are eng, jpn, and jpn-Latn (romaji).
+  string locale_fallback = 12;
+
+  // The birthday defined by the user, this value is used to determine whether
+  // the user should be allowed to access explicit and sensitive content.
+  google.type.Date birthday = 13;
+
+  // The gender of the user.
+  Gender gender = 14;
+
+  // The profile image of the user.
+  string profile_image = 15;
+
+  // The banner image of the user.
+  string banner_image = 16;
+}
+
+message UserSettings {
+  enum Visibility {
+    // Not specified.
+    VISIBILITY_UNSPECIFIED = 0;
+
+    // Public.
+    PUBLIC = 1;
+
+    // Private.
+    PRIVATE = 2;
+  }
+
+  // The resource name of the user.
+  string name = 1;
+
+  // A private user will only have the username, discriminator, profile image
+  // and banner image public.
+  Visibility profile_visibility = 2;
 }
 
 message Group {
@@ -126,14 +230,14 @@ message Group {
   bytes etag = 3;
 }
 
+message GetUserProfileRequest {
+  // The name of the user to retrieve the profile from.
+  string name = 1;
+}
+
 message GetUserRequest {
   // The name of the user to retrieve.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+  string name = 1;
 }
 
 message ListUsersRequest {
@@ -157,12 +261,12 @@ message ListUsersResponse {
 
 message CreateUserRequest {
   // The user to create.
-  User user = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+  User user = 1;
+}
+
+message GetUserSettingsRequest {
+  // The name of the user to retrieve the settings from.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateUserRequest {
@@ -176,22 +280,21 @@ message UpdateUserRequest {
 
 message DeleteUserRequest {
   // The name of the user to delete.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/User"
-    }
-  ];
+  string name = 1;
+}
+
+message UpdateUserSettingsRequest {
+  // The user settings to update.
+  UserSettings settings = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
 }
 
 message GetGroupRequest {
   // The name of the group to retrieve.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/Group"
-    }
-  ];
+  string name = 1;
 }
 
 message ListGroupsRequest {
@@ -215,12 +318,7 @@ message ListGroupsResponse {
 
 message CreateGroupRequest {
   // The group to create.
-  Group group = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/Group"
-    }
-  ];
+  Group group = 1;
 }
 
 message UpdateGroupRequest {
@@ -234,10 +332,5 @@ message UpdateGroupRequest {
 
 message DeleteGroupRequest {
   // The name of the group to delete.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "identity.animeapis.com/Group"
-    }
-  ];
+  string name = 1;
 }
