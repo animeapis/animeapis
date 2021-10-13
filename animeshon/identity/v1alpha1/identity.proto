@@ -210,10 +210,6 @@ message User {
 
   // The banner image of the user.
   string banner_image = 16;
-
-  // The activities of the user. The list of accepted values is the following:
-  // `user`, `translator`, `business`, `artist`, and `developer`.
-  repeated string activities = 17;
 }
 
 message UserSettings {
