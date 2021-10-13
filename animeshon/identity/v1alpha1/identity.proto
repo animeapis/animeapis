@@ -233,6 +233,9 @@ message UserSettings {
 
   // Whether the user choose to see explicit content during navigation. 
   bool show_explicit_content = 3;
+
+  // Whether the user has enabled the developer mode.
+  bool enable_developer_mode = 4;
 }
 
 message UserNotifications {
