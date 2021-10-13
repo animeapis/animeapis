@@ -129,8 +129,8 @@ enum Gender {
   // Female.
   FEMALE = 2;
 
-  // Undetermined gender.
-  UNDETERMINED = 3;
+  // Any other non-binary gender.
+  OTHER = 3;
 }
 
 // This message is returned only when a user wants to fetch information about
