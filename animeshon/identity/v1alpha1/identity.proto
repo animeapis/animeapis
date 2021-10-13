@@ -197,6 +197,10 @@ message User {
 
   // The banner image of the user.
   string banner_image = 16;
+
+  // The type of user. The list of accepted values is the following: `user`,
+  // `translator`, `business`, `artist`, and `developer`.
+  repeated string type = 17;
 }
 
 message UserSettings {
@@ -217,6 +221,9 @@ message UserSettings {
   // A private user will only have the username, discriminator, profile image
   // and banner image public.
   Visibility profile_visibility = 2;
+
+  // Whether the user choose to see explicit content during navigation. 
+  bool show_explicit_content = 3;
 }
 
 message Group {
