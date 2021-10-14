@@ -7,15 +7,15 @@ import "google/api/resource.proto";
 import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
 
-package animeshon.migrator.v1alpha1;
+package animeshon.graph.v1alpha1;
 
-option go_package = "github.com/animeapis/go-genproto/migrator/v1alpha1;migrator";
-option java_package = "com.animeshon.migrator.v1alpha1";
+option go_package = "github.com/animeapis/go-genproto/graph/v1alpha1;graph";
+option java_package = "com.animeshon.graph.v1alpha1";
 option java_multiple_files = true;
 option ruby_package = "Animeshon::WebCache::v1Alpha1";
 
 service WebCache {
-  option (google.api.default_host) = "migrator.animeapis.com";
+  option (google.api.default_host) = "graph.animeapis.com";
   
   rpc MigrateGraph(MigrateGraphRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {

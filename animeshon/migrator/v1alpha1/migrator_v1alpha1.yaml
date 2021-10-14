@@ -1,7 +1,0 @@
-type: google.api.Service
-config_version: 3
-name: migrator.animeapis.com
-title: WebCache API
-
-apis:
-- name: animeshon.migrator.v1alpha1.WebCache

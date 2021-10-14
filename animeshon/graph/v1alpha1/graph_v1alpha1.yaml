@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: graph.animeapis.com
+title: Graph Migrator API
+
+apis:
+- name: animeshon.graph.v1alpha1.GraphMigrator
