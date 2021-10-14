@@ -1,0 +1,111 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load(
+    "@com_google_googleapis_imports//:imports.bzl",
+    "go_gapic_assembly_pkg",
+    "go_gapic_library",
+    "go_proto_library",
+    "go_test",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
+    "proto_library_with_info",
+)
+
+# This is an API workspace, having public visibility by default makes perfect sense.
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob(["*.json"]))
+
+proto_library(
+    name = "webcache_proto",
+    srcs = [
+        "webcache.proto",
+    ],
+    deps = [
+        "@com_google_googleapis//google/api:annotations_proto",
+        "@com_google_googleapis//google/api:client_proto",
+        "@com_google_googleapis//google/api:field_behavior_proto",
+        "@com_google_googleapis//google/api:resource_proto",
+        "@com_google_googleapis//google/longrunning:operations_proto",
+        "@com_google_protobuf//:empty_proto",
+        "@com_google_protobuf//:field_mask_proto",
+        "@com_google_protobuf//:timestamp_proto",
+        "@com_google_protobuf//:duration_proto",
+    ],
+)
+
+proto_library_with_info(
+    name = "webcache_proto_with_info",
+    deps = [
+        ":webcache_proto",
+        "@com_google_googleapis//google/cloud:common_resources_proto",
+        "@com_google_googleapis//google/rpc:error_details_proto",
+    ],
+)
+
+##############################################################################
+# Go
+##############################################################################
+go_proto_library(
+    name = "webcache_go_proto",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "github.com/animeapis/go-genproto/webcache/v1alpha1",
+    protos = [":webcache_proto"],
+    deps = [
+        "@go_googleapis//google/api:annotations_go_proto",
+        "@go_googleapis//google/longrunning:longrunning_go_proto",
+    ],
+)
+
+go_gapic_library(
+    name = "webcache_go_gapic",
+    srcs = [":webcache_proto_with_info"],
+    grpc_service_config = "webcache_grpc_service_config.json",
+    importpath = "github.com/animeapis/api-go-client/webcache/v1alpha1;webcache",
+    service_yaml = "webcache_v1alpha1.yaml",
+    metadata = True,
+    deps = [
+        ":webcache_go_proto",
+        "@go_googleapis//google/longrunning:longrunning_go_proto",
+        "@com_google_cloud_go//longrunning:go_default_library",
+        "@com_google_cloud_go//longrunning/autogen:go_default_library",
+    ],
+)
+
+go_test(
+    name = "webcache_go_gapic_test",
+    srcs = [":webcache_go_gapic_srcjar_test"],
+    embed = [":webcache_go_gapic"],
+    importpath = "github.com/animeapis/api-go-client/webcache/v1alpha1",
+)
+
+# Open Source Packages
+go_gapic_assembly_pkg(
+    name = "gapi-webcache-v1alpha1-go",
+    deps = [
+        ":webcache_go_gapic",
+        ":webcache_go_gapic_srcjar-test.srcjar",
+        ":webcache_go_proto",
+    ],
+)
+
+##############################################################################
+# Node.js
+##############################################################################
+nodejs_gapic_library(
+    name = "webcache_nodejs_gapic",
+    package_name = "@animeapis/webcache",
+    src = ":webcache_proto_with_info",
+    extra_protoc_parameters = ["metadata"],
+    grpc_service_config = "webcache_grpc_service_config.json",
+    package = "animeshon.webcache.v1alpha1",
+    service_yaml = "webcache_v1alpha1.yaml",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "gapi-webcache-v1alpha1-nodejs",
+    deps = [
+        ":webcache_nodejs_gapic",
+        ":webcache_proto",
+    ],
+)
