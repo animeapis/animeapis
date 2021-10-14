@@ -12,9 +12,9 @@ package animeshon.graph.v1alpha1;
 option go_package = "github.com/animeapis/go-genproto/graph/v1alpha1;graph";
 option java_package = "com.animeshon.graph.v1alpha1";
 option java_multiple_files = true;
-option ruby_package = "Animeshon::WebCache::v1Alpha1";
+option ruby_package = "Animeshon::Graph::v1Alpha1";
 
-service WebCache {
+service Graph {
   option (google.api.default_host) = "graph.animeapis.com";
   
   rpc MigrateGraph(MigrateGraphRequest) returns (google.protobuf.Empty) {
