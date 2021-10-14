@@ -18,6 +18,7 @@ declare -A services=(
   ["tracker"]="tracker"
   ["vision"]="vision"
   ["webcache"]="webcache"
+  ["graph"]="graph"
 )
 
 declare -A gapi=(
@@ -34,6 +35,7 @@ declare -A gapi=(
   ["tracker"]="tracker"
   ["vision"]="vision"
   ["webcache"]="webcache"
+  ["graph"]="graph"
 )
 
 for i in "${!services[@]}"
