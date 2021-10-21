@@ -5,6 +5,7 @@ set -o nounset
 set -o pipefail
 
 declare -A services=(
+  ["credentials"]="credentials"
   ["crossrefs"]="crossrefs"
   ["grbac"]="grbac"
   ["hub"]="hub"
@@ -21,6 +22,7 @@ declare -A services=(
 )
 
 declare -A gapi=(
+  ["credentials"]="credentials"
   ["crossrefs"]="crossrefs"
   ["grbac"]="grbac"
   ["hub"]="hub"
