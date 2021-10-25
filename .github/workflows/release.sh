@@ -6,6 +6,7 @@ set -o pipefail
 
 declare -A services=(
   ["crossrefs"]="crossrefs"
+  ["graph"]="graph"
   ["grbac"]="grbac"
   ["hub"]="hub"
   ["iam/admin"]="admin"
@@ -18,11 +19,11 @@ declare -A services=(
   ["tracker"]="tracker"
   ["vision"]="vision"
   ["webcache"]="webcache"
-  ["graph"]="graph"
 )
 
 declare -A gapi=(
   ["crossrefs"]="crossrefs"
+  ["graph"]="graph"
   ["grbac"]="grbac"
   ["hub"]="hub"
   ["iam/admin"]="iam-admin"
@@ -35,7 +36,6 @@ declare -A gapi=(
   ["tracker"]="tracker"
   ["vision"]="vision"
   ["webcache"]="webcache"
-  ["graph"]="graph"
 )
 
 for i in "${!services[@]}"
