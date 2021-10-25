@@ -7,6 +7,7 @@ allowMergeCommits: true
 scopes:
   - all
   - crossrefs
+  - graph
   - grbac
   - hub
   - iam

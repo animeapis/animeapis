@@ -6,6 +6,7 @@ set -o pipefail
 
 declare -A services=(
   ["crossrefs"]="crossrefs"
+  ["graph"]="graph"
   ["grbac"]="grbac"
   ["hub"]="hub"
   ["iam/admin"]="admin"
@@ -22,6 +23,7 @@ declare -A services=(
 
 declare -A gapi=(
   ["crossrefs"]="crossrefs"
+  ["graph"]="graph"
   ["grbac"]="grbac"
   ["hub"]="hub"
   ["iam/admin"]="iam-admin"
