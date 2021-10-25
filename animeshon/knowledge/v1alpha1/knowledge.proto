@@ -17,10 +17,9 @@ option ruby_package = "Animeshon::Knowledge::v1Alpha1";
 service Knowledge {
   option (google.api.default_host) = "knowledge.animeapis.com";
 
-  rpc CreateContribution(CreateContributionRequest) returns (Contribution) {
+  rpc GetContribution(GetContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=users/*}/contributions"
-      body: "*"
+      get: "/v1alpha1/{name=users/*/contributions/*}"
     };
   }
 
@@ -30,28 +29,29 @@ service Knowledge {
     };
   }
 
-  rpc GetContribution(GetContributionRequest) returns (Contribution) {
+  rpc CreateContribution(CreateContributionRequest) returns (Contribution) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/contributions/*}"
+      post: "/v1alpha1/{parent=users/*}/contributions"
+      body: "*"
     };
   }
 
   rpc GetContributionChanges(GetContributionChangesRequest) returns (ContributionChanges) {
     option (google.api.http) = {
-    get: "/v1alpha1/{name=users/*/contributions/*}/changes"
-    };
-  }
-
-  rpc ApproveContribution(ApproveContributionRequest) returns (Contribution) {
-    option (google.api.http) = {
-      post: "/v1alpha1/{name=users/*/contributions/*}:approve"
-      body: "*"
+      get: "/v1alpha1/{name=users/*/contributions/*}:changes"
     };
   }
 
   rpc ReviewContribution(ReviewContributionRequest) returns (Contribution) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=users/*/contributions/*}:review"
+      body: "*"
+    };
+  }
+
+  rpc ApproveContribution(ApproveContributionRequest) returns (Contribution) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/contributions/*}:approve"
       body: "*"
     };
   }
@@ -63,19 +63,19 @@ service Knowledge {
     };
   }
 
-  rpc NewContributionResourceName(NewContributionResourceNameRequest) returns (NewContributionResourceNameResponse) {
+  rpc AllocateResourceName(AllocateResourceNameRequest) returns (AllocateResourceNameResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/contributions/resource_name:new"
+      get: "/v1alpha1/contributions:allocateResourceName"
     };
   }
 }
 
-message NewContributionResourceNameRequest {
+message AllocateResourceNameRequest {
   // The resource kind of the resource to migrate.
   string kind = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message NewContributionResourceNameResponse {
+message AllocateResourceNameResponse {
   // The resource name of the resource to migrate.
   string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
