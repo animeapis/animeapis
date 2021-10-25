@@ -1,0 +1,10 @@
+type: google.api.Service
+config_version: 3
+name: payment.animeapis.com
+title: Payment API
+
+apis:
+- name: animeshon.payment.v1alpha1.Connect
+- name: animeshon.payment.v1alpha1.Gateway
+- name: animeshon.payment.v1alpha1.Pledge
+- name: animeshon.payment.v1alpha1.Subscription
