@@ -353,20 +353,19 @@ message Chapter {
   EXTRA
   */
   string type = 2;
-  repeated Edge episodes = 3;
-  int32 identifier = 4;
-  int32 page_count = 5;
-  google.protobuf.Timestamp release_date = 6;
-  repeated Text names = 7;
-  repeated Text aliases = 8;
-  repeated Text descriptions = 9;
-  string cover_image_id = 10;
-  string banner_image_id = 11;
-  repeated Website websites = 12;
-  repeated Marketplace marketplaces = 13;
-  repeated Cast starring = 14;
-  repeated Collaboration staff = 15;
-  repeated Edge releases = 16;
+  int32 identifier = 3;
+  int32 page_count = 4;
+  google.protobuf.Timestamp release_date = 5;
+  repeated Text names = 6;
+  repeated Text aliases = 7;
+  repeated Text descriptions = 8;
+  string cover_image_id = 9;
+  string banner_image_id = 10;
+  repeated Website websites = 11;
+  repeated Marketplace marketplaces = 12;
+  repeated Cast starring = 13;
+  repeated Collaboration staff = 14;
+  repeated Edge releases = 15;
 
   /*
   Valid maturity Ratings:
@@ -386,7 +385,7 @@ message Chapter {
   Safe in USA
   MTR_RTN_USA_G
   */
-  repeated string maturity_ratings = 17;
+  repeated string maturity_ratings = 16;
 
   /*
   Valid Region Restrictions:
@@ -396,7 +395,7 @@ message Chapter {
   The Entity is illegal following the U.N. guidelines
   ILLEGAL
   */
-  repeated string region_restrictions = 18;
+  repeated string region_restrictions = 17;
 }
 
 message Character {
@@ -435,7 +434,7 @@ message Character {
 	The gender something between male and female
 	INTERSEXUAL
   */
-  string genre = 7;
+  string gender = 7;
 
   /*
   Valid blood types:
