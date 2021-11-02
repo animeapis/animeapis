@@ -24,14 +24,14 @@ service Git {
   rpc ReceivePack(ReceivePackRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=*/*}/git-receive-pack"
-      body: "*"
+      body: "body"
     };
   }
 
   rpc UploadPack(UploadPackRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
       post: "/v1alpha1/{name=*/*}/git-upload-pack"
-      body: "*"
+      body: "body"
     };
   }
 }
@@ -54,28 +54,40 @@ service Hub {
 }
 
 message Repository {
+  // The repository resource name.
   string name = 1;
 }
 
 message AdvertiseReferencesRequest {
+  // The resource name of the repository.
   string name = 1;
+
+  // The git service according to the git protocol.
   string service = 2;
 }
 
 message ReceivePackRequest {
+  // The resource name of the repository.
   string name = 1;
+
+  // The request content, represented as an HttpBody.
   google.api.HttpBody body = 2;
 }
 
 message UploadPackRequest {
+  // The resource name of the repository.
   string name = 1;
+
+  // The request content, represented as an HttpBody.
   google.api.HttpBody body = 2;
 }
 
 message CreateRepositoryRequest {
+  // The resource name of the repository to be created.
   string name = 1;
 }
 
 message DeleteRepositoryRequest {
+  // The resource name of the repository to be deleted.
   string name = 1;
 }
