@@ -17,32 +17,21 @@ service Git {
 
   rpc AdvertiseReferences(AdvertiseReferencesRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=namespaces/*/repositories/*}/info/refs"
-      additional_bindings {
-        get: "/v1alpha1/{name=*/*}/info/refs"
-      }
+      get: "/v1alpha1/{name=*/*}/info/refs"
     };
   }
 
   rpc ReceivePack(ReceivePackRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=namespaces/*/repositories/*}/git-receive-pack"
+      post: "/v1alpha1/{name=*/*}/git-receive-pack"
       body: "*"
-      additional_bindings {
-        post: "/v1alpha1/{name=*/*}/git-receive-pack"
-        body: "*"
-      }
     };
   }
 
   rpc UploadPack(UploadPackRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=namespaces/*/repositories/*}/git-upload-pack"
+      post: "/v1alpha1/{name=*/*}/git-upload-pack"
       body: "*"
-      additional_bindings {
-        post: "/v1alpha1/{name=*/*}/git-upload-pack"
-        body: "*"
-      }
     };
   }
 }
