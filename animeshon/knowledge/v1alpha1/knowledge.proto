@@ -190,7 +190,8 @@ message EntryEntity {
     Person person = 10;
     Track track = 11;
     Universe universe = 12;
-    Volume volume = 13;
+    VisualNovel visual_novel = 13;
+    Volume volume = 14;
   }
 }
 
