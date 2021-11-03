@@ -949,6 +949,14 @@ message GameRelease {
   ILLEGAL
   */
   repeated string region_restrictions = 31;
+
+  /*
+  Valid values:
+  TRUE
+  FALSE
+  UNKNOWN
+  */
+  string original = 32;
 }
 
 message GraphicNovel {
@@ -1200,27 +1208,6 @@ message Organization {
   string type = 2;
   google.protobuf.Timestamp foundation_date = 3;
 
-  /*
-  Valid Content Focuses:
-  Unknown focus
-	UNKNOWN
-
-	Main content handled are games
-	GAME
-
-	Main content handled are anime
-	ANIME
-
-	Main content handled are manga
-	MANGA
-
-	Main content handled are light novels
-	LIGHT_NOVEL
-
-	ContentFocusOther other
-	OTHER
-  */
-  string focus = 4;
   repeated Text names = 5;
   repeated Text aliases = 6;
   repeated Text descriptions = 7;
