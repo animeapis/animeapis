@@ -30,6 +30,12 @@ service Referrer {
     };
   }
 
+  rpc ListCrossRefs(ListCrossRefsRequest) returns (ListCrossRefsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/crossrefs"
+    };
+  }
+
   // CreateCrossRef creates a new crossref.
   rpc CreateCrossRef(CreateCrossRefRequest) returns (CrossRef) {
     option (google.api.http) = {
@@ -42,12 +48,6 @@ service Referrer {
     option (google.api.http) = {
       patch: "/v1alpha1/crossrefs/{crossref.name=kinds/*/crossrefs/*}"
       body: "*"
-    };
-  }
-
-  rpc ListCrossRefs(ListCrossRefsRequest) returns (ListCrossRefsResponse) {
-    option (google.api.http) = {
-      get: "/v1alpha1/crossrefs"
     };
   }
 

@@ -8,6 +8,7 @@ scopes:
   - all
   - credentials
   - crossrefs
+  - graph
   - grbac
   - hub
   - iam
