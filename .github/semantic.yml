@@ -6,6 +6,7 @@ allowMergeCommits: true
 
 scopes:
   - all
+  - credentials
   - crossrefs
   - graph
   - grbac
