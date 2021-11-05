@@ -404,8 +404,8 @@ message Character {
   string birthday_day = 2;
   string birthday_month = 3;
   string birthday_year = 4;
-  repeated Text hometown = 5;
-  repeated Text birthplace = 6;
+  repeated Text hometowns = 5;
+  repeated Text birthplaces = 6;
 
   /*
   Unknown gender
@@ -557,7 +557,7 @@ message Character {
   string banner_image_id = 21;
   repeated Website websites = 22;
   repeated Marketplace marketplaces = 23;
-  repeated Edge guise_of = 24;
+  //repeated Edge guise_of = 24;
 }
 
 message Episode {
