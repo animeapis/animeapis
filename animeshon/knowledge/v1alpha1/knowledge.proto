@@ -222,7 +222,6 @@ message EntryEntity {
 message Anime {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
   /*
   Type of the anime
   Valid anime types:
@@ -276,7 +275,6 @@ message Anime {
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
   repeated Marketplace marketplaces = 11;
-
   /*
   Status of the content
   Valid content statuses:
@@ -308,7 +306,6 @@ message Anime {
   string status = 12;
   //List of relations with other content
   repeated ContentRelation content_relations = 13;
-
   /*
   Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
   
@@ -323,7 +320,6 @@ message Anime {
 	CORPORATE
   */
   string publishing_type = 14;
-  
   /*
   Original specifies if the idea behind the content is original or if it's base on an existing opera.
   Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
@@ -353,7 +349,6 @@ message Anime {
   repeated Soundtrack soundtracks = 22;
   // List of voice actors giving voice to the characters in the content
   repeated VoiceActing voiceactings = 23;
-
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -374,7 +369,6 @@ message Anime {
   MTR_RTN_USA_G
   */
   repeated string maturity_ratings = 24;
-
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -415,7 +409,6 @@ message Canonical {
 message Chapter {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
   /*
   Type of the chapter
   Valid Chapter types
@@ -430,9 +423,9 @@ message Chapter {
   EXTRA
   */
   string type = 2;
-  // Incremental inedx of the chapter.
+  // Incremental index of the chapter.
   // Describes the release order
-  int32 inedx = 3;
+  int32 index = 3;
   // Number of page of the chapter without extra pages
   int32 page_count = 4;
   // The release date in homeland of the content
@@ -460,7 +453,6 @@ message Chapter {
   // Releases are all those entities which practically make the content consumable
   // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
   repeated Edge releases = 15;
-
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -481,7 +473,6 @@ message Chapter {
   MTR_RTN_USA_G
   */
   repeated string maturity_ratings = 16;
-
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -499,19 +490,9 @@ message Character {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   // The day the character is born
-  string birthday_day = 2;
+  int32 birthday_day = 2;
   // The month the character is born
-  string birthday_month = 3;
-  // The year the characteris born
-  // The year can include the calendar if not standard
-  string birthday_year = 4;
-  // Localized hometowns of the caracter.
-  // Localization is required when the place's name depends on the language
-  repeated Text hometowns = 5;
-  // Localized birthplaces of the caracter.
-  // Localization is required when the place's name depends on the language
-  repeated Text birthplaces = 6;
-
+  int32 birthday_month = 3;
   /*
   Gender 
   Valid Gender values:
@@ -544,7 +525,6 @@ message Character {
 	INTERSEXUAL
   */
   string gender = 7;
-
   /*
   Blod Type
   Valid blood types:
@@ -589,7 +569,6 @@ message Character {
 	O_MINUS
   */
   string blood_type = 8;
-
   /*
   Valid Cup Sizes:
   UNKNOWN
@@ -623,7 +602,6 @@ message Character {
   Z
   */
   string cup_size = 9;
-
   /*
   Shown age of the character when the numeric age is not enough to identify the character
   Valid Age Range:
@@ -690,7 +668,6 @@ message Character {
 message Episode {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
   /*
   Type of the episode
   Valid Episode types:
@@ -720,9 +697,9 @@ message Episode {
   OTHER
   */
   string type = 2;
-  // Incremental inedx of the volume.
+  // Incremental index of the episode.
   // Describes the release order 
-  int32 inedx = 3;
+  int32 index = 3;
   // The release date in homeland of the content
   google.protobuf.Timestamp release_date = 4;
   // List of localized names of the entity
@@ -843,11 +820,6 @@ message GameRelease {
   DLC
   */
   string type = 9;
-  // Width resolution
-  int32 WidthResolution = 10;
-  // Height Resolution
-  int32 HeightResolution = 11;
-  
   /*
   If patch the release is not sold alone and it's ment to be applied to an existing game
   Valid values:
@@ -857,17 +829,6 @@ message GameRelease {
   UNKNOWN
   */
   string IsPatch = 12;
-  
-  /*
-  If true, the release is freeware
-  Valid values:
-
-  TRUE
-  FALSE
-  UNKNOWN
-  */
-  string IsFree = 13;
-
   /*
   dub_degree describes how much of the game is dubbed
   Valid game dub degree
@@ -888,7 +849,6 @@ message GameRelease {
   FULL
   */
   string dub_degree = 14;
-
   /*
   story_animation_degree specifies how well the story scenes are animated
   Valid game animation degrees:
@@ -930,7 +890,6 @@ message GameRelease {
   */
   string ero_animation_degree = 16;
   string engine = 17;
-
   /*
   Valid Platforms:
   Unknown platform
@@ -1075,7 +1034,6 @@ message GameRelease {
   MOBILE_OTHER
   */
   repeated string platforms = 18;
-
   // List of localized names of the entity
   repeated Text names = 19;
   // List of localized aliases of the entity
@@ -1100,7 +1058,6 @@ message GameRelease {
   repeated Soundtrack soundtracks = 28;
   // List of voice actors giving voice to the characters in the content
   repeated VoiceActing voiceactings = 29;
-
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1121,7 +1078,6 @@ message GameRelease {
   MTR_RTN_USA_G
   */
   repeated string maturity_ratings = 30;
-
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -1133,7 +1089,6 @@ message GameRelease {
   ILLEGAL
   */
   repeated string region_restrictions = 31;
-
   /*
   Original specifies if the idea behind the content is original or if it's base on an existing opera.
   Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
@@ -1149,7 +1104,6 @@ message GameRelease {
 message GraphicNovel {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
   /*
   Type of the graphic novel
   Valid Graphic Novel types:
@@ -1203,7 +1157,6 @@ message GraphicNovel {
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
   repeated Marketplace marketplaces = 11;
-
   /*
   Status of the content
   Valid content statuses:
@@ -1235,7 +1188,6 @@ message GraphicNovel {
   string status = 12;
   //List of relations with other content
   repeated ContentRelation content_relations = 13;
-
   /*
   Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
   Valid Publishing types:
@@ -1249,7 +1201,6 @@ message GraphicNovel {
 	CORPORATE
   */
   string publishing_type = 14;
-  
   /*
   Original specifies if the idea behind the content is original or if it's base on an existing opera.
   Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
@@ -1273,7 +1224,6 @@ message GraphicNovel {
   // Releases are all those entities which practically make the content consumable
   // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
   repeated Edge releases = 21;
-
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1294,7 +1244,6 @@ message GraphicNovel {
   MTR_RTN_USA_G
   */
   repeated string maturity_ratings = 22;
-
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -1334,7 +1283,6 @@ message LightNovel {
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
   repeated Marketplace marketplaces = 10;
-
   /*
   Status of the content
   Valid content statuses:
@@ -1366,7 +1314,6 @@ message LightNovel {
   string status = 11;
   //List of relations with other content
   repeated ContentRelation content_relations = 12;
-
   /*
   Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
   Valid Publishing types:
@@ -1381,7 +1328,6 @@ message LightNovel {
 	CORPORATE
   */
   string publishing_type = 13;
-  
   /*
   Original specifies if the idea behind the content is original or if it's base on an existing opera.
   Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
@@ -1405,7 +1351,6 @@ message LightNovel {
   // Releases are all those entities which practically make the content consumable
   // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
   repeated Edge releases = 20;
-
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1426,7 +1371,6 @@ message LightNovel {
   MTR_RTN_USA_G
   */
   repeated string maturity_ratings = 21;
-
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -1442,11 +1386,9 @@ message LightNovel {
   repeated Edge volumes = 23;
 }
 
-
 message Organization {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
   /*
   Type of the organization
   Valid Organization types:
@@ -1463,7 +1405,6 @@ message Organization {
   string type = 2;
   // Foundation date of the organization
   google.protobuf.Timestamp foundation_date = 3;
-
   // List of localized names of the entity
   repeated Text names = 5;
   // List of localized aliases of the entity
@@ -1482,10 +1423,6 @@ message Organization {
 message Person {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-  // Nationalities of the person
-  repeated string nationalities = 2;
-  // Language spoken by the person
-  repeated string languages = 3;
   // Birthday of the person
   google.protobuf.Timestamp birthday = 4;
   /*
@@ -1502,7 +1439,6 @@ message Person {
 	FEMALE 
   */
   string gender = 5;
-
   /*
   Blod Type
   Valid blood types:
@@ -1621,7 +1557,6 @@ message Universe {
 message VisualNovel {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
   /*
   Valid Visual Novel lengths:
   Unknown length
@@ -1659,7 +1594,6 @@ message VisualNovel {
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
   repeated Marketplace marketplaces = 9;
-
   /*
   Status of the content
   Valid content statuses:
@@ -1691,8 +1625,6 @@ message VisualNovel {
   string status = 10;
   //List of relations with other content
   repeated ContentRelation content_relations = 11;
-
-  
   /*
   Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
   Valid Publishing types:
@@ -1707,7 +1639,6 @@ message VisualNovel {
 	CORPORATE
   */
   string publishing_type = 12;
-  
   /*
   Original specifies if the idea behind the content is original or if it's base on an existing opera.
   Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
@@ -1735,7 +1666,6 @@ message VisualNovel {
   repeated Soundtrack soundtracks = 20;
   // List of voice actors giving voice to the characters in the content
   repeated VoiceActing voiceactings = 21;
-
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1756,7 +1686,6 @@ message VisualNovel {
   MTR_RTN_USA_G
   */
   repeated string maturity_ratings = 22;
-
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -1776,8 +1705,6 @@ message Volume {
   repeated string languages = 2;
   // The release date in homeland of the content
   google.protobuf.Timestamp release_date = 3;
-  //repeated Media media = 4;
-
   /*
   Valid Censorships
 	Unknown censorship
@@ -1790,7 +1717,6 @@ message Volume {
 	CENSORED
   */
   string  censorship = 5;
-
   /*
   Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
   Valid Publishing types:
@@ -1809,11 +1735,9 @@ message Volume {
   string asin = 7;
   // Global Trade identifier of the good
   string gtin = 8;
-
-  // 
-  int32 identifier = 9;
-  // ReadingComplexity reading_complexity = 10;
-
+  // Incremental index of the volume.
+  // Describes the release order  
+  int32 index = 9;
   // List of localized names of the entity
   repeated Text names = 11;
   // List of localized aliases of the entity
@@ -1834,7 +1758,6 @@ message Volume {
   repeated Cast starring = 18;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 19;
-
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1855,7 +1778,6 @@ message Volume {
   MTR_RTN_USA_G
   */
   repeated string maturity_ratings = 20;
-
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
