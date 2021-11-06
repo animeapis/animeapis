@@ -759,6 +759,9 @@ message Episode {
   ILLEGAL
   */
   repeated string region_restrictions = 17;
+
+  // Length of the episode in seconds.
+  int32 length_seconds = 18;
 }
 
 message GameRelease {
