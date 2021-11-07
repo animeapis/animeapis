@@ -141,7 +141,12 @@ message ReviewContributionRequest {
   string comment = 2;
 
   // Changes to the existing contribution
+  // New changes will be added on top of the existing ones
   ContributionChanges changes = 3;
+
+  // Changes to discard from the contribution
+  // Discarded changes will be completely removed from the contribution
+  ContributionChanges discards = 4;
 }
 
 message CreateContributionRequest {
