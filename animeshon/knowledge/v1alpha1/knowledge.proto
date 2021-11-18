@@ -263,7 +263,7 @@ message Anime {
   repeated Edge episodes = 3;
   // Number of scheduled episodes
   // This field is useful for season anime which already announced how many episodes will be aired
-  int32 EpisodeCount = 4;
+  int32 episode_count = 4;
   // List of localized names of the entity
   repeated Text names = 5;
   // List of localized aliases of the entity
@@ -1148,7 +1148,7 @@ message GraphicNovel {
   repeated Edge chapters = 3;
   // Number of scheduled chapters
   // This field is useful for graphic novels which already announced how many chapter will be published
-  int32 ChapterCount = 4;
+  int32 chapter_count = 4;
   // List of localized names of the entity
   repeated Text names = 5;
   // List of localized aliases of the entity
@@ -1274,7 +1274,7 @@ message LightNovel {
   repeated Edge chapters = 2;
   // Number of scheduled chapters
   // This field is useful for light novels which already announced how many chapter will be published
-  int32 ChapterCount = 3;
+  int32 chapter_count = 3;
   // List of localized names of the entity
   repeated Text names = 4;
   // List of localized aliases of the entity
