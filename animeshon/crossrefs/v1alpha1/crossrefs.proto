@@ -195,8 +195,8 @@ message AnalyzeCrossRefRequest {
   // Namespaces to analyze
   repeated string namespaces = 3;
 
-  // Prefixes to analyze
-  repeated string target_prefixes = 4;
+  // Kinds to analyze
+  repeated string target_kinds = 4;
 }
 
 message CrossRefEdge {
