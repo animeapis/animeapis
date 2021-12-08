@@ -26,7 +26,7 @@ service Referrer {
   // GetCrossRef returns a crossref.
   rpc GetCrossRef(GetCrossRefRequest) returns (CrossRef) {
     option (google.api.http) = {
-      get: "/v1alpha1/crossrefs/{name=kinds/*/crossrefs/*}"
+      get: "/v1alpha1/crossrefs/{name=/*/*}"
     };
   }
 
@@ -46,7 +46,7 @@ service Referrer {
 
   rpc UpdateCrossRef(UpdateCrossRefRequest) returns (UpdateCrossRefResponse) {
     option (google.api.http) = {
-      patch: "/v1alpha1/crossrefs/{crossref.name=kinds/*/crossrefs/*}"
+      patch: "/v1alpha1/crossrefs/{crossref.name=/*/*}"
       body: "*"
     };
   }
@@ -181,8 +181,8 @@ message ExportCrossRefRequest {
 
   Target target = 1;
 
-  // Kind to restrict the crossrefs to export to a specific subset
-  string kind = 2;
+  // Prefix to restrict the crossrefs to export to a specific subset
+  string prefix = 2;
 }
 
 message AnalyzeCrossRefRequest {
@@ -195,21 +195,23 @@ message AnalyzeCrossRefRequest {
   // Namespaces to analyze
   repeated string namespaces = 3;
 
-  // Kinds to analyze
-  repeated string target_kinds = 4;
+  // Prefixes to analyze
+  repeated string target_prefixes = 4;
+}
+
+message CrossRefEdge {
+  string name = 1;
+  int32 state = 2;
 }
 
 message CrossRef {
   option (google.api.resource) = {
     type: "crossrefs.animeapis.com/CrossRef"
-    pattern: "kinds/{kind}/crossrefs/{crossref}"
+    pattern: "{collection}/{crossref}"
   };
 
   // The resource name of the crossref.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // kind of the crossreference.
-  string kind = 2;
 
   // root entity which generated the crossreference.
   string root = 3;
@@ -229,17 +231,8 @@ message CrossRef {
   // update time
   google.protobuf.Timestamp update_time = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // all approved entities
-  repeated string approved = 9;
-
-  // all rejected entities
-  repeated string rejected = 10;
-
-  // all rejected entities
-  repeated string pending = 11;
-
-  // all partial entities
-  repeated string partial = 12;
+  // all edges of the crossreference
+  repeated CrossRefEdge edges = 9;
 }
 
 // TODO(christian-roggia): move the universe together with all other resources.
@@ -326,8 +319,8 @@ message UpdateCrossRefResponse {
 }
 
 message CrossRefsFilterRequest {
-  // specifies the kind of the CrossRefs to search in 
-  string kind = 1;
+  // specifies the prefix of the CrossRefs name to search in 
+  string prefix = 1;
   
   // if true only crossreferences with pendings are returned
   bool pendingOnly = 2;
@@ -432,8 +425,8 @@ message ListWormholeCrossRefsRequest {
   // list of CrossRefs to exclude
   repeated string crossRefsExclusion = 6;
 
-  // kind of the CrossRefs to search
-  string kind = 7;
+  // prefix of the CrossRefs name to search
+  string prefix = 7;
 }
 
 message ListWormholeCrossRefsResponse {
