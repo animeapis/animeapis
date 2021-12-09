@@ -51,6 +51,12 @@ service Hub {
       delete: "/v1alpha1/{name=namespaces/*/repositories/*}"
     };
   }
+
+  rpc ListRepositories(ListRepositoriesRequest) returns (ListRepositoriesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=namespaces/*}/repositories"
+    };
+  }
 }
 
 message Repository {
@@ -90,4 +96,23 @@ message CreateRepositoryRequest {
 message DeleteRepositoryRequest {
   // The resource name of the repository to be deleted.
   string name = 1;
+}
+
+message ListRepositoriesRequest {
+  // The parent, which owns this collection of credentials.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+}
+
+message ListRepositoriesResponse {
+  // The list of groups.
+  repeated Group groups = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
 }
