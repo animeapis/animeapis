@@ -26,7 +26,7 @@ service Referrer {
   // GetCrossRef returns a crossref.
   rpc GetCrossRef(GetCrossRefRequest) returns (CrossRef) {
     option (google.api.http) = {
-      get: "/v1alpha1/crossrefs/{name=/*/*}"
+      get: "/v1alpha1/crossrefs/{name=*/*}"
     };
   }
 
@@ -46,7 +46,7 @@ service Referrer {
 
   rpc UpdateCrossRef(UpdateCrossRefRequest) returns (UpdateCrossRefResponse) {
     option (google.api.http) = {
-      patch: "/v1alpha1/crossrefs/{crossref.name=/*/*}"
+      patch: "/v1alpha1/crossrefs/{crossref.name=*/*}"
       body: "*"
     };
   }
