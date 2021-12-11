@@ -15,6 +15,7 @@ scopes:
   - image
   - knowledge
   - library
+  - multimedia
   - release
   - resourcemanager
   - tracker
