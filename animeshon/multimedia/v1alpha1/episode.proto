@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/type/date.proto";
+import "google/type/localized_text.proto";
+
+package animeshon.multimedia.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/multimedia/v1alpha1;multimedia";
+option java_package = "com.animeshon.multimedia.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Multimedia::v1Alpha1";
+
+service EpisodeService {
+  option (google.api.default_host) = "multimedia.animeapis.com";
+
+  rpc GetEpisode(GetEpisodeRequest) returns (Episode) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=episodes/*}"
+    };
+  }
+
+  rpc ListEpisodes(ListEpisodesRequest) returns (ListEpisodesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/episodes"
+    };
+  }
+
+  rpc CreateEpisode(CreateEpisodeRequest) returns (Episode) {
+    option (google.api.http) = {
+      post: "/v1alpha1/episodes"
+      body: "*"
+    };
+  }
+
+  rpc UpdateEpisode(UpdateEpisodeRequest) returns (Episode) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{episode.name=episodes/*}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteEpisode(DeleteEpisodeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=episodes/*}"
+    };
+  }
+}
+
+message Episode {
+  enum Type {
+    // The default value. This value is used if the state is omitted.
+    TYPE_UNSPECIFIED = 0;
+
+    // The episode is a regular canonical episode.
+    REGULAR = 1;
+
+    // The episode is a recap.
+    RECAP = 2;
+
+    // The episode is a parody.
+    PARODY = 3;
+
+    // The episode is a promo.
+    PROMO = 4;
+
+    // The episode is a special.
+    SPECIAL = 5;
+
+    // The episode is an opening or ending.
+    OPENING_ENDING = 6;
+
+    // The episode is unclassified.
+    OTHER = 7;
+  }
+
+  // The id of the episode.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The cover image of the episode.
+  string cover_image = 2;
+  
+  // The banner image of the episode.
+  string banner_image = 3;
+
+  // The title of the episode localized in multiple languages.
+  repeated google.type.LocalizedText title = 4;
+
+  // The description of the episode localized in multiple languages.
+  repeated google.type.LocalizedText description = 5;
+
+  // The type of episode.
+  Type type = 6;
+
+  // The index of episode.
+  int32 index = 7;
+
+  // The original release date of episode.
+  google.type.Date release_date = 8;
+
+  // The original duration of the episode.
+  google.protobuf.Duration duration = 9;
+}
+
+message GetEpisodeRequest {
+  // The name of the episode to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListEpisodesRequest {
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 1;
+
+  // The value returned from the previous call.
+  string page_token = 2;
+
+  // A filter to be applied to results.
+  string filter = 3;
+}
+
+message ListEpisodesResponse {
+  // The list of episodes.
+  repeated Episode episodes = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateEpisodeRequest {
+  // The episode to create.
+  Episode episode = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateEpisodeRequest {
+  // The episode to update.
+  Episode episode = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteEpisodeRequest {
+  // The name of the episode to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
