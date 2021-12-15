@@ -20,33 +20,33 @@ service ChapterService {
 
   rpc GetChapter(GetChapterRequest) returns (Chapter) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=chapters/*}"
+      get: "/v1alpha1/{name=graphicNovels/*/chapters/*}"
     };
   }
 
   rpc ListChapters(ListChaptersRequest) returns (ListChaptersResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/chapters"
+      get: "/v1alpha1/{parent=graphicNovels/*}/chapters"
     };
   }
 
   rpc CreateChapter(CreateChapterRequest) returns (Chapter) {
     option (google.api.http) = {
-      post: "/v1alpha1/chapters"
+      post: "/v1alpha1/{parent=graphicNovels/*}/chapters"
       body: "*"
     };
   }
 
   rpc UpdateChapter(UpdateChapterRequest) returns (Chapter) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{chapter.name=chapters/*}"
+      patch: "/v1alpha1/{chapter.name=graphicNovels/*/chapters/*}"
       body: "*"
     };
   }
 
   rpc DeleteChapter(DeleteChapterRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=chapters/*}"
+      delete: "/v1alpha1/{name=graphicNovels/*/chapters/*}"
     };
   }
 }
@@ -75,20 +75,23 @@ message Chapter {
   // The title of the chapter localized in multiple languages.
   repeated google.type.LocalizedText title = 4;
 
+  // The synopsis of the chapter localized in multiple languages.
+  repeated google.type.LocalizedText synopsis = 5;
+
   // The description of the chapter localized in multiple languages.
-  repeated google.type.LocalizedText description = 5;
+  repeated google.type.LocalizedText description = 6;
 
   // The type of chapter.
-  Type type = 6;
+  Type type = 7;
 
   // The index of chapter.
-  int32 index = 7;
+  int32 index = 8;
 
   // The original release date of chapter.
-  google.type.Date release_date = 8;
+  google.type.Date release_date = 9;
 
   // The original page count of the chapter.
-  int32 page_count = 9;
+  int32 page_count = 10;
 }
 
 message GetChapterRequest {
@@ -97,14 +100,17 @@ message GetChapterRequest {
 }
 
 message ListChaptersRequest {
+  // The parent this chapter belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
   // If unspecified, server will pick an appropriate default.
-  int32 page_size = 1;
+  int32 page_size = 2;
 
   // The value returned from the previous call.
-  string page_token = 2;
+  string page_token = 3;
 
   // A filter to be applied to results.
-  string filter = 3;
+  string filter = 4;
 }
 
 message ListChaptersResponse {
@@ -116,8 +122,11 @@ message ListChaptersResponse {
 }
 
 message CreateChapterRequest {
+  // The parent this chapter belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
   // The chapter to create.
-  Chapter chapter = 1 [(google.api.field_behavior) = REQUIRED];
+  Chapter chapter = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateChapterRequest {
