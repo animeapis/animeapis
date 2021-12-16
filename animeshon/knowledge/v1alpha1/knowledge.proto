@@ -669,7 +669,7 @@ message Episode {
   Safe in USA
   MTR_RTN_USA_G
   */
-  repeated string maturity_ratings = 15;
+  repeated string maturity_ratings = 16;
 
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
@@ -681,10 +681,10 @@ message Episode {
   The Entity is illegal following the U.N. guidelines
   ILLEGAL
   */
-  repeated string region_restrictions = 16;
+  repeated string region_restrictions = 17;
 
   // Length of the episode in seconds.
-  int32 length_seconds = 17;
+  int32 length_seconds = 18;
 }
 
 message GameRelease {
