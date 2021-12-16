@@ -6,6 +6,8 @@ import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "google/type/date.proto";
+import "google/type/localized_text.proto";
 
 package animeshon.knowledge.v1alpha1;
 
@@ -220,7 +222,6 @@ message EntryEntity {
     Track track = 11;
     Universe universe = 12;
     VisualNovel visual_novel = 13;
-    Volume volume = 14;
   }
 }
 
@@ -265,21 +266,23 @@ message Anime {
   // This field is useful for season anime which already announced how many episodes will be aired
   int32 episode_count = 4;
   // List of localized names of the entity
-  repeated Text names = 5;
+  repeated google.type.LocalizedText names = 5;
   // List of localized aliases of the entity
-  repeated Text aliases = 6;
+  repeated google.type.LocalizedText aliases = 6;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 7;
+  repeated google.type.LocalizedText descriptions = 7;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 8;
   // Cover Image id of the entity
-  string cover_image_id = 8;
+  string cover_image_id = 9;
   // Banner Image id of the entity
-  string banner_image_id = 9;
+  string banner_image_id = 10;
   // List of websiste related to the entity.
   // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 10;
+  repeated Website websites = 11;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 11;
+  repeated Marketplace marketplaces = 12;
   /*
   Status of the content
   Valid content statuses:
@@ -308,9 +311,9 @@ message Anime {
   The content is in work in progress
   WORK_IN_PROGRESS
   */
-  string status = 12;
+  string status = 13;
   //List of relations with other content
-  repeated ContentRelation content_relations = 13;
+  repeated ContentRelation content_relations = 14;
   /*
   Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
   
@@ -324,7 +327,7 @@ message Anime {
 	Published by a corporation
 	CORPORATE
   */
-  string publishing_type = 14;
+  string publishing_type = 15;
   /*
   Original specifies if the idea behind the content is original or if it's base on an existing opera.
   Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
@@ -334,22 +337,17 @@ message Anime {
   FALSE
   UNKNOWN
   */
-  string original = 15;
+  string original = 16;
   // List of localized airing/publishing periods of the content
-  repeated Running runnings = 16;
+  repeated Running runnings = 17;
   // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 17;
+  google.protobuf.Date release_date = 18;
   // List of characters starred in the content
-  repeated Cast starring = 18;
+  repeated Cast starring = 19;
   // List of people/organizations which contributed to the production/distribution of the content
-  repeated Collaboration staff = 19;
+  repeated Collaboration staff = 20;
   // List of genres the entity is part of
-  repeated Edge genres = 20;
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  repeated Edge releases = 21;
+  repeated Edge genres = 21;
   // List of soundtracks in the content
   repeated Soundtrack soundtracks = 22;
   // List of voice actors giving voice to the characters in the content
@@ -391,24 +389,26 @@ message Canonical {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   // List of localized names of the entity
-  repeated Text names = 2;
+  repeated google.type.LocalizedText names = 2;
   // List of localized aliases of the entity
-  repeated Text aliases = 3;
+  repeated google.type.LocalizedText aliases = 3;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 4;
+  repeated google.type.LocalizedText descriptions = 4;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 5;
   // Cover Image id of the entity
-  string cover_image_id = 5;
+  string cover_image_id = 6;
   // Banner Image id of the entity
-  string banner_image_id = 6;
+  string banner_image_id = 7;
   // List of websiste related to the entity.
   // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 7;
+  repeated Website websites = 8;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 8;
+  repeated Marketplace marketplaces = 9;
   // List of contents part of the canonical
   // Canonicals can include Anime, GraphicNovels, LightNovels and VisualNovels
-  repeated Edge contents = 9;
+  repeated Edge contents = 10;
 }
 
 message Chapter {
@@ -434,30 +434,27 @@ message Chapter {
   // Number of page of the chapter without extra pages
   int32 page_count = 4;
   // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 5;
+  google.protobuf.Date release_date = 5;
   // List of localized names of the entity
-  repeated Text names = 6;
+  repeated google.type.LocalizedText names = 6;
   // List of localized aliases of the entity
-  repeated Text aliases = 7;
+  repeated google.type.LocalizedText aliases = 7;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 8;
+  repeated google.type.LocalizedText descriptions = 8;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 9;
   // Cover Image id of the entity
-  string cover_image_id = 9;
+  string cover_image_id = 10;
   // Banner Image id of the entity
-  string banner_image_id = 10;
+  string banner_image_id = 11;
   // List of websiste related to the entity.
   // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 11;
+  repeated Website websites = 12;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 12;
-  // List of characters starred in the content
-  repeated Cast starring = 13;
+  repeated Marketplace marketplaces = 13;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 14;
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  repeated Edge releases = 15;
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -477,7 +474,7 @@ message Chapter {
   Safe in USA
   MTR_RTN_USA_G
   */
-  repeated string maturity_ratings = 16;
+  repeated string maturity_ratings = 15;
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -488,16 +485,14 @@ message Chapter {
   The Entity is illegal following the U.N. guidelines
   ILLEGAL
   */
-  repeated string region_restrictions = 17;
+  repeated string region_restrictions = 16;
 }
 
 message Character {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-  // The day the character is born
-  int32 birthday_day = 2;
-  // The month the character is born
-  int32 birthday_month = 3;
+  // The birthday of the character
+  google.type.Date birthday = 2;
   /*
   Gender 
   Valid Gender values:
@@ -529,7 +524,7 @@ message Character {
 	The gender something between male and female
 	INTERSEXUAL
   */
-  string gender = 7;
+  string gender = 3;
   /*
   Blod Type
   Valid blood types:
@@ -573,101 +568,24 @@ message Character {
 	O-
 	O_MINUS
   */
-  string blood_type = 8;
-  /*
-  Valid Cup Sizes:
-  UNKNOWN
-  AAA 
-  AA
-  A
-  B
-  C
-  D
-  E
-  F
-  G
-  H
-  I
-  J
-  K
-  L
-  M
-  N
-  O
-  P
-  Q
-  R
-  S
-  T
-  U
-  V
-  W
-  X
-  Y
-  Z
-  */
-  string cup_size = 9;
-  /*
-  Shown age of the character when the numeric age is not enough to identify the character
-  Valid Age Range:
-
-  Unknown
-  UNKNOWN
-
-  The character is an infant. 1-3
-  INFANT
-
-  The character is a child. 4-12
-  CHILD
-
-  The character is a teen. 13-17
-  TEEN
-
-  The character is a young adult. 18-25
-  YOUNG_ADULT
-
-  The character is a grown up adult. 26-59
-  ADULT
-
-  The character is an eldery. 60+
-  ELDERY
-
-  The character is an entity which the concept of age do not makes sense (robots, ...)
-  NOT_APPLICABLE
-
-  The character can't be fit in any any of the other category. (Gods, planets, ...)
-  WITHOUT
-  */
-  string age_range = 10;
-  // Precise age of the character
-  int32 age = 11;
-  // Height of the character
-  int32 height = 12;
-  // Weight of the character
-  int32 weight = 13;
-  // Bust size of the character
-  int32 bust = 14;
-  // Waist size of the character
-  int32 waist = 15;
-  // Hips size of the character
-  int32 hips = 16;
+  string blood_type = 4;
   // List of localized names of the entity
-  repeated Text names = 17;
+  repeated google.type.LocalizedText names = 5;
   // List of localized aliases of the entity
-  repeated Text aliases = 18;
+  repeated google.type.LocalizedText aliases = 6;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 19;
+  repeated google.type.LocalizedText descriptions = 7;
   // Cover Image id of the entity
-  string cover_image_id = 20;
+  string cover_image_id = 8;
   // Banner Image id of the entity
-  string banner_image_id = 21;
+  string banner_image_id = 9;
   // List of websiste related to the entity.
   // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 22;
+  repeated Website websites = 10;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 23;
-  //repeated Edge guise_of = 24;
+  repeated Marketplace marketplaces = 11;
+  //repeated Edge guise_of = 13;
 }
 
 message Episode {
@@ -706,25 +624,25 @@ message Episode {
   // Describes the release order 
   int32 index = 3;
   // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 4;
+  google.protobuf.Date release_date = 4;
   // List of localized names of the entity
-  repeated Text names = 5;
+  repeated google.type.LocalizedText names = 5;
   // List of localized aliases of the entity
-  repeated Text aliases = 6;
+  repeated google.type.LocalizedText aliases = 6;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 7;
+  repeated google.type.LocalizedText descriptions = 7;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 8;
   // Cover Image id of the entity
-  string cover_image_id = 8;
+  string cover_image_id = 9;
   // Banner Image id of the entity
-  string banner_image_id = 9;
+  string banner_image_id = 10;
   // List of websiste related to the entity.
   // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 10;
+  repeated Website websites = 11;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 11;
-  // List of characters starred in the content
-  repeated Cast starring = 12;
+  repeated Marketplace marketplaces = 12;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 13;
   // List of soundtracks in the content
@@ -751,7 +669,7 @@ message Episode {
   Safe in USA
   MTR_RTN_USA_G
   */
-  repeated string maturity_ratings = 16;
+  repeated string maturity_ratings = 15;
 
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
@@ -763,10 +681,10 @@ message Episode {
   The Entity is illegal following the U.N. guidelines
   ILLEGAL
   */
-  repeated string region_restrictions = 17;
+  repeated string region_restrictions = 16;
 
   // Length of the episode in seconds.
-  int32 length_seconds = 18;
+  int32 length_seconds = 17;
 }
 
 message GameRelease {
@@ -775,7 +693,7 @@ message GameRelease {
   // List of languages the release is localized in
   repeated string languages = 2;
   // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 3;
+  google.protobuf.Date release_date = 3;
   //repeated Media media = 4;
 
   /*
@@ -836,7 +754,7 @@ message GameRelease {
   FALSE
   UNKNOWN
   */
-  string IsPatch = 12;
+  string IsPatch = 10;
   /*
   dub_degree describes how much of the game is dubbed
   Valid game dub degree
@@ -856,7 +774,7 @@ message GameRelease {
   Full dubbed
   FULL
   */
-  string dub_degree = 14;
+  string dub_degree = 11;
   /*
   story_animation_degree specifies how well the story scenes are animated
   Valid game animation degrees:
@@ -876,7 +794,7 @@ message GameRelease {
   Fully animated
   FULL
   */
-  string story_animation_degree = 15;
+  string story_animation_degree = 12;
   /*
   ero_animation_degree specifies how well the erotic scenes are animated
   Valid game animation degrees:
@@ -896,8 +814,8 @@ message GameRelease {
   Fully animated
   FULL
   */
-  string ero_animation_degree = 16;
-  string engine = 17;
+  string ero_animation_degree = 13;
+  string engine = 14;
   /*
   Valid Platforms:
   Unknown platform
@@ -1041,31 +959,33 @@ message GameRelease {
   Mobile Other
   MOBILE_OTHER
   */
-  repeated string platforms = 18;
+  repeated string platforms = 15;
   // List of localized names of the entity
-  repeated Text names = 19;
+  repeated google.type.LocalizedText names = 16;
   // List of localized aliases of the entity
-  repeated Text aliases = 20;
+  repeated google.type.LocalizedText aliases = 17;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 21;
+  repeated google.type.LocalizedText descriptions = 18;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 19;
   // Cover Image id of the entity
-  string cover_image_id = 22;
+  string cover_image_id = 20;
   // Banner Image id of the entity
-  string banner_image_id = 23;
+  string banner_image_id = 21;
   // List of websiste related to the entity.
   // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 24;
+  repeated Website websites = 22;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 25;
+  repeated Marketplace marketplaces = 23;
   // List of characters starred in the content
-  repeated Cast starring = 26;
+  repeated Cast starring = 24;
   // List of people/organizations which contributed to the production/distribution of the content
-  repeated Collaboration staff = 27;
+  repeated Collaboration staff = 25;
   // List of soundtracks in the content
-  repeated Soundtrack soundtracks = 28;
+  repeated Soundtrack soundtracks = 26;
   // List of voice actors giving voice to the characters in the content
-  repeated VoiceActing voiceactings = 29;
+  repeated VoiceActing voiceactings = 27;
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1085,7 +1005,7 @@ message GameRelease {
   Safe in USA
   MTR_RTN_USA_G
   */
-  repeated string maturity_ratings = 30;
+  repeated string maturity_ratings = 28;
   /*
   Region restrictions mark the content as illegal in some region given the local regulations
   Valid Region Restrictions:
@@ -1096,7 +1016,7 @@ message GameRelease {
   The Entity is illegal following the U.N. guidelines
   ILLEGAL
   */
-  repeated string region_restrictions = 31;
+  repeated string region_restrictions = 29;
   /*
   Original specifies if the idea behind the content is original or if it's base on an existing opera.
   Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
@@ -1106,7 +1026,7 @@ message GameRelease {
   FALSE
   UNKNOWN
   */
-  string original = 32;
+  string original = 30;
 }
 
 message GraphicNovel {
@@ -1150,11 +1070,141 @@ message GraphicNovel {
   // This field is useful for graphic novels which already announced how many chapter will be published
   int32 chapter_count = 4;
   // List of localized names of the entity
-  repeated Text names = 5;
+  repeated google.type.LocalizedText names = 5;
   // List of localized aliases of the entity
-  repeated Text aliases = 6;
+  repeated google.type.LocalizedText aliases = 6;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 7;
+  repeated google.type.LocalizedText descriptions = 7;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 8;
+  // Cover Image id of the entity
+  string cover_image_id = 9;
+  // Banner Image id of the entity
+  string banner_image_id = 10;
+  // List of websiste related to the entity.
+  // Websites mught be official websites, Social, Wiki Entries
+  repeated Website websites = 11;
+  // List of marketplaces related to the entry.
+  // Maketplaces tells where to buy / consume / read the entity
+  repeated Marketplace marketplaces = 12;
+  /*
+  Status of the content
+  Valid content statuses:
+
+  Unknown status
+  UNKNOWN
+
+  Publishing or airing is still ongoing.
+  ONGOING
+
+  Publishing or airing has been completed.
+  COMPLETED
+
+  Publishing or airing has been scheduled.
+  SCHEDULED
+
+  Publishing or airing started but never finished.
+  INTERRUPTED
+
+  Publishing or airing was scheduled but later canceled.
+  CANCELED
+
+  Publishing or airing has been suspended / has been put on hold.
+  SUSPENDED
+
+  The content is in work in progress
+  WORK_IN_PROGRESS
+  */
+  string status = 13;
+  //List of relations with other content
+  repeated ContentRelation content_relations = 14;
+  /*
+  Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
+  Valid Publishing types:
+  Unknown status
+	UNKNOWN
+  
+	Self publishing
+	SELF
+
+	Published by a corporation
+	CORPORATE
+  */
+  string publishing_type = 15;
+  /*
+  Original specifies if the idea behind the content is original or if it's base on an existing opera.
+  Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
+
+  Valid values:
+  TRUE
+  FALSE
+  UNKNOWN
+  */
+  string original = 16;
+  // List of localized airing/publishing periods of the content
+  repeated Running runnings = 17;
+  // The release date in homeland of the content
+  google.protobuf.Date release_date = 18;
+  // List of characters starred in the content
+  repeated Cast starring = 19;
+  // List of people/organizations which contributed to the production/distribution of the content
+  repeated Collaboration staff = 20;
+  // List of genres the entity is part of
+  repeated Edge genres = 21;
+  // Releases are all those entities which practically make the content consumable
+  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
+  repeated Edge releases = 22;
+  /*
+  Maturity ratings describes what it the minum age to legally consume a content  
+  Valid maturity Ratings:
+
+  Over 18 in USA
+  MTR_RTN_USA_NC17
+
+  Over 18 in USA
+  MTR_RTN_USA_R
+
+  Over 13 in USA
+  MTR_RTN_USA_PG13
+
+  Over 3 in USA
+  MTR_RTN_USA_PG
+
+  Safe in USA
+  MTR_RTN_USA_G
+  */
+  repeated string maturity_ratings = 23;
+  /*
+  Region restrictions mark the content as illegal in some region given the local regulations
+  Valid Region Restrictions:
+
+  No Region Restriction
+  NONE
+
+  The Entity is illegal following the U.N. guidelines
+  ILLEGAL
+  */
+  repeated string region_restrictions = 24;
+  // List of volumes releasing the content
+  repeated Edge volumes = 25;
+}
+
+message LightNovel {
+  // Required resource name
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // List of chaters part of the light novel
+  repeated Edge chapters = 2;
+  // Number of scheduled chapters
+  // This field is useful for light novels which already announced how many chapter will be published
+  int32 chapter_count = 3;
+  // List of localized names of the entity
+  repeated google.type.LocalizedText names = 4;
+  // List of localized aliases of the entity
+  repeated google.type.LocalizedText aliases = 5;
+  // List of localized descriptions of the entity
+  repeated google.type.LocalizedText descriptions = 6;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 7;
   // Cover Image id of the entity
   string cover_image_id = 8;
   // Banner Image id of the entity
@@ -1199,9 +1249,10 @@ message GraphicNovel {
   /*
   Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
   Valid Publishing types:
+
   Unknown status
 	UNKNOWN
-  
+
 	Self publishing
 	SELF
 
@@ -1222,7 +1273,7 @@ message GraphicNovel {
   // List of localized airing/publishing periods of the content
   repeated Running runnings = 16;
   // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 17;
+  google.protobuf.Date release_date = 17;
   // List of characters starred in the content
   repeated Cast starring = 18;
   // List of people/organizations which contributed to the production/distribution of the content
@@ -1263,24 +1314,213 @@ message GraphicNovel {
   ILLEGAL
   */
   repeated string region_restrictions = 23;
-  // List of volumes releasing the content
-  repeated Edge volumes = 24;
 }
 
-message LightNovel {
+message Organization {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-  // List of chaters part of the light novel
-  repeated Edge chapters = 2;
-  // Number of scheduled chapters
-  // This field is useful for light novels which already announced how many chapter will be published
-  int32 chapter_count = 3;
+  /*
+  Type of the organization
+  Valid Organization types:
+
+  Uunknown organization type
+  UNKNOWN
+
+  Coorporation / company
+  CORPORATE
+
+  Circle of people
+  CIRCLE
+  */
+  string type = 2;
+  // Foundation date of the organization
+  google.protobuf.Date foundation_date = 3;
   // List of localized names of the entity
-  repeated Text names = 4;
+  repeated google.type.LocalizedText names = 4;
   // List of localized aliases of the entity
-  repeated Text aliases = 5;
+  repeated google.type.LocalizedText aliases = 5;
   // List of localized descriptions of the entity
-  repeated Text descriptions = 6;
+  repeated google.type.LocalizedText descriptions = 6;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 7;
+  // Cover Image id of the entity
+  string cover_image_id = 8;
+  // Banner Image id of the entity
+  string banner_image_id = 9;
+  // List of websiste related to the entity.
+  // Websites mught be official websites, Social, Wiki Entries
+  repeated Website websites = 10;
+}
+
+message Person {
+  // Required resource name
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // Birthday of the person
+  google.protobuf.Date birthday = 2;
+  /*
+  Gender 
+  Valid Gender values:
+
+  Unknown gender
+  UNKNOWN 
+  
+	Male
+	MALE 
+
+	Female
+	FEMALE 
+  */
+  string gender = 3;
+  /*
+  Blod Type
+  Valid blood types:
+
+  Unknown blood type
+	UNKNOWN
+
+	A (no Rh info)
+	A
+
+	B (no Rh info)
+	B
+
+	AB (no Rh info)
+	AB
+  
+	O (no Rh info)
+	O
+
+	A+
+	A_PLUS
+
+	B+
+	B_PLUS
+
+	AB+
+	AB_PLUS
+  
+	O+
+	O_PLUS
+
+	A-
+	A_MINUS
+
+	B-
+	B_MINUS
+
+	AB-
+	AB_MINUS
+  
+	O-
+	O_MINUS
+  */
+  string blood_type = 4;
+  // List of localized names of the entity
+  repeated google.type.LocalizedText names = 5;
+  // List of localized aliases of the entity
+  repeated google.type.LocalizedText aliases = 6;
+  // List of localized descriptions of the entity
+  repeated google.type.LocalizedText descriptions = 7;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 8;
+  // Cover Image id of the entity
+  string cover_image_id = 9;
+  // Banner Image id of the entity
+  string banner_image_id = 10;
+  // List of websiste related to the entity.
+  // Websites mught be official websites, Social, Wiki Entries
+  repeated Website websites = 11;
+}
+
+message Track {
+  // Required resource name
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // The release date in homeland of the content
+  google.protobuf.Date release_date = 2;
+  // List of localized names of the entity
+  repeated google.type.LocalizedText names = 3;
+  // List of localized aliases of the entity
+  repeated google.type.LocalizedText aliases = 4;
+  // List of localized descriptions of the entity
+  repeated google.type.LocalizedText descriptions = 5;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 6;
+  // Cover Image id of the entity
+  string cover_image_id = 7;
+  // Banner Image id of the entity
+  string banner_image_id = 8;
+  // List of websiste related to the entity.
+  // Websites mught be official websites, Social, Wiki Entries
+  repeated Website websites = 9;
+  // List of marketplaces related to the entry.
+  // Maketplaces tells where to buy / consume / read the entity
+  repeated Marketplace marketplaces = 10;
+  // List of people/organizations which contributed to the production/distribution of the content
+  repeated Collaboration staff = 11;
+  // List of genres the entity is part of
+  repeated Edge genres = 12;
+}
+
+message Universe {
+  // Required resource name
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // List of localized names of the entity
+  repeated google.type.LocalizedText names = 2;
+  // List of localized aliases of the entity
+  repeated google.type.LocalizedText aliases = 3;
+  // List of localized descriptions of the entity
+  repeated google.type.LocalizedText descriptions = 4;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 5;
+  // Cover Image id of the entity
+  string cover_image_id = 6;
+  // Banner Image id of the entity
+  string banner_image_id = 7;
+  // List of websiste related to the entity.
+  // Websites mught be official websites, Social, Wiki Entries
+  repeated Website websites = 8;
+  // List of marketplaces related to the entry.
+  // Maketplaces tells where to buy / consume / read the entity
+  repeated Marketplace marketplaces = 9;
+  // List of contents part of the universe
+  // Universes can include Anime, GraphicNovels, LightNovels and VisualNovels
+  repeated Edge contents = 10;
+  // List of canonicals part of the universe
+  repeated Edge canonicals = 11;
+}
+
+message VisualNovel {
+  // Required resource name
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  /*
+  Valid Visual Novel lengths:
+  Unknown length
+  UNKNOWN
+  
+  < 2 hours
+  VERY_SHORT
+
+  20 - 10 hours
+  SHORT
+
+  10 - 30 hours
+  MEDIUM
+
+  30 - 50 hours
+  LONG
+
+  > 50 hours
+  VERY_LONG
+  */
+  string length = 2;
+  // List of localized names of the entity
+  repeated google.type.LocalizedText names = 3;
+  // List of localized aliases of the entity
+  repeated google.type.LocalizedText aliases = 4;
+  // List of localized descriptions of the entity
+  repeated google.type.LocalizedText descriptions = 5;
+  // List of localized synopsys of the entity
+  repeated google.type.LocalizedText synopsys = 6;
   // Cover Image id of the entity
   string cover_image_id = 7;
   // Banner Image id of the entity
@@ -1328,7 +1568,7 @@ message LightNovel {
 
   Unknown status
 	UNKNOWN
-
+  
 	Self publishing
 	SELF
 
@@ -1349,327 +1589,13 @@ message LightNovel {
   // List of localized airing/publishing periods of the content
   repeated Running runnings = 15;
   // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 16;
+  google.protobuf.Date release_date = 16;
   // List of characters starred in the content
   repeated Cast starring = 17;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 18;
   // List of genres the entity is part of
   repeated Edge genres = 19;
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  repeated Edge releases = 20;
-  /*
-  Maturity ratings describes what it the minum age to legally consume a content  
-  Valid maturity Ratings:
-
-  Over 18 in USA
-  MTR_RTN_USA_NC17
-
-  Over 18 in USA
-  MTR_RTN_USA_R
-
-  Over 13 in USA
-  MTR_RTN_USA_PG13
-
-  Over 3 in USA
-  MTR_RTN_USA_PG
-
-  Safe in USA
-  MTR_RTN_USA_G
-  */
-  repeated string maturity_ratings = 21;
-  /*
-  Region restrictions mark the content as illegal in some region given the local regulations
-  Valid Region Restrictions:
-
-  No Region Restriction
-  NONE
-
-  The Entity is illegal following the U.N. guidelines
-  ILLEGAL
-  */
-  repeated string region_restrictions = 22;
-  // List of volumes releasing the content
-  repeated Edge volumes = 23;
-}
-
-message Organization {
-  // Required resource name
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  /*
-  Type of the organization
-  Valid Organization types:
-
-  Uunknown organization type
-  UNKNOWN
-
-  Coorporation / company
-  CORPORATE
-
-  Circle of people
-  CIRCLE
-  */
-  string type = 2;
-  // Foundation date of the organization
-  google.protobuf.Timestamp foundation_date = 3;
-  // List of localized names of the entity
-  repeated Text names = 5;
-  // List of localized aliases of the entity
-  repeated Text aliases = 6;
-  // List of localized descriptions of the entity
-  repeated Text descriptions = 7;
-  // Cover Image id of the entity
-  string cover_image_id = 8;
-  // Banner Image id of the entity
-  string banner_image_id = 9;
-  // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 10;
-}
-
-message Person {
-  // Required resource name
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  // Birthday of the person
-  google.protobuf.Timestamp birthday = 4;
-  /*
-  Gender 
-  Valid Gender values:
-
-  Unknown gender
-  UNKNOWN 
-  
-	Male
-	MALE 
-
-	Female
-	FEMALE 
-  */
-  string gender = 5;
-  /*
-  Blod Type
-  Valid blood types:
-
-  Unknown blood type
-	UNKNOWN
-
-	A (no Rh info)
-	A
-
-	B (no Rh info)
-	B
-
-	AB (no Rh info)
-	AB
-  
-	O (no Rh info)
-	O
-
-	A+
-	A_PLUS
-
-	B+
-	B_PLUS
-
-	AB+
-	AB_PLUS
-  
-	O+
-	O_PLUS
-
-	A-
-	A_MINUS
-
-	B-
-	B_MINUS
-
-	AB-
-	AB_MINUS
-  
-	O-
-	O_MINUS
-  */
-  string blood_type = 6;
-  // List of localized names of the entity
-  repeated Text names = 7;
-  // List of localized aliases of the entity
-  repeated Text aliases = 8;
-  // List of localized descriptions of the entity
-  repeated Text descriptions = 9;
-  // Cover Image id of the entity
-  string cover_image_id = 10;
-  // Banner Image id of the entity
-  string banner_image_id = 11;
-  // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 12;
-}
-
-message Track {
-  // Required resource name
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 2;
-  // List of localized names of the entity
-  repeated Text names = 3;
-  // List of localized aliases of the entity
-  repeated Text aliases = 4;
-  // List of localized descriptions of the entity
-  repeated Text descriptions = 5;
-  // Cover Image id of the entity
-  string cover_image_id = 6;
-  // Banner Image id of the entity
-  string banner_image_id = 7;
-  // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 8;
-  // List of marketplaces related to the entry.
-  // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 9;
-  // List of people/organizations which contributed to the production/distribution of the content
-  repeated Collaboration staff = 10;
-  // List of genres the entity is part of
-  repeated Edge genres = 11;
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  repeated Edge releases = 12;
-}
-
-message Universe {
-  // Required resource name
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  // List of localized names of the entity
-  repeated Text names = 2;
-  // List of localized aliases of the entity
-  repeated Text aliases = 3;
-  // List of localized descriptions of the entity
-  repeated Text descriptions = 4;
-  // Cover Image id of the entity
-  string cover_image_id = 5;
-  // Banner Image id of the entity
-  string banner_image_id = 6;
-  // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 7;
-  // List of marketplaces related to the entry.
-  // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 8;
-  // List of contents part of the universe
-  // Universes can include Anime, GraphicNovels, LightNovels and VisualNovels
-  repeated Edge contents = 9;
-  // List of canonicals part of the universe
-  repeated Edge canonicals = 10;
-}
-
-message VisualNovel {
-  // Required resource name
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  /*
-  Valid Visual Novel lengths:
-  Unknown length
-  UNKNOWN
-  
-  < 2 hours
-  VERY_SHORT
-
-  20 - 10 hours
-  SHORT
-
-  10 - 30 hours
-  MEDIUM
-
-  30 - 50 hours
-  LONG
-
-  > 50 hours
-  VERY_LONG
-  */
-  string length = 2;
-  // List of localized names of the entity
-  repeated Text names = 3;
-  // List of localized aliases of the entity
-  repeated Text aliases = 4;
-  // List of localized descriptions of the entity
-  repeated Text descriptions = 5;
-  // Cover Image id of the entity
-  string cover_image_id = 6;
-  // Banner Image id of the entity
-  string banner_image_id = 7;
-  // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 8;
-  // List of marketplaces related to the entry.
-  // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 9;
-  /*
-  Status of the content
-  Valid content statuses:
-
-  Unknown status
-  UNKNOWN
-
-  Publishing or airing is still ongoing.
-  ONGOING
-
-  Publishing or airing has been completed.
-  COMPLETED
-
-  Publishing or airing has been scheduled.
-  SCHEDULED
-
-  Publishing or airing started but never finished.
-  INTERRUPTED
-
-  Publishing or airing was scheduled but later canceled.
-  CANCELED
-
-  Publishing or airing has been suspended / has been put on hold.
-  SUSPENDED
-
-  The content is in work in progress
-  WORK_IN_PROGRESS
-  */
-  string status = 10;
-  //List of relations with other content
-  repeated ContentRelation content_relations = 11;
-  /*
-  Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
-  Valid Publishing types:
-
-  Unknown status
-	UNKNOWN
-  
-	Self publishing
-	SELF
-
-	Published by a corporation
-	CORPORATE
-  */
-  string publishing_type = 12;
-  /*
-  Original specifies if the idea behind the content is original or if it's base on an existing opera.
-  Parodies of other content are normally not original, because charactes/settings/storyline are not owned by the creator.
-
-  Valid values:
-  TRUE
-  FALSE
-  UNKNOWN
-  */
-  string original = 13;
-  // List of localized airing/publishing periods of the content
-  repeated Running runnings = 14;
-  // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 15;
-  // List of characters starred in the content
-  repeated Cast starring = 16;
-  // List of people/organizations which contributed to the production/distribution of the content
-  repeated Collaboration staff = 17;
-  // List of genres the entity is part of
-  repeated Edge genres = 18;
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  repeated Edge releases = 19;
   // List of soundtracks in the content
   repeated Soundtrack soundtracks = 20;
   // List of voice actors giving voice to the characters in the content
@@ -1707,113 +1633,13 @@ message VisualNovel {
   repeated string region_restrictions = 23;
 }
 
-message Volume {
-  // Required resource name
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
-  repeated string languages = 2;
-  // The release date in homeland of the content
-  google.protobuf.Timestamp release_date = 3;
-  /*
-  Valid Censorships
-	Unknown censorship
-	UNKNOWN
-
-	No censorship
-	NONE
-
-	Censorship applied
-	CENSORED
-  */
-  string  censorship = 5;
-  /*
-  Publishin Type specifies wether the content has been produced by a self published creator or if it's backed by a corporation
-  Valid Publishing types:
-
-  Unknown status
-	UNKNOWN
-  
-	Self publishing
-	SELF
-
-	Published by a corporation
-	CORPORATE
-  */
-  string publishing_type = 6; 
-  // Amazon identifier of the good
-  string asin = 7;
-  // Global Trade identifier of the good
-  string gtin = 8;
-  // Incremental index of the volume.
-  // Describes the release order  
-  int32 index = 9;
-  // List of localized names of the entity
-  repeated Text names = 11;
-  // List of localized aliases of the entity
-  repeated Text aliases = 12;
-  // List of localized descriptions of the entity
-  repeated Text descriptions = 13;
-  // Cover Image id of the entity
-  string cover_image_id = 14;
-  // Banner Image id of the entity
-  string banner_image_id = 15;
-  // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
-  repeated Website websites = 16;
-  // List of marketplaces related to the entry.
-  // Maketplaces tells where to buy / consume / read the entity
-  repeated Marketplace marketplaces = 17;
-  // List of characters starred in the content
-  repeated Cast starring = 18;
-  // List of people/organizations which contributed to the production/distribution of the content
-  repeated Collaboration staff = 19;
-  /*
-  Maturity ratings describes what it the minum age to legally consume a content  
-  Valid maturity Ratings:
-
-  Over 18 in USA
-  MTR_RTN_USA_NC17
-
-  Over 18 in USA
-  MTR_RTN_USA_R
-
-  Over 13 in USA
-  MTR_RTN_USA_PG13
-
-  Over 3 in USA
-  MTR_RTN_USA_PG
-
-  Safe in USA
-  MTR_RTN_USA_G
-  */
-  repeated string maturity_ratings = 20;
-  /*
-  Region restrictions mark the content as illegal in some region given the local regulations
-  Valid Region Restrictions:
-
-  No Region Restriction
-  NONE
-
-  The Entity is illegal following the U.N. guidelines
-  ILLEGAL
-  */
-  repeated string region_restrictions = 21;
-}
-
-// Localized text following the ISO3 standard
-message Text {
-  // Text
-  string text = 1;
-  // Valid ISO3 localization which identifies the language/full localization of the text
-  string localization = 2;
-}
-
 // Period in which the content has been aired/released/published for a particular localization
 message Running {
   // Start of the publishing/airing/release  
-  google.protobuf.Timestamp start_time = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Date start_time = 1 [(google.api.field_behavior) = REQUIRED];
   // End of the publishing/airing/release  
   // Omitted if the content is still ONGOING
-  google.protobuf.Timestamp end_time = 2;
+  google.protobuf.Date end_time = 2;
   // Valid ISO3 localization
   string localization = 3 [(google.api.field_behavior) = REQUIRED];
 }
@@ -2061,52 +1887,4 @@ message Soundtrack {
   string version = 3 [(google.api.field_behavior) = REQUIRED];
   // Valid ISO3 localization in which the track was used
   string localization = 4 [(google.api.field_behavior) = REQUIRED];
-}
-
-/*
-TrackListing exposes the information about which Track has been released from which MusicRelease in which version and in whic order.
-*/
-message TrackListing {
-  // Collection of tracks groupping one or multiple tracks in order to them be sold
-  Edge musicRelease = 1 [(google.api.field_behavior) = REQUIRED];
-
-  /*
-  Valid track versions:
-  Unknown version
-  UNKNOWN
-
-  Normal version of the track
-  NORMAL
-
-  Instrumental version
-  INSTRUMENTAL
-
-  Only piano version
-  PIANO
-
-  Japanese version
-  JAPANESE
-
-  English version
-  ENGLISH
-
-  TV version of the track
-  TV
-
-  The track has been mixed with another
-  MIX
-
-  The track has been remixed
-  REMIX
-
-  Extended version of the track
-  EXTENDED
-  
-  other
-  OTHER
-  */
-  string version = 2 [(google.api.field_behavior) = REQUIRED];
-  // Incremental index of the track.
-  // Describes the play order in the release
-  int32 index = 3 [(google.api.field_behavior) = REQUIRED];
 }
