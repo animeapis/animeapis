@@ -341,7 +341,7 @@ message Anime {
   // List of localized airing/publishing periods of the content
   repeated Running runnings = 17;
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 18;
+  google.type.Date release_date = 18;
   // List of characters starred in the content
   repeated Cast starring = 19;
   // List of people/organizations which contributed to the production/distribution of the content
@@ -434,7 +434,7 @@ message Chapter {
   // Number of page of the chapter without extra pages
   int32 page_count = 4;
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 5;
+  google.type.Date release_date = 5;
   // List of localized names of the entity
   repeated google.type.LocalizedText names = 6;
   // List of localized aliases of the entity
@@ -624,7 +624,7 @@ message Episode {
   // Describes the release order 
   int32 index = 3;
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 4;
+  google.type.Date release_date = 4;
   // List of localized names of the entity
   repeated google.type.LocalizedText names = 5;
   // List of localized aliases of the entity
@@ -693,7 +693,7 @@ message GameRelease {
   // List of languages the release is localized in
   repeated string languages = 2;
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 3;
+  google.type.Date release_date = 3;
   //repeated Media media = 4;
 
   /*
@@ -1144,7 +1144,7 @@ message GraphicNovel {
   // List of localized airing/publishing periods of the content
   repeated Running runnings = 17;
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 18;
+  google.type.Date release_date = 18;
   // List of characters starred in the content
   repeated Cast starring = 19;
   // List of people/organizations which contributed to the production/distribution of the content
@@ -1273,7 +1273,7 @@ message LightNovel {
   // List of localized airing/publishing periods of the content
   repeated Running runnings = 16;
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 17;
+  google.type.Date release_date = 17;
   // List of characters starred in the content
   repeated Cast starring = 18;
   // List of people/organizations which contributed to the production/distribution of the content
@@ -1334,7 +1334,7 @@ message Organization {
   */
   string type = 2;
   // Foundation date of the organization
-  google.protobuf.Date foundation_date = 3;
+  google.type.Date foundation_date = 3;
   // List of localized names of the entity
   repeated google.type.LocalizedText names = 4;
   // List of localized aliases of the entity
@@ -1356,7 +1356,7 @@ message Person {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   // Birthday of the person
-  google.protobuf.Date birthday = 2;
+  google.type.Date birthday = 2;
   /*
   Gender 
   Valid Gender values:
@@ -1436,7 +1436,7 @@ message Track {
   // Required resource name
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 2;
+  google.type.Date release_date = 2;
   // List of localized names of the entity
   repeated google.type.LocalizedText names = 3;
   // List of localized aliases of the entity
@@ -1589,7 +1589,7 @@ message VisualNovel {
   // List of localized airing/publishing periods of the content
   repeated Running runnings = 15;
   // The release date in homeland of the content
-  google.protobuf.Date release_date = 16;
+  google.type.Date release_date = 16;
   // List of characters starred in the content
   repeated Cast starring = 17;
   // List of people/organizations which contributed to the production/distribution of the content
@@ -1636,10 +1636,10 @@ message VisualNovel {
 // Period in which the content has been aired/released/published for a particular localization
 message Running {
   // Start of the publishing/airing/release  
-  google.protobuf.Date start_time = 1 [(google.api.field_behavior) = REQUIRED];
+  google.type.Date start_time = 1 [(google.api.field_behavior) = REQUIRED];
   // End of the publishing/airing/release  
   // Omitted if the content is still ONGOING
-  google.protobuf.Date end_time = 2;
+  google.type.Date end_time = 2;
   // Valid ISO3 localization
   string localization = 3 [(google.api.field_behavior) = REQUIRED];
 }
