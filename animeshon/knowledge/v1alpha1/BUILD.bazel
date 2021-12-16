@@ -54,6 +54,8 @@ go_proto_library(
     deps = [
         "@go_googleapis//google/api:annotations_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
+        "@go_googleapis//google/type:date_go_proto",
+        "@go_googleapis//google/type:localized_text_go_proto",
     ],
 )
 
