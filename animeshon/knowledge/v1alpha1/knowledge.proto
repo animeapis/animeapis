@@ -1151,9 +1151,6 @@ message GraphicNovel {
   repeated Collaboration staff = 20;
   // List of genres the entity is part of
   repeated Edge genres = 21;
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  repeated Edge releases = 22;
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1185,8 +1182,6 @@ message GraphicNovel {
   ILLEGAL
   */
   repeated string region_restrictions = 24;
-  // List of volumes releasing the content
-  repeated Edge volumes = 25;
 }
 
 message LightNovel {
@@ -1280,9 +1275,6 @@ message LightNovel {
   repeated Collaboration staff = 19;
   // List of genres the entity is part of
   repeated Edge genres = 20;
-  // Releases are all those entities which practically make the content consumable
-  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
-  repeated Edge releases = 21;
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1631,6 +1623,10 @@ message VisualNovel {
   ILLEGAL
   */
   repeated string region_restrictions = 23;
+
+  // Releases are all those entities which practically make the content consumable
+  // Some examples are: Volumes for GraphicNovels/LightNovels/Chapters, BlueRays for Anime, Collector Editions... 
+  repeated Edge releases = 24;
 }
 
 // Period in which the content has been aired/released/published for a particular localization
