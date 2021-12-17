@@ -1847,44 +1847,6 @@ message Soundtrack {
   */
   string type = 2 [(google.api.field_behavior) = REQUIRED];
 
-  /*
-  version describes which version of the track was used
-  Valid track versions:
-
-  Unknown version
-  UNKNOWN
-
-  Normal version of the track
-  NORMAL
-
-  Instrumental version
-  INSTRUMENTAL
-
-  Only piano version
-  PIANO
-
-  Japanese version
-  JAPANESE
-
-  English version
-  ENGLISH
-
-  TV version of the track
-  TV
-
-  The track has been mixed with another
-  MIX
-
-  The track has been remixed
-  REMIX
-
-  Extended version of the track
-  EXTENDED
-
-  other
-  OTHER
-  */
-  string version = 3 [(google.api.field_behavior) = REQUIRED];
   // Valid ISO3 localization in which the track was used
-  string localization = 4 [(google.api.field_behavior) = REQUIRED];
+  string localization = 3 [(google.api.field_behavior) = REQUIRED];
 }
