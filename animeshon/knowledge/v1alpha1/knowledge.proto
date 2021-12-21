@@ -346,8 +346,6 @@ message Anime {
   repeated Cast starring = 19;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 20;
-  // List of genres the entity is part of
-  repeated Edge genres = 21;
   // List of soundtracks in the content
   repeated Soundtrack soundtracks = 22;
   // List of voice actors giving voice to the characters in the content
@@ -1084,8 +1082,6 @@ message GraphicNovel {
   repeated Cast starring = 19;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 20;
-  // List of genres the entity is part of
-  repeated Edge genres = 21;
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1208,8 +1204,6 @@ message LightNovel {
   repeated Cast starring = 18;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 19;
-  // List of genres the entity is part of
-  repeated Edge genres = 20;
   /*
   Maturity ratings describes what it the minum age to legally consume a content  
   Valid maturity Ratings:
@@ -1384,8 +1378,6 @@ message Track {
   repeated Marketplace marketplaces = 10;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 11;
-  // List of genres the entity is part of
-  repeated Edge genres = 12;
 }
 
 message Universe {
@@ -1521,8 +1513,6 @@ message VisualNovel {
   repeated Cast starring = 17;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 18;
-  // List of genres the entity is part of
-  repeated Edge genres = 19;
   // List of soundtracks in the content
   repeated Soundtrack soundtracks = 20;
   // List of voice actors giving voice to the characters in the content
