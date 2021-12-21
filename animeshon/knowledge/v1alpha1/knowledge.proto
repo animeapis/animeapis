@@ -455,37 +455,6 @@ message Chapter {
   repeated Marketplace marketplaces = 13;
   // List of people/organizations which contributed to the production/distribution of the content
   repeated Collaboration staff = 14;
-  /*
-  Maturity ratings describes what it the minum age to legally consume a content  
-  Valid maturity Ratings:
-
-  Over 18 in USA
-  MTR_RTN_USA_NC17
-
-  Over 18 in USA
-  MTR_RTN_USA_R
-
-  Over 13 in USA
-  MTR_RTN_USA_PG13
-
-  Over 3 in USA
-  MTR_RTN_USA_PG
-
-  Safe in USA
-  MTR_RTN_USA_G
-  */
-  repeated string maturity_ratings = 15;
-  /*
-  Region restrictions mark the content as illegal in some region given the local regulations
-  Valid Region Restrictions:
-
-  No Region Restriction
-  NONE
-
-  The Entity is illegal following the U.N. guidelines
-  ILLEGAL
-  */
-  repeated string region_restrictions = 16;
 }
 
 message Character {
@@ -649,42 +618,8 @@ message Episode {
   repeated Soundtrack soundtracks = 14;
   // List of voice actors giving voice to the characters in the content
   repeated VoiceActing voiceactings = 15;
-
-  /*
-  Maturity ratings describes what it the minum age to legally consume a content  
-  Valid maturity Ratings:
-
-  Over 18 in USA
-  MTR_RTN_USA_NC17
-
-  Over 18 in USA
-  MTR_RTN_USA_R
-
-  Over 13 in USA
-  MTR_RTN_USA_PG13
-
-  Over 3 in USA
-  MTR_RTN_USA_PG
-
-  Safe in USA
-  MTR_RTN_USA_G
-  */
-  repeated string maturity_ratings = 16;
-
-  /*
-  Region restrictions mark the content as illegal in some region given the local regulations
-  Valid Region Restrictions:
-
-  No Region Restriction
-  NONE
-
-  The Entity is illegal following the U.N. guidelines
-  ILLEGAL
-  */
-  repeated string region_restrictions = 17;
-
   // Length of the episode in seconds.
-  int32 length_seconds = 18;
+  int32 length_seconds = 16;
 }
 
 message GameRelease {
