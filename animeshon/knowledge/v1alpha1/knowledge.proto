@@ -278,7 +278,7 @@ message Anime {
   // Banner Image id of the entity
   string banner_image_id = 10;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 11;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -399,7 +399,7 @@ message Canonical {
   // Banner Image id of the entity
   string banner_image_id = 7;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 8;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -446,7 +446,7 @@ message Chapter {
   // Banner Image id of the entity
   string banner_image_id = 11;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 12;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -547,7 +547,7 @@ message Character {
   // Banner Image id of the entity
   string banner_image_id = 9;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 10;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -605,7 +605,7 @@ message Episode {
   // Banner Image id of the entity
   string banner_image_id = 10;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 11;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -906,7 +906,7 @@ message GameRelease {
   // Banner Image id of the entity
   string banner_image_id = 21;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 22;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -1015,7 +1015,7 @@ message GraphicNovel {
   // Banner Image id of the entity
   string banner_image_id = 10;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 11;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -1136,7 +1136,7 @@ message LightNovel {
   // Banner Image id of the entity
   string banner_image_id = 9;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 10;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -1269,7 +1269,7 @@ message Organization {
   // Banner Image id of the entity
   string banner_image_id = 9;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 10;
 }
 
@@ -1349,7 +1349,7 @@ message Person {
   // Banner Image id of the entity
   string banner_image_id = 10;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 11;
 }
 
@@ -1371,7 +1371,7 @@ message Track {
   // Banner Image id of the entity
   string banner_image_id = 8;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 9;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -1396,7 +1396,7 @@ message Universe {
   // Banner Image id of the entity
   string banner_image_id = 7;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 8;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
@@ -1445,7 +1445,7 @@ message VisualNovel {
   // Banner Image id of the entity
   string banner_image_id = 8;
   // List of websiste related to the entity.
-  // Websites mught be official websites, Social, Wiki Entries
+  // Websites might be official websites, Social, Wiki Entries
   repeated Website websites = 9;
   // List of marketplaces related to the entry.
   // Maketplaces tells where to buy / consume / read the entity
