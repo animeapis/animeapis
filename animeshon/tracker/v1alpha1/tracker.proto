@@ -70,10 +70,8 @@ service TrackerService {
   rpc DeleteTracker(DeleteTrackerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*/trackers/*}"
-      body: "*"
       additional_bindings {
         delete: "/v1alpha1/{name=audiences/*/trackers/*}"
-        body: "*"
       }
     };
   }
