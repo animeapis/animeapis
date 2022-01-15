@@ -236,6 +236,18 @@ message UserSettings {
 
   // Whether the user has enabled the developer mode.
   bool enable_developer_mode = 4;
+
+  // The system-managed album dedicated to user profile images.
+  string album_profile = 5 [(google.api.field_behavior) = REQUIRED];
+
+  // The system-managed album dedicated to user banner images.
+  string album_banner = 6 [(google.api.field_behavior) = REQUIRED];
+
+  // The system-managed playlist dedicated to user liked content.
+  string playlist_liked = 7 [(google.api.field_behavior) = REQUIRED];
+
+  // The system-managed playlist dedicated to user saved for later content.
+  string playlist_later = 8 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UserNotifications {
