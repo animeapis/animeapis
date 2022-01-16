@@ -86,6 +86,12 @@ service Identity {
     };
   }
 
+  rpc GetUserDefaults(GetUserDefaultsRequest) returns (UserDefaults) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*}:defaults"
+    };
+  }
+
   rpc GetGroup(GetGroupRequest) returns (Group) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=groups/*}"
@@ -236,18 +242,20 @@ message UserSettings {
 
   // Whether the user has enabled the developer mode.
   bool enable_developer_mode = 4;
+}
 
+message UserDefaults {
   // The system-managed album dedicated to user profile images.
-  string album_profile = 5 [(google.api.field_behavior) = REQUIRED];
+  string album_profile = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The system-managed album dedicated to user banner images.
-  string album_banner = 6 [(google.api.field_behavior) = REQUIRED];
+  string album_banner = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The system-managed playlist dedicated to user liked content.
-  string playlist_liked = 7 [(google.api.field_behavior) = REQUIRED];
+  string playlist_liked = 3 [(google.api.field_behavior) = REQUIRED];
 
   // The system-managed playlist dedicated to user saved for later content.
-  string playlist_later = 8 [(google.api.field_behavior) = REQUIRED];
+  string playlist_later = 4 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UserNotifications {
@@ -340,6 +348,11 @@ message UpdateUserNotificationsRequest {
   // The field mask to determine which fields are to be updated. If empty, the
   // server will assume all fields are to be updated.
   google.protobuf.FieldMask update_mask = 2;
+}
+
+message GetUserDefaultsRequest {
+  // The name of the user to retrieve the defaults from.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message GetGroupRequest {
