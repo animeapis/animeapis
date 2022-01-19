@@ -480,6 +480,10 @@ message Wormhole {
 
   // most significant date
   google.protobuf.Timestamp date = 12;
+
+  // parent's resource name
+  // useful for chapters and episodes to know which content it refers
+  string parent_name = 13;
 }
 
 
