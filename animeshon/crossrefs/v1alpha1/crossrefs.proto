@@ -484,6 +484,9 @@ message Wormhole {
   // parent's resource name
   // useful for chapters and episodes to know which content it refers
   string parent_name = 13;
+
+  // prant external url
+  string parent_external_url = 14;
 }
 
 
