@@ -53,6 +53,18 @@ service EpisodeService {
       delete: "/v1alpha1/{name=animes/*/episodes/*}"
     };
   }
+
+  // Reconcile episodes with the search and knowledge base.
+  rpc ReconcileEpisodes(ReconcileEpisodesRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=animes/*}/episodes:reconcile"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ReconcileEpisodesResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
 }
 
 message Episode {
@@ -161,3 +173,9 @@ message DeleteEpisodeRequest {
   // The name of the episode to delete.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
+
+message ReconcileEpisodesRequest {
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ReconcileEpisodesResponse {}

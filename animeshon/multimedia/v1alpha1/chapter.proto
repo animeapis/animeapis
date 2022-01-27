@@ -52,6 +52,18 @@ service ChapterService {
       delete: "/v1alpha1/{name=graphicNovels/*/chapters/*}"
     };
   }
+
+  // Reconcile chapters with the search and knowledge base.
+  rpc ReconcileChapters(ReconcileChaptersRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=graphicNovels/*}/chapters:reconcile"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ReconcileChaptersResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
 }
 
 message Chapter {
@@ -145,3 +157,9 @@ message DeleteChapterRequest {
   // The name of the chapter to delete.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
+
+message ReconcileChaptersRequest {
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ReconcileChaptersResponse {}
