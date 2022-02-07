@@ -1,0 +1,154 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/type/date.proto";
+import "google/type/localized_text.proto";
+
+package animeshon.multimedia.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/multimedia/v1alpha1;multimedia";
+option java_package = "com.animeshon.multimedia.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Multimedia::v1Alpha1";
+
+service GraphicNovelService {
+  option (google.api.default_host) = "multimedia.animeapis.com";
+
+  rpc GetGraphicNovel(GetGraphicNovelRequest) returns (GraphicNovel) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=graphicNovels/*}"
+    };
+  }
+
+  rpc ListGraphicNovels(ListGraphicNovelsRequest) returns (ListGraphicNovelsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/graphicNovels"
+    };
+  }
+
+  rpc CreateGraphicNovel(CreateGraphicNovelRequest) returns (GraphicNovel) {
+    option (google.api.http) = {
+      post: "/v1alpha1/graphicNovels"
+      body: "*"
+    };
+  }
+
+  rpc UpdateGraphicNovel(UpdateGraphicNovelRequest) returns (GraphicNovel) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{graphic_novel.name=graphicNovels/*}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteGraphicNovel(DeleteGraphicNovelRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=graphicNovels/*}"
+    };
+  }
+
+  // Reconcile graphic novels with the search and knowledge base.
+  rpc ReconcileGraphicNovels(ReconcileGraphicNovelsRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=graphicNovels/*}:reconcile"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ReconcileGraphicNovelsResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
+}
+
+message GraphicNovel {
+  enum Type {
+    // The default value. This value is used if the state is omitted.
+    TYPE_UNSPECIFIED = 0;
+
+    // The anime is a regular canonical graphic novel.
+    REGULAR = 1;
+  }
+
+  // The id of the graphic novel.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  
+  // The cover image of the graphic novel.
+  string cover_image = 2;
+  
+  // The banner image of the graphic novel.
+  string banner_image = 3;
+
+  // The title of the graphic novel localized in multiple languages.
+  repeated google.type.LocalizedText title = 4;
+
+  // The synopsis of the graphic novel localized in multiple languages.
+  repeated google.type.LocalizedText synopsis = 5;
+
+  // The description of the graphic novel localized in multiple languages.
+  repeated google.type.LocalizedText description = 6;
+
+  // The type of graphic novel.
+  Type type = 7;
+
+  // The original release date of graphic novel.
+  google.type.Date release_date = 8;
+}
+
+message GetGraphicNovelRequest {
+  // The name of the graphic novel to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListGraphicNovelsRequest {
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 1;
+
+  // The value returned from the previous call.
+  string page_token = 2;
+
+  // A filter to be applied to results.
+  string filter = 3;
+}
+
+message ListGraphicNovelsResponse {
+  // The list of graphic novels.
+  repeated GraphicNovel graphic_novels = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateGraphicNovelRequest {
+  // The graphic novel to create.
+  GraphicNovel graphic_novel = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateGraphicNovelRequest {
+  // The graphic novel to update.
+  GraphicNovel graphic_novel = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteGraphicNovelRequest {
+  // The name of the graphic novel to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ReconcileGraphicNovelsRequest {
+  // The name of the graphic novel to reconcile.
+  // Use the wildcard`graphicNovels/-` to reconcile all graphic novels.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // TODO: add timeout provided by the requester.
+}
+
+message ReconcileGraphicNovelsResponse {}

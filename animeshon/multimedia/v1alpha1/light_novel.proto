@@ -1,0 +1,154 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/type/date.proto";
+import "google/type/localized_text.proto";
+
+package animeshon.multimedia.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/multimedia/v1alpha1;multimedia";
+option java_package = "com.animeshon.multimedia.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Multimedia::v1Alpha1";
+
+service LightNovelService {
+  option (google.api.default_host) = "multimedia.animeapis.com";
+
+  rpc GetLightNovel(GetLightNovelRequest) returns (LightNovel) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=lightNovels/*}"
+    };
+  }
+
+  rpc ListLightNovels(ListLightNovelsRequest) returns (ListLightNovelsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/lightNovels"
+    };
+  }
+
+  rpc CreateLightNovel(CreateLightNovelRequest) returns (LightNovel) {
+    option (google.api.http) = {
+      post: "/v1alpha1/lightNovels"
+      body: "*"
+    };
+  }
+
+  rpc UpdateLightNovel(UpdateLightNovelRequest) returns (LightNovel) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{light_novel.name=lightNovels/*}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteLightNovel(DeleteLightNovelRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=lightNovels/*}"
+    };
+  }
+
+  // Reconcile light novels with the search and knowledge base.
+  rpc ReconcileLightNovels(ReconcileLightNovelsRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=lightNovels/*}:reconcile"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "ReconcileLightNovelsResponse"
+      metadata_type: "OperationMetadata"
+    };
+  }
+}
+
+message LightNovel {
+  enum Type {
+    // The default value. This value is used if the state is omitted.
+    TYPE_UNSPECIFIED = 0;
+
+    // The anime is a regular canonical light novel.
+    REGULAR = 1;
+  }
+
+  // The id of the light novel.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  
+  // The cover image of the light novel.
+  string cover_image = 2;
+  
+  // The banner image of the light novel.
+  string banner_image = 3;
+
+  // The title of the light novel localized in multiple languages.
+  repeated google.type.LocalizedText title = 4;
+
+  // The synopsis of the light novel localized in multiple languages.
+  repeated google.type.LocalizedText synopsis = 5;
+
+  // The description of the light novel localized in multiple languages.
+  repeated google.type.LocalizedText description = 6;
+
+  // The type of light novel.
+  Type type = 7;
+
+  // The original release date of light novel.
+  google.type.Date release_date = 8;
+}
+
+message GetLightNovelRequest {
+  // The name of the light novel to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListLightNovelsRequest {
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 1;
+
+  // The value returned from the previous call.
+  string page_token = 2;
+
+  // A filter to be applied to results.
+  string filter = 3;
+}
+
+message ListLightNovelsResponse {
+  // The list of light novels.
+  repeated LightNovel light_novels = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateLightNovelRequest {
+  // The light novel to create.
+  LightNovel light_novel = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateLightNovelRequest {
+  // The light novel to update.
+  LightNovel light_novel = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteLightNovelRequest {
+  // The name of the light novel to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ReconcileLightNovelsRequest {
+  // The name of the light novel to reconcile.
+  // Use the wildcard`lightNovels/-` to reconcile all light novels.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // TODO: add timeout provided by the requester.
+}
+
+message ReconcileLightNovelsResponse {}
