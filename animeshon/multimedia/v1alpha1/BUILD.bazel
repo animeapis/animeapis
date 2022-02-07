@@ -18,12 +18,12 @@ exports_files(glob(["*.json"]))
 proto_library(
     name = "multimedia_proto",
     srcs = [
+        "common.proto",
         "anime.proto",
         "chapter.proto",
         "episode.proto",
         "graphic_novel.proto",
         "light_novel.proto",
-        "longrunning.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api:annotations_proto",

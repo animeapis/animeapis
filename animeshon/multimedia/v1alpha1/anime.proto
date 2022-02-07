@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "animeshon/multimedia/v1alpha1/common.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -71,8 +72,21 @@ message Anime {
     // The default value. This value is used if the state is omitted.
     TYPE_UNSPECIFIED = 0;
 
-    // The anime is a regular canonical anime.
-    REGULAR = 1;
+    TV = 1;
+    
+    MOVIE = 2;
+    
+    OVA = 3;
+
+    ONA = 4;
+
+    SPECIAL = 5;
+
+    WEB = 6;
+
+    MUSIC_VIDEO = 7;
+
+    OTHER = 8;
   }
 
   // The id of the anime.
@@ -98,6 +112,16 @@ message Anime {
 
   // The original release date of anime.
   google.type.Date release_date = 8;
+
+  // The original publishing type of this content.
+  // TODO: migrate this field to a more structured licensing history.
+  PublishingType publishing_type = 9;
+
+  // The current state of the anime.
+  State state = 10;
+
+  // Whether this content is an original work or a derivative work (parody).
+  bool original = 11;
 }
 
 message GetAnimeRequest {

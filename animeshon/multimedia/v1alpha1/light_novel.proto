@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "animeshon/multimedia/v1alpha1/common.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -70,9 +71,6 @@ message LightNovel {
   enum Type {
     // The default value. This value is used if the state is omitted.
     TYPE_UNSPECIFIED = 0;
-
-    // The anime is a regular canonical light novel.
-    REGULAR = 1;
   }
 
   // The id of the light novel.
@@ -98,6 +96,16 @@ message LightNovel {
 
   // The original release date of light novel.
   google.type.Date release_date = 8;
+
+  // The original publishing type of this content.
+  // TODO: migrate this field to a more structured licensing history.
+  PublishingType publishing_type = 9;
+
+  // The current state of the anime.
+  State state = 10;
+
+  // Whether this content is an original work or a derivative work (parody).
+  bool original = 11;
 }
 
 message GetLightNovelRequest {

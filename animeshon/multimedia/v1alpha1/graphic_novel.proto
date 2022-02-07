@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "animeshon/multimedia/v1alpha1/common.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -71,8 +72,21 @@ message GraphicNovel {
     // The default value. This value is used if the state is omitted.
     TYPE_UNSPECIFIED = 0;
 
-    // The anime is a regular canonical graphic novel.
-    REGULAR = 1;
+    MANGA = 1;
+
+    ONE_SHOT = 2;
+
+    MANHUA = 3;
+
+    MANHWA = 4;
+
+    OEL = 5;
+
+    WEB_COMIC = 6;
+
+    YON_KOMA = 7;
+
+    OTHER = 8;
   }
 
   // The id of the graphic novel.
@@ -98,6 +112,16 @@ message GraphicNovel {
 
   // The original release date of graphic novel.
   google.type.Date release_date = 8;
+
+  // The original publishing type of this content.
+  // TODO: migrate this field to a more structured licensing history.
+  PublishingType publishing_type = 9;
+
+  // The current state of the anime.
+  State state = 10;
+
+  // Whether this content is an original work or a derivative work (parody).
+  bool original = 11;
 }
 
 message GetGraphicNovelRequest {
