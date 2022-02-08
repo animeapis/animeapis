@@ -116,11 +116,14 @@ message VisualNovel {
   // TODO: migrate this field to a more structured licensing history.
   PublishingType publishing_type = 9;
 
-  // The average duration of the visual novel.
-  PlayLength length = 10;
+  // The current state of the light novel.
+  State state = 10;
 
   // Whether this content is an original work or a derivative work (parody).
   bool original = 11;
+
+  // The average duration of the visual novel.
+  PlayLength length = 12;
 }
 
 message GetVisualNovelRequest {
