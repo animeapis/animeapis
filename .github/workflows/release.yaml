@@ -97,7 +97,7 @@ jobs:
         path: |
           ~/.cache/bazelisk
           ~/.cache/bazel
-        key: ${{ runner.os }}-${{ github.ref }}-bazel-${{ hashFiles('**/WORKSPACE') }}
+        key: ${{ runner.os }}-${{ github.ref }}-bazel-0000-${{ hashFiles('**/WORKSPACE') }}
 
     - name: Build all client libraries
       run: |-
