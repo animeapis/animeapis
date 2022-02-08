@@ -23,6 +23,7 @@ proto_library(
         "chapter.proto",
         "episode.proto",
         "graphic_novel.proto",
+        "visual_novel.proto",
         "light_novel.proto",
     ],
     deps = [

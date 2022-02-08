@@ -117,7 +117,7 @@ message GraphicNovel {
   // TODO: migrate this field to a more structured licensing history.
   PublishingType publishing_type = 9;
 
-  // The current state of the anime.
+  // The current state of the graphic novel.
   State state = 10;
 
   // Whether this content is an original work or a derivative work (parody).
@@ -169,7 +169,7 @@ message DeleteGraphicNovelRequest {
 
 message ReconcileGraphicNovelsRequest {
   // The name of the graphic novel to reconcile.
-  // Use the wildcard`graphicNovels/-` to reconcile all graphic novels.
+  // Use the wildcard `graphicNovels/-` to reconcile all graphic novels.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // TODO: add timeout provided by the requester.

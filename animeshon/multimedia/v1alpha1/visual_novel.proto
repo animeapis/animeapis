@@ -19,101 +19,116 @@ option java_package = "com.animeshon.multimedia.v1alpha1";
 option java_multiple_files = true;
 option ruby_package = "Animeshon::Multimedia::v1Alpha1";
 
-service LightNovelService {
+service VisualNovelService {
   option (google.api.default_host) = "multimedia.animeapis.com";
 
-  rpc GetLightNovel(GetLightNovelRequest) returns (LightNovel) {
+  rpc GetVisualNovel(GetVisualNovelRequest) returns (VisualNovel) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=lightNovels/*}"
+      get: "/v1alpha1/{name=visualNovels/*}"
     };
   }
 
-  rpc ListLightNovels(ListLightNovelsRequest) returns (ListLightNovelsResponse) {
+  rpc ListVisualNovels(ListVisualNovelsRequest) returns (ListVisualNovelsResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/lightNovels"
+      get: "/v1alpha1/visualNovels"
     };
   }
 
-  rpc CreateLightNovel(CreateLightNovelRequest) returns (LightNovel) {
+  rpc CreateVisualNovel(CreateVisualNovelRequest) returns (VisualNovel) {
     option (google.api.http) = {
-      post: "/v1alpha1/lightNovels"
+      post: "/v1alpha1/visualNovels"
       body: "*"
     };
   }
 
-  rpc UpdateLightNovel(UpdateLightNovelRequest) returns (LightNovel) {
+  rpc UpdateVisualNovel(UpdateVisualNovelRequest) returns (VisualNovel) {
     option (google.api.http) = {
-      patch: "/v1alpha1/{light_novel.name=lightNovels/*}"
+      patch: "/v1alpha1/{visual_novel.name=visualNovels/*}"
       body: "*"
     };
   }
 
-  rpc DeleteLightNovel(DeleteLightNovelRequest) returns (google.protobuf.Empty) {
+  rpc DeleteVisualNovel(DeleteVisualNovelRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1alpha1/{name=lightNovels/*}"
+      delete: "/v1alpha1/{name=visualNovels/*}"
     };
   }
 
-  // Reconcile light novels with the search and knowledge base.
-  rpc ReconcileLightNovels(ReconcileLightNovelsRequest) returns (google.longrunning.Operation) {
+  // Reconcile visual novels with the search and knowledge base.
+  rpc ReconcileVisualNovels(ReconcileVisualNovelsRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=lightNovels/*}:reconcile"
+      post: "/v1alpha1/{name=visualNovels/*}:reconcile"
       body: "*"
     };
     option (google.longrunning.operation_info) = {
-      response_type: "ReconcileLightNovelsResponse"
+      response_type: "ReconcileVisualNovelsResponse"
       metadata_type: "OperationMetadata"
     };
   }
 }
 
-message LightNovel {
+message VisualNovel {
   enum Type {
     // The default value. This value is used if the state is omitted.
     TYPE_UNSPECIFIED = 0;
   }
 
-  // The id of the light novel.
+  enum PlayLength {
+    // The default value. This value is used if the state is omitted.
+    LENGTH_UNSPECIFIED = 0;
+
+    VERY_SHORT = 1;
+  
+    SHORT = 2;
+
+    MEDIUM = 3;
+
+    LONG = 4;
+
+    VERY_LONG = 5;
+  }
+
+  // The id of the visual novel.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   
-  // The cover image of the light novel.
+  // The cover image of the visual novel.
   string cover_image = 2;
   
-  // The banner image of the light novel.
+  // The banner image of the visual novel.
   string banner_image = 3;
 
-  // The title of the light novel localized in multiple languages.
+  // The title of the visual novel localized in multiple languages.
   repeated google.type.LocalizedText title = 4;
 
-  // The synopsis of the light novel localized in multiple languages.
+  // The synopsis of the visual novel localized in multiple languages.
   repeated google.type.LocalizedText synopsis = 5;
 
-  // The description of the light novel localized in multiple languages.
+  // The description of the visual novel localized in multiple languages.
   repeated google.type.LocalizedText description = 6;
 
-  // The type of light novel.
+  // The type of visual novel.
   Type type = 7;
 
-  // The original release date of light novel.
+  // The original release date of visual novel.
   google.type.Date release_date = 8;
 
   // The original publishing type of this content.
   // TODO: migrate this field to a more structured licensing history.
   PublishingType publishing_type = 9;
 
-  // The current state of the light novel.
-  State state = 10;
+  // The average duration of the visual novel.
+  PlayLength length = 10;
 
   // Whether this content is an original work or a derivative work (parody).
   bool original = 11;
 }
 
-message GetLightNovelRequest {
-  // The name of the light novel to retrieve.
+message GetVisualNovelRequest {
+  // The name of the visual novel to retrieve.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message ListLightNovelsRequest {
+message ListVisualNovelsRequest {
   // If unspecified, server will pick an appropriate default.
   int32 page_size = 1;
 
@@ -124,39 +139,39 @@ message ListLightNovelsRequest {
   string filter = 3;
 }
 
-message ListLightNovelsResponse {
-  // The list of light novels.
-  repeated LightNovel light_novels = 1;
+message ListVisualNovelsResponse {
+  // The list of visual novels.
+  repeated VisualNovel visual_novels = 1;
 
   // A token to retrieve next page of results.
   string next_page_token = 2;
 }
 
-message CreateLightNovelRequest {
-  // The light novel to create.
-  LightNovel light_novel = 1 [(google.api.field_behavior) = REQUIRED];
+message CreateVisualNovelRequest {
+  // The visual novel to create.
+  VisualNovel visual_novel = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message UpdateLightNovelRequest {
-  // The light novel to update.
-  LightNovel light_novel = 1 [(google.api.field_behavior) = REQUIRED];
+message UpdateVisualNovelRequest {
+  // The visual novel to update.
+  VisualNovel visual_novel = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The field mask to determine which fields are to be updated. If empty, the
   // server will assume all fields are to be updated.
   google.protobuf.FieldMask update_mask = 2;
 }
 
-message DeleteLightNovelRequest {
-  // The name of the light novel to delete.
+message DeleteVisualNovelRequest {
+  // The name of the visual novel to delete.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message ReconcileLightNovelsRequest {
-  // The name of the light novel to reconcile.
-  // Use the wildcard `lightNovels/-` to reconcile all light novels.
+message ReconcileVisualNovelsRequest {
+  // The name of the visual novel to reconcile.
+  // Use the wildcard `visualNovels/-` to reconcile all visual novels.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // TODO: add timeout provided by the requester.
 }
 
-message ReconcileLightNovelsResponse {}
+message ReconcileVisualNovelsResponse {}
