@@ -75,7 +75,7 @@ message VisualNovel {
 
   enum PlayLength {
     // The default value. This value is used if the state is omitted.
-    LENGTH_UNSPECIFIED = 0;
+    PLAY_LENGTH_UNSPECIFIED = 0;
 
     VERY_SHORT = 1;
   
