@@ -153,6 +153,9 @@ message ListVisualNovelsResponse {
 message CreateVisualNovelRequest {
   // The visual novel to create.
   VisualNovel visual_novel = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // An idempotent identifier to be used as static resource id.
+  int64 idempotent_resource_id = 2;
 }
 
 message UpdateVisualNovelRequest {

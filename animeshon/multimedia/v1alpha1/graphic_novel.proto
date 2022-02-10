@@ -151,6 +151,9 @@ message ListGraphicNovelsResponse {
 message CreateGraphicNovelRequest {
   // The graphic novel to create.
   GraphicNovel graphic_novel = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // An idempotent identifier to be used as static resource id.
+  int64 idempotent_resource_id = 2;
 }
 
 message UpdateGraphicNovelRequest {
