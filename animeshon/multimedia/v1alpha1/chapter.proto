@@ -103,7 +103,7 @@ message Chapter {
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   
   // The idempotent unique knowledge base identifier of the anime.
-  string knowledge_base_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string knowledge_base_resource_name = 2 [(google.api.field_behavior) = REQUIRED];
   
   // The cover image of the chapter.
   string cover_image = 3;
