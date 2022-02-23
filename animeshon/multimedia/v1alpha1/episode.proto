@@ -158,6 +158,9 @@ message CreateEpisodeRequest {
 
   // The episode to create.
   Episode episode = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // An idempotent identifier to be used as static resource id.
+  int64 idempotent_resource_id = 3;
 }
 
 message UpdateEpisodeRequest {
