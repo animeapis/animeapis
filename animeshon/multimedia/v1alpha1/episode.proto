@@ -97,35 +97,32 @@ message Episode {
   // The id of the episode.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The idempotent unique knowledge base identifier of the anime.
-  string knowledge_base_resource_name = 2 [(google.api.field_behavior) = REQUIRED];
-  
   // The cover image of the episode.
-  string cover_image = 3;
+  string cover_image = 2;
   
   // The banner image of the episode.
-  string banner_image = 4;
+  string banner_image = 3;
 
   // The title of the episode localized in multiple languages.
-  repeated google.type.LocalizedText title = 5;
+  repeated google.type.LocalizedText title = 4;
 
   // The synopsis of the episode localized in multiple languages.
-  repeated google.type.LocalizedText synopsis = 6;
+  repeated google.type.LocalizedText synopsis = 5;
 
   // The description of the episode localized in multiple languages.
-  repeated google.type.LocalizedText description = 7;
+  repeated google.type.LocalizedText description = 6;
 
   // The type of episode.
-  Type type = 8;
+  Type type = 7;
 
   // The index of episode.
-  int32 index = 9;
+  int32 index = 8;
 
   // The original release date of episode.
-  google.type.Date release_date = 10;
+  google.type.Date release_date = 9;
 
   // The original duration of the episode.
-  google.protobuf.Duration duration = 11;
+  google.protobuf.Duration duration = 10;
 }
 
 message GetEpisodeRequest {

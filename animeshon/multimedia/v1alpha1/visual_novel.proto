@@ -91,42 +91,39 @@ message VisualNovel {
   // The id of the visual novel.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
   
-  // The idempotent unique knowledge base identifier of the anime.
-  string knowledge_base_resource_name = 2 [(google.api.field_behavior) = REQUIRED];
-  
   // The cover image of the visual novel.
-  string cover_image = 3;
+  string cover_image = 2;
   
   // The banner image of the visual novel.
-  string banner_image = 4;
+  string banner_image = 3;
 
   // The title of the visual novel localized in multiple languages.
-  repeated google.type.LocalizedText title = 5;
+  repeated google.type.LocalizedText title = 4;
 
   // The synopsis of the visual novel localized in multiple languages.
-  repeated google.type.LocalizedText synopsis = 6;
+  repeated google.type.LocalizedText synopsis = 5;
 
   // The description of the visual novel localized in multiple languages.
-  repeated google.type.LocalizedText description = 7;
+  repeated google.type.LocalizedText description = 6;
 
   // The type of visual novel.
-  Type type = 8;
+  Type type = 7;
 
   // The original release date of visual novel.
-  google.type.Date release_date = 9;
+  google.type.Date release_date = 8;
 
   // The original publishing type of this content.
   // TODO: migrate this field to a more structured licensing history.
-  PublishingType publishing_type = 10;
+  PublishingType publishing_type = 9;
 
   // The current state of the light novel.
-  State state = 11;
+  State state = 10;
 
   // Whether this content is an original work or a derivative work (parody).
-  bool original = 12;
+  bool original = 11;
 
   // The average duration of the visual novel.
-  PlayLength length = 13;
+  PlayLength length = 12;
 }
 
 message GetVisualNovelRequest {
@@ -156,6 +153,9 @@ message ListVisualNovelsResponse {
 message CreateVisualNovelRequest {
   // The visual novel to create.
   VisualNovel visual_novel = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // An idempotent identifier to be used as static resource id.
+  int64 idempotent_resource_id = 2;
 }
 
 message UpdateVisualNovelRequest {
