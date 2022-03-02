@@ -9,6 +9,7 @@ import "google/longrunning/operations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
+import "google/rpc/status.proto";
 import "google/type/date.proto";
 import "google/type/localized_text.proto";
 
@@ -38,6 +39,12 @@ service EpisodeService {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=animes/*}/episodes"
       body: "*"
+    };
+  }
+
+  rpc BatchCreateEpisodes(BatchCreateEpisodesRequest) returns (BatchCreateEpisodesResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=animes/*}/episodes:batch"
     };
   }
 
@@ -161,6 +168,37 @@ message CreateEpisodeRequest {
 
   // An idempotent identifier to be used as static resource id.
   int64 idempotent_resource_id = 3;
+}
+
+message BatchCreateEpisodesRequest {
+  message Request {
+    // The episode to create.
+    Episode episode = 1 [(google.api.field_behavior) = REQUIRED];
+  
+    // An idempotent identifier to be used as static resource id.
+    int64 idempotent_resource_id = 2;
+  }
+
+  // Individual create episode requests for this batch.
+  repeated Request requests = 1 [
+    (google.api.field_behavior) = REQUIRED
+  ];
+  
+  // The parent this batch belongs to.
+  string parent = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchCreateEpisodesResponse {
+  message Response {
+    // The newly created episode.
+    Episode episode = 1;
+
+    // If set, represents the error message for the operation.
+    google.rpc.Status error = 2;
+  }
+
+  // Individual responses to create episode requests within the batch.
+  repeated Response responses = 1;
 }
 
 message UpdateEpisodeRequest {
