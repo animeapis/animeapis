@@ -51,7 +51,7 @@ service ChapterService {
     };
   }
 
-  rpc BatchCreateChapters(BatchCreateChaptersRequest) returns (BatchCreateChaptersResponse) {
+  rpc BatchCreateChapters(BatchCreateChaptersRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=graphicNovels/*}/chapters:batch"
       body: "*"
@@ -59,6 +59,10 @@ service ChapterService {
         post: "/v1alpha1/{parent=lightNovels/*}/chapters:batch"
         body: "*"
       }
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "BatchCreateChaptersResponse"
+      metadata_type: "OperationMetadata"
     };
   }
 
