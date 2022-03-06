@@ -44,7 +44,7 @@ service EpisodeService {
 
   rpc BatchCreateEpisodes(BatchCreateEpisodesRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=animes/*}/episodes:batch"
+      post: "/v1alpha1/{parent=animes/*}/episodes:batchCreate"
     };
     option (google.longrunning.operation_info) = {
       response_type: "BatchCreateEpisodesResponse"

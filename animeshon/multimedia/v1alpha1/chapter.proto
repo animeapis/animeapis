@@ -53,10 +53,10 @@ service ChapterService {
 
   rpc BatchCreateChapters(BatchCreateChaptersRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
-      post: "/v1alpha1/{parent=graphicNovels/*}/chapters:batch"
+      post: "/v1alpha1/{parent=graphicNovels/*}/chapters:batchCreate"
       body: "*"
       additional_bindings {
-        post: "/v1alpha1/{parent=lightNovels/*}/chapters:batch"
+        post: "/v1alpha1/{parent=lightNovels/*}/chapters:batchCreate"
         body: "*"
       }
     };
