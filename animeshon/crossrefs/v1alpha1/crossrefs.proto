@@ -316,7 +316,7 @@ message CreateCrossRefRequest {
 }
 
 message BatchCreateCrossRefsRequest {
-  repeated CrossRef crossref = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated CrossRef crossrefs = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateCrossRefRequest {
