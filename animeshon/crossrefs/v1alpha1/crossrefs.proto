@@ -44,6 +44,17 @@ service Referrer {
     };
   }
 
+  // BatchCreateCrossRefs creates new crossrefs in batch.
+  // The limit is of 10 crossreferences and it's blocking.
+  // It ensures that the crossreferences are created in the database
+  // but not propagated to the other services
+  rpc BatchCreateCrossRefs(BatchCreateCrossRefsRequest) returns (BatchCreateCrossRefsResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/crossrefs:batchCreate"
+      body: "*"
+    };
+  }
+
   rpc UpdateCrossRef(UpdateCrossRefRequest) returns (UpdateCrossRefResponse) {
     option (google.api.http) = {
       patch: "/v1alpha1/crossrefs/{crossref.name=*/*}"
@@ -304,6 +315,10 @@ message CreateCrossRefRequest {
   CrossRef crossref = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+message BatchCreateCrossRefsRequest {
+  repeated CrossRef crossref = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
 message UpdateCrossRefRequest {
   // The crossref to update.
   CrossRef crossref = 1;
@@ -343,6 +358,11 @@ message ListCrossRefsRequest {
 message CountCrossRefsRequest {
   // A filter to be applied to results.
   CrossRefsFilterRequest filter = 3;
+}
+
+message BatchCreateCrossRefsResponse {
+  // The list of crossrefs to create.
+  repeated CrossRef crossrefs = 1;
 }
 
 message ListCrossRefsResponse {
