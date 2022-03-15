@@ -197,17 +197,36 @@ message ExportCrossRefRequest {
 }
 
 message AnalyzeCrossRefRequest {
-  // Tollerance of the match in pct
-  int32 tollerance = 1;
+  message AnalyzeCrossRefConfig {
+    // Tollerance of the match in pct
+    int32 tollerance = 1;
 
-  // Map of all options for the analysis
-  map<string, bool> opts = 2;
+    // Map of all options for the analysis
+    map<string, bool> opts = 2;
+  }
+  message AnalyzeCrossRefNamespaceConfig {
+    // Namespace to analyze
+    string namespace = 1;
 
-  // Namespaces to analyze
-  repeated string namespaces = 3;
+    // Optional Namespace specific configuration
+    AnalyzeCrossRefConfig config = 2;
+  }
+  message AnalyzeCrossRefTargetConfig {
+    // Kind to analyze
+    string target_kind = 1;
 
-  // Kinds to analyze
-  repeated string target_kinds = 4;
+    // Optional Target specific configuration
+    AnalyzeCrossRefConfig config = 2;
+
+    // Namespace configurations
+    map<string, AnalyzeCrossRefNamespaceConfig> namespaces = 3;
+  }
+
+  // Global configuration
+  AnalyzeCrossRefConfig config = 1;
+
+  // Kind configurations
+  map<string, AnalyzeCrossRefTargetConfig> target_kinds = 2;
 }
 
 message CrossRefEdge {
