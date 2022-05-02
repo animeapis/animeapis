@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+package animeshon.webproxy.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/webproxy/v1alpha1;webproxy";
+option java_package = "com.animeshon.webproxy.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Release::v1Alpha1";
+
+service HttpProxy {
+  option (google.api.default_host) = "webproxy.animeapis.com";
+
+  rpc TODO(Request) returns (Response) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{proxy=proxies/*}:???"
+      body: "*"
+    };
+  }
+}

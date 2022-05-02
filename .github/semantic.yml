@@ -21,6 +21,7 @@ scopes:
   - tracker
   - vision
   - webcache
+  - webproxy
 
 types:
   - feat

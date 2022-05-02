@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: webproxy.animeapis.com
+title: Release API
+
+apis:
+- name: animeshon.webproxy.v1alpha1.HttpProxy
