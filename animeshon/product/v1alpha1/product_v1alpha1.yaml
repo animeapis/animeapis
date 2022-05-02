@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: product.animeapis.com
+title: Product API
+
+apis:
+- name: animeshon.product.v1alpha1.ChapterService
