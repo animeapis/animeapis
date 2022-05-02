@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+package animeshon.product.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/product/v1alpha1;product";
+option java_package = "com.animeshon.product.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::Product::v1Alpha1";
+
+service ChapterService {
+  option (google.api.default_host) = "product.animeapis.com";
+
+  rpc GetChapter(GetChapterRequest) returns (Chapter) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/chapters/*}"
+      additional_bindings {
+        get: "/v1alpha1/{name=organizations/*/chapters/*}"
+      }
+    };
+  }
+
+  rpc ListChapters(ListChaptersRequest) returns (ListChaptersResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/chapters"
+      additional_bindings {
+        get: "/v1alpha1/{parent=organizations/*}/chapters"
+      }
+    };
+  }
+
+  rpc CreateChapter(CreateChapterRequest) returns (Chapter) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=users/*}/chapters"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{parent=organizations/*}/chapters"
+        body: "*"
+      }
+    };
+  }
+
+  rpc UpdateChapter(UpdateChapterRequest) returns (Chapter) {
+    option (google.api.http) = {
+      patch: "/v1alpha1/{chapter.name=users/*/chapters/*}"
+      body: "*"
+      additional_bindings {
+        patch: "/v1alpha1/{chapter.name=organizations/*/chapters/*}"
+        body: "*"
+      }
+    };
+  }
+
+  rpc DeleteChapter(DeleteChapterRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=users/*/chapters/*}"
+      additional_bindings {
+        delete: "/v1alpha1/{name=organizations/*/chapters/*}"
+      }
+    };
+  }
+}
+
+message Chapter {
+  // The id of the chapter.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The language code of the chapter pages.
+  string language_code = 2;
+
+  // The album that contains all images associated to this chapter.
+  string album = 3;
+
+  // The ordered list of all pages represented as ids of images.
+  repeated int64 pages = 4;
+}
+
+message GetChapterRequest {
+  // The name of the chapter to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListChaptersRequest {
+  // The parent this chapter belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListChaptersResponse {
+  // The list of chapters.
+  repeated Chapter chapters = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message CreateChapterRequest {
+  // The parent this chapter belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The chapter to create.
+  Chapter chapter = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateChapterRequest {
+  // The chapter to update.
+  Chapter chapter = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The field mask to determine which fields are to be updated. If empty, the
+  // server will assume all fields are to be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteChapterRequest {
+  // The name of the chapter to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
