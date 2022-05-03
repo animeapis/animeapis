@@ -73,17 +73,20 @@ service ChapterService {
 }
 
 message Chapter {
-  // The id of the chapter.
+  // The name of the chapter.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
+  // The unique, stable numeric ID for the chapter.
+  string uid = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+
   // The language code of the chapter pages.
-  string language_code = 2;
+  string language_code = 3;
 
   // The album that contains all images associated to this chapter.
-  string album = 3;
+  string album = 4;
 
   // The ordered list of all pages represented as ids of images.
-  repeated int64 pages = 4;
+  repeated int64 pages = 5;
 }
 
 message GetChapterRequest {
