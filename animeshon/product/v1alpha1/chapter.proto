@@ -80,7 +80,7 @@ message Chapter {
   string language_code = 2;
 
   // The album that contains all images associated to this chapter.
-  string album = 3;
+  string album = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The ordered list of all pages represented as ids of images.
   repeated int64 pages = 4;
