@@ -183,10 +183,13 @@ message Release {
   // deleted from Animeshon all associated non-authoritative releases will
   // be automatically hidden from public consumption and marked as suspended.
   //
-  // Furthermore, there can only be one authoritative release per asset, which
-  // means that you can have unlimited non-authoritative releases for one asset
-  // but it must have at most one, and only one, authoritative release.
+  // Furthermore, there can only be one authoritative release per resource,
+  // which means that you can have unlimited non-authoritative releases for one
+  // resource but it must have exactly one authoritative release.
   string authoritative_release = 2;
+
+  // The resource being released.
+  string resource = 3;
 
   // The product included in the release.
   string asset = 4;
