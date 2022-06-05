@@ -220,6 +220,12 @@ message Release {
     [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
+// The release strategy describes how a release should be published.
+message ReleaseStrategy {
+  // Whether the release should be available only to the members of a group.
+  bool membership_only = 1;
+}
+
 message GetReleaseRequest {
   // The name of the release to retrieve.
   string name = 1;
@@ -281,6 +287,9 @@ message UndeleteReleaseRequest {
 message PublishReleaseRequest {
   // The name of the release to publish.
   string name = 1;
+
+  // The release strategy to use.
+  ReleaseStrategy strategy = 2;
 }
 
 message PublishReleaseResponse {
@@ -297,6 +306,9 @@ message UnpublishReleaseResponse {
 message ScheduleReleaseRequest {
   // The name of the release to schedule.
   string name = 1;
+
+  // The release strategy to use.
+  ReleaseStrategy strategy = 2;
 }
 
 message ScheduleReleaseResponse {
