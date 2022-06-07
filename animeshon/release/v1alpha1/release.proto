@@ -171,6 +171,12 @@ message Release {
   // The release resource name.
   string name = 1;
 
+  // The human-readable display name of the release.
+  string display_name = 2;
+
+  // The short description of the release.
+  string description = 3;
+
   // The authoritative release is set only for sub-licensed releases that do not
   // hold any publishing rights on the content being distributed.
   //
@@ -186,37 +192,40 @@ message Release {
   // Furthermore, there can only be one authoritative release per resource,
   // which means that you can have unlimited non-authoritative releases for one
   // resource but it must have exactly one authoritative release.
-  string authoritative_release = 2;
+  string authoritative_release = 4;
 
   // The resource being released.
-  string resource = 3;
+  string resource = 5;
 
   // The product included in the release.
-  string asset = 4;
+  string asset = 6;
 
   // The group of users authorized to access the asset.
-  string access_group = 5;
+  string access_group = 7;
 
   // The visibility of the resources included in the asset.
-  Visibility visibility = 6;
+  Visibility visibility = 8;
 
   // The current release state.
-  State state = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  State state = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The list of labels associated with the release.
+  repeated string labels = 10;
 
   // The timestamp at which the release was created.
-  google.protobuf.Timestamp create_time = 8
+  google.protobuf.Timestamp create_time = 11
     [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The latest timestamp at which the release was updated.
-  google.protobuf.Timestamp update_time = 9
+  google.protobuf.Timestamp update_time = 12
     [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The timestamp at which the release will expire.
-  google.protobuf.Timestamp expire_time = 10
+  google.protobuf.Timestamp expire_time = 13
     [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The timestamp at which the release was deleted.
-  google.protobuf.Timestamp delete_time = 11
+  google.protobuf.Timestamp delete_time = 14
     [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
@@ -263,6 +272,11 @@ message CreateReleaseRequest {
   // The time-to-live indicating for how long this release should be published.
   // If set to zero, the release will not have an expiration time.
   google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = INPUT_ONLY];
+
+  // TODO: consider adding an option to inherit the access group from another
+  //       release or to manually specify an existing access group.
+  // TODO: maybe if access group is defined in the release, use it, otherwise
+  //       create a new one.
 }
 
 message UpdateReleaseRequest {
