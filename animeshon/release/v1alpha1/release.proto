@@ -209,8 +209,8 @@ message Release {
   // The current release state.
   State state = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // The list of labels associated with the release.
-  repeated string labels = 10;
+  // The map of labels associated with the release.
+  map<string, string> labels = 10;
 
   // The timestamp at which the release was created.
   google.protobuf.Timestamp create_time = 11
