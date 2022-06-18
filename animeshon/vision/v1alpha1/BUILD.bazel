@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "go_gapic_assembly_pkg",
@@ -113,4 +115,35 @@ nodejs_gapic_assembly_pkg(
         ":vision_nodejs_gapic",
         ":vision_proto",
     ],
+)
+
+##############################################################################
+# Markdown
+##############################################################################
+doc_markdown_compile(
+    name = "vision_proto_markdown",
+    protos = [":vision_proto"],
+)
+
+##############################################################################
+# GraphQL
+##############################################################################
+proto_graphql(
+    name = "vision_proto_graphql",
+    protos = [":vision_proto"],
+)
+
+##############################################################################
+# OpenAPI
+##############################################################################
+proto_openapi(
+    name = "vision_proto_openapi",
+    protos = [":vision_proto"],
+    options = {
+        "@com_animeshon_animeapis//:openapi_plugin": [
+            # "title='Credentials API'", # TODO: fix bazel plugin generator.
+            "title=animeshon.vision",
+            "version=v1alpha1"
+        ],
+    },
 )

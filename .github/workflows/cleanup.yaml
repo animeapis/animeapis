@@ -41,6 +41,27 @@ jobs:
     #     path: animeapis/api-nodejs-client
     #     token: ${{ env.TOKEN }}
 
+    - name: Clone animeapis/openapi-specification
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/openapi-specification
+        path: animeapis/openapi-specification
+        token: ${{ env.TOKEN }}
+
+    - name: Clone animeapis/graphql-schema
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/graphql-schema
+        path: animeapis/graphql-schema
+        token: ${{ env.TOKEN }}
+
+    - name: Clone animeapis/reference-markdown
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/reference-markdown
+        path: animeapis/reference-markdown
+        token: ${{ env.TOKEN }}
+
     - name: Delete branch ${{ github.event.ref }} from animeapis/proto-binary
       working-directory: animeapis/proto-binary
       run: |-
@@ -60,3 +81,18 @@ jobs:
     #   working-directory: animeapis/api-nodejs-client
     #   run: |-
     #     git push origin --delete ${{ github.event.ref }}
+
+    - name: Delete branch ${{ github.event.ref }} from animeapis/openapi-specification
+      working-directory: animeapis/openapi-specification
+      run: |-
+        git push origin --delete ${{ github.event.ref }}
+
+    - name: Delete branch ${{ github.event.ref }} from animeapis/graphql-schema
+      working-directory: animeapis/graphql-schema
+      run: |-
+        git push origin --delete ${{ github.event.ref }}
+
+    - name: Delete branch ${{ github.event.ref }} from animeapis/reference-markdown
+      working-directory: animeapis/reference-markdown
+      run: |-
+        git push origin --delete ${{ github.event.ref }}
