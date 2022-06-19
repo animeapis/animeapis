@@ -218,9 +218,8 @@ jobs:
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-nodejs-client.git
         git push -u origin HEAD
 
-    - name: Push commit to animeapis/openapi-specification (master only)
+    - name: Push commit to animeapis/openapi-specification
       working-directory: animeapis/openapi-specification
-      if: github.ref == 'refs/heads/master'
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
         git config --local user.name "${{ env.USERNAME }}"
@@ -233,9 +232,8 @@ jobs:
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/openapi-specification.git
         git push -u origin HEAD
 
-    - name: Push commit to animeapis/graphql-schema (master only)
+    - name: Push commit to animeapis/graphql-schema
       working-directory: animeapis/graphql-schema
-      if: github.ref == 'refs/heads/master'
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
         git config --local user.name "${{ env.USERNAME }}"
@@ -248,9 +246,8 @@ jobs:
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/graphql-schema.git
         git push -u origin HEAD
 
-    - name: Push commit to animeapis/reference-markdown (master only)
+    - name: Push commit to animeapis/reference-markdown
       working-directory: animeapis/reference-markdown
-      if: github.ref == 'refs/heads/master'
       run: |-
         git config --local user.email "${{ env.EMAIL }}"
         git config --local user.name "${{ env.USERNAME }}"
