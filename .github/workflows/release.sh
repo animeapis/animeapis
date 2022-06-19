@@ -116,7 +116,7 @@ do
 
   rm -rf "animeapis/graphql-schema/animeshon/${i}/v1alpha1"
   mkdir -p "animeapis/graphql-schema/animeshon/${i}/v1alpha1"
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_graphql/animeshon" "animeapis/graphql-schema/animeshon"
+  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_graphql/animeshon" "animeapis/graphql-schema"
 
   # animeapis/reference-markdown
   echo "copying *.md files to animeapis/reference-markdown..."
