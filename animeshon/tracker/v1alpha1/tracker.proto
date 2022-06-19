@@ -440,8 +440,12 @@ option (openapi.v3.document) = {
             security_scheme: {
               type: "oauth2";
               flows: {
+                client_credentials: {
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {};
+                }
                 authorization_code: {
-                  authorization_url: "https://accounts.animeshon.com/o/oauth2/authorize";
+                  authorization_url: "https://accounts.animeshon.com/o/oauth2/auth";
                   token_url: "https://accounts.animeshon.com/o/oauth2/token";
                   scopes: {
                     additional_properties: [
