@@ -109,21 +109,21 @@ do
   rm -rf "animeapis/openapi-specification/animeshon/${i}/v1alpha1"
   mkdir -p "animeapis/openapi-specification/animeshon/${i}/v1alpha1"
 
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_openapi/openapi.yaml" "animeapis/openapi-specification/animeshon/${i}/v1alpha1"
+  cp "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_openapi/openapi.yaml" "animeapis/openapi-specification/animeshon/${i}/v1alpha1"
 
   # animeapis/graphql-schema
   echo "copying *.graphql files to animeapis/graphql-schema..."
 
   rm -rf "animeapis/graphql-schema/animeshon/${i}/v1alpha1"
   mkdir -p "animeapis/graphql-schema/animeshon/${i}/v1alpha1"
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_graphql" .
+  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_graphql/animeshon" "animeapis/graphql-schema/animeshon"
 
   # animeapis/reference-markdown
   echo "copying *.md files to animeapis/reference-markdown..."
 
   rm -rf "animeapis/reference-markdown/rpc/animeshon/${i}/v1alpha1"
   mkdir -p "animeapis/reference-markdown/rpc/animeshon/${i}/v1alpha1"
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_markdown/${services[$i]}_proto_markdown.md" "animeapis/reference-markdown/rpc/animeshon/${i}/v1alpha1/${gapi[$i]}.md"
+  cp "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_markdown/${services[$i]}_proto_markdown.md" "animeapis/reference-markdown/rpc/animeshon/${i}/v1alpha1/${gapi[$i]}.md"
 done
 
 exit 0
