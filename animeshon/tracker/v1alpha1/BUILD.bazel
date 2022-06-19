@@ -23,6 +23,8 @@ proto_library(
         "tracker.proto",
     ],
     deps = [
+        "//graphql:graphql_proto",
+        "//openapi/v3:openapi_proto",
         "@com_google_googleapis//google/api:annotations_proto",
         "@com_google_googleapis//google/api:client_proto",
         "@com_google_googleapis//google/api:field_behavior_proto",
@@ -55,6 +57,8 @@ go_proto_library(
     importpath = "github.com/animeapis/go-genproto/tracker/v1alpha1",
     protos = [":tracker_proto"],
     deps = [
+        "//graphql:graphql_go_proto",
+        "//openapi/v3:openapi_go_proto",
         "@go_googleapis//google/api:annotations_go_proto",
         "@go_googleapis//google/iam/v1:iam_go_proto",
         "@go_googleapis//google/longrunning:longrunning_go_proto",
@@ -130,6 +134,11 @@ doc_markdown_compile(
 proto_graphql(
     name = "tracker_proto_graphql",
     protos = [":tracker_proto"],
+    options = {
+        "@com_animeshon_animeapis//:graphql_plugin": [
+            "trim_prefix=AnimeshonTrackerV1Alpha1_",
+        ],
+    },
 )
 
 ##############################################################################
@@ -138,11 +147,4 @@ proto_graphql(
 proto_openapi(
     name = "tracker_proto_openapi",
     protos = [":tracker_proto"],
-    options = {
-        "@com_animeshon_animeapis//:openapi_plugin": [
-            # "title='Tracker API'", # TODO: fix bazel plugin generator.
-            "title=animeshon.tracker",
-            "version=v1alpha1"
-        ],
-    },
 )

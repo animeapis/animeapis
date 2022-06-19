@@ -1,9 +1,41 @@
 load("@rules_proto_grpc//:defs.bzl", "proto_plugin")
 
+# ! ############################################################################
+# ! LIST OF KNOWN ISSUES TO BE FIXED IN PROTO PLUGINS.
+# ! ############################################################################
+# !
+# ! @(graphql_plugin): integers should generate "Int" type rather than "Float".
+# ! @(graphql_plugin): Input types shouldn't be generate for Request messages:
+# !    e.g. do not duplicate GetTrackerRequest and GetTrackerRequestInput.
+# ! @(graphql_plugin): recognize required fields (google.api.field_behavior).
+# ! @(graphql_plugin): recognize output only fields (google.api.field_behavior).
+# ! @(graphql_plugin): ignore required "name" field for create methods.
+# ! @(graphql_plugin): (graphql.field).type should be nullable for Input types
+# !   or add (graphql.field).input_type to override input field generation.
+# ! @(graphql_plugin): options "trim_prefix" should support multiple prefixes.
+# ! @(graphql_plugin): add option "empty" like option "timestamp" or implement
+# !   options logic to map well-known proto types to other GraphQL types
+# !   e.g. map_wellknown_type=GoogleProtobuf_Timpestamp:DateTime.
+# ! @(graphql_plugin): allow generating enums with Input type with no
+# !   UNSPECIFIED value, e.g. (graphql.enum_value).output_only = true.
+# ! @(graphql_plugin): find a good way to generate IAM and LRO methods.
+# ! @(graphql_plugin): add option "disable_prefix" to disable all prefixes.
+# !
+# ! @(openapi_plugin): update OAS version to 3.1.x.
+# ! @(openapi_plugin): move title and version protoc options to annotations.
+# ! @(openapi_plugin): add more useful openapi annotations:
+# !   https://github.com/google/gnostic/blob/main/cmd/protoc-gen-openapi/examples/tests/openapiv3annotations/message.proto
+
+
 proto_plugin(
   name = "graphql_plugin",
   exclusions = [
     "google",
+  ],
+  options = [
+    # "trim_prefix=GoogleProtobuf_,GoogleLongrunning_", # TODO: add support for multiple prefixes to be trimmed.
+    "null_wrappers=true",
+    "timestamp=DateTime"
   ],
   # outputs = ["{basename}_pb.graphql"], # TODO: generate files in the output folder.
   protoc_plugin_name = "graphql",
