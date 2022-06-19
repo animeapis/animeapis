@@ -62,9 +62,9 @@ do
   rm -rf "animeapis/api-go-client/${i}/v1alpha1"
   mkdir -p "animeapis/api-go-client/${i}/v1alpha1"
 
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_metadata.json/github.com/animeapis" .
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_main.go/github.com/animeapis" .
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_test.go/github.com/animeapis" .
+  cp -r -L "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_metadata.json/github.com/animeapis" .
+  cp -r -L "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_main.go/github.com/animeapis" .
+  cp -r -L "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_gapic_srcjar_test.go/github.com/animeapis" .
 
   # animeapis/api-nodejs-client
   echo "copying gapics to animeapis/api-nodejs-client..."
@@ -101,7 +101,7 @@ do
   rm -rf "animeapis/go-genproto/${i}/v1alpha1"
   mkdir -p "animeapis/go-genproto/${i}/v1alpha1"
 
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_proto_/github.com/animeapis" .
+  cp -r -L "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_go_proto_/github.com/animeapis" .
 
   # animeapis/openapi-specification
   echo "copying *.yaml files to animeapis/openapi-specification..."
@@ -116,7 +116,7 @@ do
 
   rm -rf "animeapis/graphql-schema/animeshon/${i}/v1alpha1"
   mkdir -p "animeapis/graphql-schema/animeshon/${i}/v1alpha1"
-  cp -r "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_graphql/animeshon" "animeapis/graphql-schema"
+  cp -r -L "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_graphql/animeshon" "animeapis/graphql-schema"
 
   # animeapis/reference-markdown
   echo "copying *.md files to animeapis/reference-markdown..."
