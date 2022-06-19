@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "go_gapic_assembly_pkg",
@@ -107,4 +109,35 @@ nodejs_gapic_assembly_pkg(
         ":crossrefs_nodejs_gapic",
         ":crossrefs_proto",
     ],
+)
+
+##############################################################################
+# Markdown
+##############################################################################
+doc_markdown_compile(
+    name = "crossrefs_proto_markdown",
+    protos = [":crossrefs_proto"],
+)
+
+##############################################################################
+# GraphQL
+##############################################################################
+proto_graphql(
+    name = "crossrefs_proto_graphql",
+    protos = [":crossrefs_proto"],
+)
+
+##############################################################################
+# OpenAPI
+##############################################################################
+proto_openapi(
+    name = "crossrefs_proto_openapi",
+    protos = [":crossrefs_proto"],
+    options = {
+        "@com_animeshon_animeapis//:openapi_plugin": [
+            # "title='CrossRefs API'", # TODO: fix bazel plugin generator.
+            "title=animeshon.crossrefs",
+            "version=v1alpha1"
+        ],
+    },
 )

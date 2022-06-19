@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "go_gapic_assembly_pkg",
@@ -108,4 +110,35 @@ nodejs_gapic_assembly_pkg(
         ":webcache_nodejs_gapic",
         ":webcache_proto",
     ],
+)
+
+##############################################################################
+# Markdown
+##############################################################################
+doc_markdown_compile(
+    name = "webcache_proto_markdown",
+    protos = [":webcache_proto"],
+)
+
+##############################################################################
+# GraphQL
+##############################################################################
+proto_graphql(
+    name = "webcache_proto_graphql",
+    protos = [":webcache_proto"],
+)
+
+##############################################################################
+# OpenAPI
+##############################################################################
+proto_openapi(
+    name = "webcache_proto_openapi",
+    protos = [":webcache_proto"],
+    options = {
+        "@com_animeshon_animeapis//:openapi_plugin": [
+            # "title='WebCache API'", # TODO: fix bazel plugin generator.
+            "title=animeshon.webcache",
+            "version=v1alpha1"
+        ],
+    },
 )

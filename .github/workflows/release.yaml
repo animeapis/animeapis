@@ -47,6 +47,27 @@ jobs:
         path: animeapis/api-nodejs-client
         token: ${{ env.TOKEN }}
 
+    - name: Clone animeapis/openapi-specification
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/openapi-specification
+        path: animeapis/openapi-specification
+        token: ${{ env.TOKEN }}
+
+    - name: Clone animeapis/graphql-schema
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/graphql-schema
+        path: animeapis/graphql-schema
+        token: ${{ env.TOKEN }}
+
+    - name: Clone animeapis/reference-markdown
+      uses: actions/checkout@v2
+      with:
+        repository: animeapis/reference-markdown
+        path: animeapis/reference-markdown
+        token: ${{ env.TOKEN }}
+
     - name: Switch branch for animeapis/proto-binary (pull requests only)
       working-directory: animeapis/proto-binary
       if: github.event_name == 'pull_request'
@@ -82,6 +103,39 @@ jobs:
 
     - name: Switch branch for animeapis/api-nodejs-client (pull requests only)
       working-directory: animeapis/api-nodejs-client
+      if: github.event_name == 'pull_request'
+      run: |-
+        if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+        else
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        fi
+
+    - name: Switch branch for animeapis/openapi-specification (pull requests only)
+      working-directory: animeapis/openapi-specification
+      if: github.event_name == 'pull_request'
+      run: |-
+        if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+        else
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        fi
+
+    - name: Switch branch for animeapis/graphql-schema (pull requests only)
+      working-directory: animeapis/graphql-schema
+      if: github.event_name == 'pull_request'
+      run: |-
+        if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+        else
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        fi
+
+    - name: Switch branch for animeapis/reference-markdown (pull requests only)
+      working-directory: animeapis/reference-markdown
       if: github.event_name == 'pull_request'
       run: |-
         if [[ -z $(git ls-remote --heads origin ${{ github.event.pull_request.head.ref }}) ]]; then
@@ -162,4 +216,46 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "${{ github.event.head_commit.message }}"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/api-nodejs-client.git
+        git push -u origin HEAD
+
+    - name: Push commit to animeapis/openapi-specification
+      working-directory: animeapis/openapi-specification
+      run: |-
+        git config --local user.email "${{ env.EMAIL }}"
+        git config --local user.name "${{ env.USERNAME }}"
+
+        git config --local core.filemode false
+
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate openapi specifications"
+
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/openapi-specification.git
+        git push -u origin HEAD
+
+    - name: Push commit to animeapis/graphql-schema
+      working-directory: animeapis/graphql-schema
+      run: |-
+        git config --local user.email "${{ env.EMAIL }}"
+        git config --local user.name "${{ env.USERNAME }}"
+
+        git config --local core.filemode false
+
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate graphql schemas"
+
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/graphql-schema.git
+        git push -u origin HEAD
+
+    - name: Push commit to animeapis/reference-markdown
+      working-directory: animeapis/reference-markdown
+      run: |-
+        git config --local user.email "${{ env.EMAIL }}"
+        git config --local user.name "${{ env.USERNAME }}"
+
+        git config --local core.filemode false
+
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate markdown files"
+
+        git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/reference-markdown.git
         git push -u origin HEAD

@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "go_gapic_assembly_pkg",
@@ -111,4 +113,35 @@ nodejs_gapic_assembly_pkg(
         ":admin_nodejs_gapic",
         ":admin_proto",
     ],
+)
+
+##############################################################################
+# Markdown
+##############################################################################
+doc_markdown_compile(
+    name = "admin_proto_markdown",
+    protos = [":admin_proto"],
+)
+
+##############################################################################
+# GraphQL
+##############################################################################
+proto_graphql(
+    name = "admin_proto_graphql",
+    protos = [":admin_proto"],
+)
+
+##############################################################################
+# OpenAPI
+##############################################################################
+proto_openapi(
+    name = "admin_proto_openapi",
+    protos = [":admin_proto"],
+    options = {
+        "@com_animeshon_animeapis//:openapi_plugin": [
+            # "title='Identity and Access Management API'", # TODO: fix bazel plugin generator.
+            "title=animeshon.iam.admin",
+            "version=v1alpha1"
+        ],
+    },
 )

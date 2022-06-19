@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "go_gapic_assembly_pkg",
@@ -102,4 +104,35 @@ nodejs_gapic_assembly_pkg(
         ":hub_nodejs_gapic",
         ":hub_proto",
     ],
+)
+
+##############################################################################
+# Markdown
+##############################################################################
+doc_markdown_compile(
+    name = "hub_proto_markdown",
+    protos = [":hub_proto"],
+)
+
+##############################################################################
+# GraphQL
+##############################################################################
+proto_graphql(
+    name = "hub_proto_graphql",
+    protos = [":hub_proto"],
+)
+
+##############################################################################
+# OpenAPI
+##############################################################################
+proto_openapi(
+    name = "hub_proto_openapi",
+    protos = [":hub_proto"],
+    options = {
+        "@com_animeshon_animeapis//:openapi_plugin": [
+            # "title='Hub API'", # TODO: fix bazel plugin generator.
+            "title=animeshon.hub",
+            "version=v1alpha1"
+        ],
+    },
 )

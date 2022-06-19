@@ -1,0 +1,35 @@
+load("@rules_proto_grpc//:defs.bzl", "proto_plugin")
+
+proto_plugin(
+  name = "graphql_plugin",
+  exclusions = [
+    "google",
+  ],
+  # outputs = ["{basename}_pb.graphql"], # TODO: generate files in the output folder.
+  protoc_plugin_name = "graphql",
+  tool = select({
+    "@bazel_tools//src/conditions:linux_x86_64": "@protoc_gen_graphql//file",
+  }),
+  output_directory = True,
+  separate_options_flag = True,
+  visibility = ["//visibility:public"],   
+)
+
+proto_plugin(
+  name = "openapi_plugin",
+  exclusions = [
+    "google",
+  ],
+  options = [
+    "fq_schema_naming=true",
+    "enum_type=string",
+  ],
+  # outputs = ["{basename}.yaml"], # TODO: generate files with basename.
+  protoc_plugin_name = "openapi",
+  tool = select({
+    "@bazel_tools//src/conditions:linux_x86_64": "@protoc_gen_openapi//file",
+  }),
+  output_directory = True,
+  separate_options_flag = True,
+  visibility = ["//visibility:public"],   
+)
