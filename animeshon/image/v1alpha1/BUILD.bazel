@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "go_gapic_assembly_pkg",
@@ -115,4 +117,35 @@ nodejs_gapic_assembly_pkg(
         ":image_nodejs_gapic",
         ":image_proto",
     ],
+)
+
+##############################################################################
+# Markdown
+##############################################################################
+doc_markdown_compile(
+    name = "image_proto_markdown",
+    protos = [":image_proto"],
+)
+
+##############################################################################
+# GraphQL
+##############################################################################
+proto_graphql(
+    name = "image_proto_graphql",
+    protos = [":image_proto"],
+)
+
+##############################################################################
+# OpenAPI
+##############################################################################
+proto_openapi(
+    name = "image_proto_openapi",
+    protos = [":image_proto"],
+    options = {
+        "@com_animeshon_animeapis//:openapi_plugin": [
+            # "title='Image API'", # TODO: fix bazel plugin generator.
+            "title=animeshon.image",
+            "version=v1alpha1"
+        ],
+    },
 )

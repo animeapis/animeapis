@@ -141,7 +141,7 @@ proto_openapi(
     protos = [":vision_proto"],
     options = {
         "@com_animeshon_animeapis//:openapi_plugin": [
-            # "title='Credentials API'", # TODO: fix bazel plugin generator.
+            # "title='Vision API'", # TODO: fix bazel plugin generator.
             "title=animeshon.vision",
             "version=v1alpha1"
         ],

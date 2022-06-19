@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "go_gapic_assembly_pkg",
@@ -112,4 +114,35 @@ nodejs_gapic_assembly_pkg(
         ":tracker_nodejs_gapic",
         ":tracker_proto",
     ],
+)
+
+##############################################################################
+# Markdown
+##############################################################################
+doc_markdown_compile(
+    name = "tracker_proto_markdown",
+    protos = [":tracker_proto"],
+)
+
+##############################################################################
+# GraphQL
+##############################################################################
+proto_graphql(
+    name = "tracker_proto_graphql",
+    protos = [":tracker_proto"],
+)
+
+##############################################################################
+# OpenAPI
+##############################################################################
+proto_openapi(
+    name = "tracker_proto_openapi",
+    protos = [":tracker_proto"],
+    options = {
+        "@com_animeshon_animeapis//:openapi_plugin": [
+            # "title='Tracker API'", # TODO: fix bazel plugin generator.
+            "title=animeshon.tracker",
+            "version=v1alpha1"
+        ],
+    },
 )
