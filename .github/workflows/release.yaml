@@ -227,7 +227,7 @@ jobs:
         git config --local core.filemode false
 
         git add -A
-        git diff-index --quiet HEAD || git commit -m "${{ github.event.head_commit.message }}"
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate openapi specifications"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/openapi-specification.git
         git push -u origin HEAD
@@ -241,7 +241,7 @@ jobs:
         git config --local core.filemode false
 
         git add -A
-        git diff-index --quiet HEAD || git commit -m "${{ github.event.head_commit.message }}"
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate graphql schemas"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/graphql-schema.git
         git push -u origin HEAD
@@ -255,7 +255,7 @@ jobs:
         git config --local core.filemode false
 
         git add -A
-        git diff-index --quiet HEAD || git commit -m "${{ github.event.head_commit.message }}"
+        git diff-index --quiet HEAD || git commit -m "chore(all): auto-regenerate markdown files"
 
         git remote set-url origin https://${{ env.USERNAME }}:${{ env.TOKEN }}@github.com/animeapis/reference-markdown.git
         git push -u origin HEAD
