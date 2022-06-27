@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+name: webpage.animeapis.com
+title: WebPage API
+
+apis:
+- name: animeshon.webpage.v1alpha1.PageStore
