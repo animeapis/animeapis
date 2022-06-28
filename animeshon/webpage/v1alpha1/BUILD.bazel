@@ -20,7 +20,7 @@ exports_files(glob(["*.json"]))
 proto_library(
     name = "webpage_proto",
     srcs = [
-        "store.proto",
+        "archive.proto",
     ],
     deps = [
         "//graphql:graphql_proto",

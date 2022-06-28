@@ -4,4 +4,4 @@ name: webpage.animeapis.com
 title: WebPage API
 
 apis:
-- name: animeshon.webpage.v1alpha1.PageStore
+- name: animeshon.webpage.v1alpha1.Archive
