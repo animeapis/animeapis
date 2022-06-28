@@ -1,0 +1,220 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+import "graphql/options.proto";
+import "openapi/v3/annotations.proto";
+
+package animeshon.webpage.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/webpage/v1alpha1;webpage";
+option java_package = "com.animeshon.webpage.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::WebPage::v1Alpha1";
+
+service Archive {
+  option (google.api.default_host) = "webpage.animeapis.com";
+
+  rpc GetPage(GetPageRequest) returns (Page) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=sites/*/pages/*}"
+    };
+    option (graphql.method) = {
+      field: "getPage"
+      operation: "query"
+    };
+  }
+
+  rpc ListPages(ListPagesRequest) returns (ListPagesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=sites/*}/pages"
+    };
+    option (graphql.method) = {
+      field: "listPages"
+      operation: "query"
+    };
+  }
+
+  rpc ImportPage(ImportPageRequest) returns (ImportPageResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=sites/*/pages/*}"
+      body: "*"
+    };
+    option (graphql.method) = {
+      field: "importPage"
+      operation: "mutation"
+    };
+  }
+
+  rpc CreatePage(CreatePageRequest) returns (Page) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=sites/*}/pages"
+      body: "*"
+    };
+    option (graphql.method) = {
+      field: "createPage"
+      operation: "mutation"
+    };
+  }
+
+  rpc DeletePage(DeletePageRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/{name=sites/*/pages/*}"
+    };
+    option (graphql.method) = {
+      field: "deletePage"
+      operation: "mutation"
+    };
+  }
+}
+
+message Page {
+  // The name of the page.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The page content according to the html selector.
+  string content = 2;
+}
+
+message GetPageRequest {
+  // The name of the page to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The html selector to use to return the page content.
+  string selector = 2;
+}
+
+message ListPagesRequest {
+  // The parent this page belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // If unspecified, server will pick an appropriate default.
+  int32 page_size = 2;
+
+  // The value returned from the previous call.
+  string page_token = 3;
+
+  // A filter to be applied to results.
+  string filter = 4;
+}
+
+message ListPagesResponse {
+  // The list of pages.
+  repeated Page pages = 1;
+
+  // A token to retrieve next page of results.
+  string next_page_token = 2;
+}
+
+message ImportPageRequest {
+  // The WebCache options to be used when importing a page from a public site.
+  message WebCacheOptions {
+    // If refresh is set to true the page is imported from the remote address
+    // regardless of an existing local cache, if the fetched page does not
+    // match the existing cache the new page is stored and a new resource is
+    // created, otherwise the existing (cached) resource is returned.
+    bool refresh = 1;
+  
+    // If ignore is set to true no cache lookup is performed and the page is
+    // imported into a new resource. If both "ignore" and "refresh" are set to
+    // true then "refresh" has no effect.
+    bool ignore = 2;
+  }
+
+  // The name of the page to retrieve.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The web cache options to apply to the import request.
+  WebCacheOptions cache_options = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ImportPageResponse {
+  message ImportPageResult {
+    // The successfully imported page.
+    Page page = 2;
+  }
+
+  message ImportPageRemoteError {
+    // The status code returned from the remote server.
+    int32 status_code = 1;
+
+    // The details related to the import failure.
+    string details = 2;
+  }
+
+  // The response is either the imported page or a remote error with details.
+  oneof response {
+    // If the operation was successful this field will return the imported page.
+    ImportPageResult result = 1;
+
+    // If the operation ended up in a failure due to an error with the remote
+    // server this field will provide more details about the failure.
+    ImportPageRemoteError error = 2;
+  }
+
+  // Whether this page was found in the cache.
+  bool cache_hit = 3;
+}
+
+message CreatePageRequest {
+  // The parent this page belongs to.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The page to create.
+  Page page = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeletePageRequest {
+  // The name of the page to delete.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// TODO: auto-generate openapi authentication security scheme.
+option (openapi.v3.document) = {
+  info: {
+    title: "WebPage API";
+    version: "v1alpha1";
+  }
+  components: {
+    security_schemes: {
+      additional_properties: [
+        {
+          name: "OAuth2";
+          value: {
+            security_scheme: {
+              type: "oauth2";
+              flows: {
+                client_credentials: {
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {};
+                }
+                authorization_code: {
+                  authorization_url: "https://accounts.animeshon.com/o/oauth2/auth";
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {
+                    additional_properties: [
+                      {
+                        name: "https://www.animeapis.com/auth/webpage",
+                        value: "View and manage indexed sites and pages."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+};

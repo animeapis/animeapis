@@ -22,6 +22,7 @@ scopes:
   - tracker
   - vision
   - webcache
+  - webpage
 
 types:
   - feat
