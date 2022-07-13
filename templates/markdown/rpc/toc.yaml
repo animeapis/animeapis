@@ -1,0 +1,13 @@
+{{- range $file := .Files }}
+{{- if $file.HasServices }}
+{{- range $service := $file.Services }}
+  - package: {{ $file.Package }}
+    name: {{ $service.Name }}
+    methods:
+{{- range $method := $service.Methods }}
+      - name: {{ $method.Name }}
+        description: {{ $method.Description }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -46,6 +46,27 @@ declare -A gapi=(
   ["webpage"]="webpage"
 )
 
+declare -A package=(
+  ["credentials"]="animeshon.credentials.v1alpha1"
+  ["crossrefs"]="animeshon.crossrefs.v1alpha1"
+  ["graph"]="animeshon.graph.v1alpha1"
+  ["grbac"]="animeshon.grbac.v1alpha1"
+  ["hub"]="animeshon.hub.v1alpha1"
+  ["iam/admin"]="animeshon.iam.admin.v1alpha1"
+  ["identity"]="animeshon.identity.v1alpha1"
+  ["image"]="animeshon.image.v1alpha1"
+  ["knowledge"]="animeshon.knowledge.v1alpha1"
+  ["library"]="animeshon.library.v1alpha1"
+  ["multimedia"]="animeshon.multimedia.v1alpha1"
+  ["product"]="animeshon.product.v1alpha1"
+  ["release"]="animeshon.release.v1alpha1"
+  ["resourcemanager"]="animeshon.resourcemanager.v1alpha1"
+  ["tracker"]="animeshon.tracker.v1alpha1"
+  ["vision"]="animeshon.vision.v1alpha1"
+  ["webcache"]="animeshon.webcache.v1alpha1"
+  ["webpage"]="animeshon.webpage.v1alpha1"
+)
+
 for i in "${!services[@]}"
 do
   echo $i
@@ -123,9 +144,9 @@ do
   # animeapis/reference-markdown
   echo "copying *.md files to animeapis/reference-markdown..."
 
-  rm -rf "animeapis/reference-markdown/rpc/animeshon/${i}/v1alpha1"
-  mkdir -p "animeapis/reference-markdown/rpc/animeshon/${i}/v1alpha1"
-  cp "bazel-bin/animeshon/${i}/v1alpha1/${services[$i]}_proto_markdown/${services[$i]}_proto_markdown.md" "animeapis/reference-markdown/rpc/animeshon/${i}/v1alpha1/${gapi[$i]}.md"
+  rm -rf "animeapis/reference-markdown/rpc/animeshon/${i}"
+  mkdir -p "animeapis/reference-markdown/rpc/animeshon/${i}"
+  cp "bazel-bin/animeshon/${i}/v1alpha1/package.md/package.md" "animeapis/reference-markdown/rpc/animeshon/${i}/${package[$i]}.md"
 done
 
 exit 0

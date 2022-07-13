@@ -1,5 +1,5 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_proto_grpc//doc:defs.bzl", "doc_markdown_compile")
+load("@rules_proto_grpc//doc:defs.bzl", "doc_template_compile")
 load("//:defs.bzl", "proto_graphql", "proto_openapi")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
@@ -118,9 +118,17 @@ nodejs_gapic_assembly_pkg(
 ##############################################################################
 # Markdown
 ##############################################################################
-doc_markdown_compile(
-    name = "knowledge_proto_markdown",
+doc_template_compile(
+    name = "package.md",
     protos = [":knowledge_proto"],
+    template = "//templates/markdown/rpc:package.md",
+)
+
+# ToC for docs.
+doc_template_compile(
+    name = "toc.yaml",
+    protos = [":knowledge_proto"],
+    template = "//templates/markdown/rpc:toc.yaml",
 )
 
 ##############################################################################
