@@ -23,22 +23,23 @@
 
 {{- range .Files }}
 {{- if not (contains "internal" .Name) }}
-{{- range .Services }}
-## {{.Name}} {#{{.FullName}}}
-{{.Description}}
+{{- range $service := .Services }}
+## <span id="{{.FullName}}">{{.Name}}</span>
 
-{{- range .Methods }}
-| {{.Name}} |
+{{.Description}}
+{{ range .Methods }}
+| <span id="{{ $service.FullName }}.{{.Name}}">{{.Name}}</span> |
 | --- |
-| **rpc** {{.Name}}([{{.RequestLongType}}](#{{.RequestFullType}})) [{{.ResponseLongType}}](#{{.ResponseFullType}})<br/>{{ nobr .Description}} |
+| **rpc {{.Name}}([{{.RequestLongType}}](#{{.RequestFullType}})) [{{.ResponseLongType}}](#{{.ResponseFullType}})**<br/><br/>{{ nobr .Description}} |
 {{ end }}
 {{- end }}
 
 {{- range .Messages }}
-## {{.LongName}} {#{{.FullName}}}
-{{.Description}}
 
-{{- if .HasFields }}
+## <span id="{{.FullName}}">{{.LongName}}</span>
+
+{{.Description}}
+{{ if .HasFields }}
 | Field | Description |
 | --- | --- |
 {{- range .Fields }}
@@ -49,7 +50,7 @@
 
 {{- range .Enums }}
 
-## {{.LongName}} {#{{.FullName}}}
+## <span id="{{.FullName}}">{{.LongName}}</span>
 {{.Description}}
 
 | Name | Description |
