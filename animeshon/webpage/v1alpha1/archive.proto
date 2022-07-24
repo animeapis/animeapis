@@ -47,7 +47,7 @@ service Archive {
 
   rpc ImportPage(ImportPageRequest) returns (ImportPageResponse) {
     option (google.api.http) = {
-      post: "/v1alpha1/{name=sites/*/pages/*}"
+      post: "/v1alpha1/{parent=sites/*}"
       body: "*"
     };
     option (graphql.method) = {
@@ -131,11 +131,18 @@ message ImportPageRequest {
     bool ignore = 2;
   }
 
-  // The name of the page to retrieve.
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // The site parent of the page.
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+  
+  // A publicly-accessible page HTTP/HTTPS URL. When fetching pages from
+  // HTTP/HTTPS URLs, Animeshon cannot guarantee that the request will be
+  // completed. Your request may fail if the specified host denies the
+  // request (e.g. due to request throttling or DoS prevention), or if
+  // Animeshon throttles requests to the site for abuse prevention.
+  string uri = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The web cache options to apply to the import request.
-  WebCacheOptions cache_options = 2 [(google.api.field_behavior) = OPTIONAL];
+  WebCacheOptions cache_options = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message ImportPageResponse {
