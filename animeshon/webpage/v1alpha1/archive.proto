@@ -45,6 +45,17 @@ service Archive {
     };
   }
 
+  rpc QueryPage(QueryPageRequest) returns (QueryPageResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=sites/*/pages/*}:query"
+      body: "*"
+    };
+    option (graphql.method) = {
+      field: "queryPage"
+      operation: "mutation"
+    };
+  }
+
   rpc CreatePage(CreatePageRequest) returns (Page) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=sites/*}/pages"
@@ -114,6 +125,19 @@ message ListPagesResponse {
 
   // A token to retrieve next page of results.
   string next_page_token = 2;
+}
+
+message QueryPageRequest {
+  // The name of the page to query.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The query to perform on the document in declarative query language.
+  string query = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message QueryPageResponse {
+  // The document query result.
+  string result = 1;
 }
 
 message ImportPageRequest {
