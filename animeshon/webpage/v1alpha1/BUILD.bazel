@@ -21,6 +21,7 @@ proto_library(
     name = "webpage_proto",
     srcs = [
         "archive.proto",
+        "internal.proto",
     ],
     deps = [
         "//graphql:graphql_proto",

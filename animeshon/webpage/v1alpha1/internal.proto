@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package animeshon.webpage.v1alpha1;
+
+option go_package = "github.com/animeapis/go-genproto/webpage/v1alpha1;webpage";
+option java_package = "com.animeshon.webpage.v1alpha1";
+option java_multiple_files = true;
+option ruby_package = "Animeshon::WebPage::v1Alpha1";
+
+// This is a private internal structure used to store metadata information
+// about a specific Page. This structure is never exposed to the public.
+message PageEntry {
+  // The page resource id.
+  int64 id = 1;
+
+  // A reference to a parent resource.
+  oneof parent {
+    // The site resource id. Example: `sites/animeshon-com`.
+    string site_id = 2;
+  }
+
+  // The uri of the page.
+  string uri = 3;
+
+  // The document body represented in bytes.
+  bytes document = 4;
+
+  // When the page entry was created.
+  google.protobuf.Timestamp create_time = 8;
+}
