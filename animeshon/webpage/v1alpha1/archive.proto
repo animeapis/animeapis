@@ -45,17 +45,6 @@ service Archive {
     };
   }
 
-  rpc ImportPage(ImportPageRequest) returns (ImportPageResponse) {
-    option (google.api.http) = {
-      post: "/v1alpha1/{parent=sites/*}"
-      body: "*"
-    };
-    option (graphql.method) = {
-      field: "importPage"
-      operation: "mutation"
-    };
-  }
-
   rpc CreatePage(CreatePageRequest) returns (Page) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=sites/*}/pages"
@@ -63,6 +52,17 @@ service Archive {
     };
     option (graphql.method) = {
       field: "createPage"
+      operation: "mutation"
+    };
+  }
+
+  rpc ImportPage(ImportPageRequest) returns (ImportPageResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{parent=sites/*}:import"
+      body: "*"
+    };
+    option (graphql.method) = {
+      field: "importPage"
       operation: "mutation"
     };
   }
