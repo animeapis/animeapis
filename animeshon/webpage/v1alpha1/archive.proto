@@ -147,8 +147,8 @@ message ImportPageRequest {
 
 message ImportPageResponse {
   message ImportPageResult {
-    // The successfully imported page.
-    Page page = 2;
+    // The page resource name.
+    string name = 1;
   }
 
   message ImportPageRemoteError {
