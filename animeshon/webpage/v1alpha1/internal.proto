@@ -21,12 +21,9 @@ message PageEntry {
     string site_id = 2;
   }
 
-  // The uri of the page.
-  string uri = 3;
-
   // The document body represented in bytes.
-  bytes document = 4;
+  bytes document = 3;
 
   // When the page entry was created.
-  google.protobuf.Timestamp create_time = 8;
+  google.protobuf.Timestamp create_time = 4;
 }
