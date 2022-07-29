@@ -10,8 +10,8 @@ import "google/longrunning/operations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/any.proto";
 
 import "graphql/options.proto";
 import "openapi/v3/annotations.proto";
@@ -111,7 +111,7 @@ message QueryRequest {
 message QueryResponse {
   message QueryPageResult {
     // The result of the query evaluation.
-    google.protobuf.Value body = 1;
+    google.protobuf.Value value = 1;
   }
 
   message QueryPageError {
@@ -177,7 +177,7 @@ message QueryPageRequest {
 message QueryPageResponse {
   message QueryPageResult {
     // The result of the query evaluation.
-    google.protobuf.Value body = 1;
+    google.protobuf.Value value = 1;
   }
 
   message QueryPageError {
