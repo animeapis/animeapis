@@ -47,12 +47,12 @@ service Archive {
 
   rpc QueryPage(QueryPageRequest) returns (QueryPageResponse) {
     option (google.api.http) = {
-      get: "/v1alpha1/{name=sites/*/pages/*}:query"
+      post: "/v1alpha1/{name=sites/*/pages/*}:query"
       body: "*"
     };
     option (graphql.method) = {
       field: "queryPage"
-      operation: "mutation"
+      operation: "query"
     };
   }
 
