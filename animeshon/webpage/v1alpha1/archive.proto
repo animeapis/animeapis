@@ -11,6 +11,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
 
 import "graphql/options.proto";
 import "openapi/v3/annotations.proto";
@@ -24,6 +25,8 @@ option ruby_package = "Animeshon::WebPage::v1Alpha1";
 
 service Archive {
   option (google.api.default_host) = "webpage.animeapis.com";
+
+  rpc Query(stream QueryRequest) returns (stream QueryResponse) {}
 
   rpc GetPage(GetPageRequest) returns (Page) {
     option (google.api.http) = {
@@ -97,6 +100,42 @@ message Page {
   string content = 2;
 }
 
+message QueryRequest {
+  // The query to perform on the matching documents in FQL.
+  string query = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The batch list of page resource names to be used for evaluation.
+  repeated string pages = 2;
+}
+
+message QueryResponse {
+  message QueryPageResult {
+    // The result of the query evaluation.
+    google.protobuf.Any body = 1;
+  }
+
+  message QueryPageError {
+    // The gRPC error code returned by the query.
+    int32 code = 1;
+
+    // Additional details of the evaluation error.
+    string details = 2;
+  }
+
+  // The evaluated page resource name.
+  string name = 1;
+
+  // The response is either the query result or an error with details.
+  oneof response {
+    // If the operation was successful this field will return the query result.
+    QueryPageResult result = 2;
+
+    // If the operation ended up in a failure due to an error with the query
+    // evaluation this field will provide more details about the failure.
+    QueryPageError error = 3;
+  }
+}
+
 message GetPageRequest {
   // The name of the page to retrieve.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
@@ -136,8 +175,28 @@ message QueryPageRequest {
 }
 
 message QueryPageResponse {
-  // The document query result.
-  string result = 1;
+  message QueryPageResult {
+    // The result of the query evaluation.
+    google.protobuf.Any body = 1;
+  }
+
+  message QueryPageError {
+    // The gRPC error code returned by the query.
+    int32 code = 1;
+
+    // Additional details of the evaluation error.
+    string details = 2;
+  }
+
+  // The response is either the query result or an error with details.
+  oneof response {
+    // If the operation was successful this field will return the query result.
+    QueryPageResult result = 1;
+
+    // If the operation ended up in a failure due to an error with the query
+    // evaluation this field will provide more details about the failure.
+    QueryPageError error = 2;
+  }
 }
 
 message ImportPageRequest {
