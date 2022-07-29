@@ -111,7 +111,7 @@ message QueryRequest {
 message QueryResponse {
   message QueryPageResult {
     // The result of the query evaluation.
-    google.protobuf.Any body = 1;
+    google.protobuf.Value body = 1;
   }
 
   message QueryPageError {
@@ -177,7 +177,7 @@ message QueryPageRequest {
 message QueryPageResponse {
   message QueryPageResult {
     // The result of the query evaluation.
-    google.protobuf.Any body = 1;
+    google.protobuf.Value body = 1;
   }
 
   message QueryPageError {
