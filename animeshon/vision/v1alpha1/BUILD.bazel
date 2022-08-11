@@ -57,9 +57,9 @@ go_proto_library(
     importpath = "github.com/animeapis/go-genproto/vision/v1alpha1",
     protos = [":vision_proto"],
     deps = [
-        "@go_googleapis//google/api:annotations_go_proto",
-        "@go_googleapis//google/longrunning:longrunning_go_proto",
-        "@go_googleapis//google/type:color_go_proto",
+        "@com_google_googleapis//google/api:annotations_go_proto",
+        "@com_google_googleapis//google/longrunning:longrunning_go_proto",
+        "@com_google_googleapis//google/type:color_go_proto",
     ],
 )
 
@@ -72,7 +72,7 @@ go_gapic_library(
     metadata = True,
     deps = [
         ":vision_go_proto",
-        "@go_googleapis//google/longrunning:longrunning_go_proto",
+        "@com_google_googleapis//google/longrunning:longrunning_go_proto",
         "@com_google_cloud_go//longrunning:go_default_library",
         "@com_google_cloud_go//longrunning/autogen:go_default_library",
     ],

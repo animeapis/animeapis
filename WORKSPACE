@@ -18,9 +18,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "com_google_googleapis",
-    sha256 = "a17552af336b93a1de63ac67189bd586ad1b8f44abb1dcea9ee5433d8eed5feb",
-    strip_prefix = "googleapis-8c42b6d576d865d40398cd67ed37215748721868",
-    urls = ["https://github.com/googleapis/googleapis/archive/8c42b6d576d865d40398cd67ed37215748721868.zip"],
+    sha256 = "62b9f0f235c8898091d0c5141bf072829f0f7954d3eaad32cc4c54a7d51649fe",
+    strip_prefix = "googleapis-be827beebe9f249fe370cb41edb7b282f90435be",
+    urls = ["https://github.com/googleapis/googleapis/archive/be827beebe9f249fe370cb41edb7b282f90435be.zip"],
 )
 
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
@@ -39,9 +39,9 @@ switched_rules_by_language(
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "9111bf0b542b631165fadbd80aa60e7fb25b25311c532139ed2089d76ddf6dd7",
-    strip_prefix = "protobuf-3.18.1",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.18.1.tar.gz"],
+    sha256 = "c29d8b4b79389463c546f98b15aa4391d4ed7ec459340c47bffe15db63eb9126",
+    strip_prefix = "protobuf-3.21.3",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.21.3.tar.gz"],
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
@@ -96,49 +96,40 @@ rules_proto_toolchains()
 # Golang
 ##############################################################################
 
+_io_bazel_rules_go_version = "0.33.0"
+
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "dbf5a9ef855684f84cac2e7ae7886c5a001d4f66ae23f6904da0faaaef0d61fc",
+    sha256 = "685052b498b6ddfe562ca7a97736741d87916fe536623afb7da2824c0211c369",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.24.11/rules_go-v0.24.11.tar.gz",
-        "https://github.com/bazelbuild/rules_go/releases/download/v0.24.11/rules_go-v0.24.11.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v{0}/rules_go-v{0}.zip".format(_io_bazel_rules_go_version),
+        "https://github.com/bazelbuild/rules_go/releases/download/v{0}/rules_go-v{0}.zip".format(_io_bazel_rules_go_version),
     ],
 )
 
 http_archive(
     name = "bazel_gazelle",
-    sha256 = "62ca106be173579c0a167deb23358fdfe71ffa1e4cfdddf5582af26520f1c66f",
+    sha256 = "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.23.0/bazel-gazelle-v0.23.0.tar.gz",
-        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.23.0/bazel-gazelle-v0.23.0.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
+        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
     ],
 )
 
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
-
-# TODO: https://github.com/googleapis/googleapis/blob/aefdc4ddbb1c5749f6cd0a32fd010228e9768769/WORKSPACE#L105
-go_repository(
-    name = "org_golang_google_genproto",
-    build_file_proto_mode = "disable_global",
-    importpath = "google.golang.org/genproto",
-    sum = "h1:4xoALQmXxqVdDdLimpPyPeDdsJzo+nFTJw9euAMpqgM=",
-    version = "v0.0.0-20210729151513-df9385d47c1b",
-)
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
 go_rules_dependencies()
 
-go_register_toolchains()
-
-gazelle_dependencies()
+go_register_toolchains(version = "1.16")
 
 ##############################################################################
 # GAPIC Generator Bazel Integration
 ##############################################################################
 
-_rules_gapic_version = "0.11.1"
+_rules_gapic_version = "0.15.0"
 
-_rules_gapic_sha256 = "edf4fa526cd8d9ae0d4aab3dc608a985ef75f631fe14f0c109a793eab2b5c31d"
+_rules_gapic_sha256 = "1da19934301ed71a1faa6a4dc19c9c1c01729fe31a58edcf520befc1002af22d"
 
 http_archive(
     name = "rules_gapic",
@@ -155,12 +146,15 @@ rules_gapic_repositories()
 # API Client Generator for Go (GAPIC)
 ##############################################################################
 
-_gapic_generator_go_version = "0.24.0"
+_gapic_generator_go_version = "0.31.2"
 
-_gapic_generator_go_sha256 = "aed695852802f8891d67d27fcaf45c1447e6760b6e5dc6b1076c54db096b67e0"
+_gapic_generator_go_sha256 = "b32f2e7939d6a8e6a94bfae3bae036882f992a3f60e6f9f8d181c55d0d938ac3"
 
 http_archive(
     name = "com_googleapis_gapic_generator_go",
+    repo_mapping = {
+        "@go_googleapis": "@com_google_googleapis",
+    },
     sha256 = _gapic_generator_go_sha256,
     strip_prefix = "gapic-generator-go-%s" % _gapic_generator_go_version,
     urls = ["https://github.com/googleapis/gapic-generator-go/archive/v%s.tar.gz" % _gapic_generator_go_version],
@@ -170,13 +164,15 @@ load("@com_googleapis_gapic_generator_go//:repositories.bzl", "com_googleapis_ga
 
 com_googleapis_gapic_generator_go_repositories()
 
+gazelle_dependencies()
+
 ##############################################################################
 # API Client Generator for TypeScript (GAPIC)
 ##############################################################################
 
-_gapic_generator_typescript_version = "2.11.0"
+_gapic_generator_typescript_version = "2.15.3"
 
-_gapic_generator_typescript_sha256 = "afb5d00a95f1fffd4c9f7fa474ff9e179b4b7a133384913a2407720537ac10a0"
+_gapic_generator_typescript_sha256 = "67e57040fe486482d7f62236ee1582c007504ad783b67cbe8429bbe4b59ffa53"
 
 ### TypeScript generator
 http_archive(
