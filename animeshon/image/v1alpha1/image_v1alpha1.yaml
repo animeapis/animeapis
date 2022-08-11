@@ -4,4 +4,25 @@ name: image.animeapis.com
 title: Image API
 
 apis:
-- name: animeshon.image.v1alpha1.Image
+  - name: animeshon.image.v1alpha1.Image
+  - name: animeshon.image.v1alpha1.ImageRouter
+  - name: google.iam.v1.IAMPolicy
+
+http:
+  rules:
+    - selector: google.iam.v1.IAMPolicy.GetIamPolicy
+      get: "/v1/{resource=users/*/albums/*}:getIamPolicy"
+      additional_bindings:
+        - get: "/v1/{resource=organizations/*/albums/*}:getIamPolicy"
+    - selector: google.iam.v1.IAMPolicy.SetIamPolicy
+      post: "/v1/{resource=users/*/albums/*}:setIamPolicy"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=organizations/*/albums/*}:setIamPolicy"
+          body: "*"
+    - selector: google.iam.v1.IAMPolicy.TestIamPermissions
+      post: "/v1/{resource=users/*/albums/*}:testIamPermissions"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=organizations/*/albums/*}:testIamPermissions"
+          body: "*"
