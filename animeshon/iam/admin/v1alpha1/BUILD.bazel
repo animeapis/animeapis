@@ -66,6 +66,7 @@ go_gapic_library(
     grpc_service_config = "iam_grpc_service_config.json",
     importpath = "github.com/animeapis/api-go-client/iam/admin/v1alpha1;admin",
     service_yaml = "iam_v1alpha1.yaml",
+    transport = "grpc+rest",
     metadata = True,
     deps = [
         ":admin_go_proto",

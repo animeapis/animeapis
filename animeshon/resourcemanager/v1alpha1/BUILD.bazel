@@ -63,6 +63,7 @@ go_gapic_library(
     grpc_service_config = "resourcemanager_grpc_service_config.json",
     importpath = "github.com/animeapis/api-go-client/resourcemanager/v1alpha1;resourcemanager",
     service_yaml = "resourcemanager_v1alpha1.yaml",
+    transport = "grpc+rest",
     metadata = True,
     deps = [
         ":resourcemanager_go_proto",

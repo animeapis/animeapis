@@ -64,6 +64,7 @@ go_gapic_library(
     grpc_service_config = "graph_grpc_service_config.json",
     importpath = "github.com/animeapis/api-go-client/graph/v1alpha1;graph",
     service_yaml = "graph_v1alpha1.yaml",
+    transport = "grpc+rest",
     metadata = True,
     deps = [
         ":graph_go_proto",

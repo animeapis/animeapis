@@ -71,6 +71,7 @@ go_gapic_library(
     grpc_service_config = "tracker_grpc_service_config.json",
     importpath = "github.com/animeapis/api-go-client/tracker/v1alpha1;tracker",
     service_yaml = "tracker_v1alpha1.yaml",
+    transport = "grpc+rest",
     metadata = True,
     deps = [
         ":tracker_go_proto",

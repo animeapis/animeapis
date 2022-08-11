@@ -63,6 +63,7 @@ go_gapic_library(
     grpc_service_config = "crossrefs_grpc_service_config.json",
     importpath = "github.com/animeapis/api-go-client/crossrefs/v1alpha1;crossrefs",
     service_yaml = "crossrefs_v1alpha1.yaml",
+    # transport = "grpc+rest", # TODO: generator breaks down in this service.
     metadata = True,
     deps = [
         ":crossrefs_go_proto",

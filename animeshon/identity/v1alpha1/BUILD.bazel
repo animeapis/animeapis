@@ -68,6 +68,7 @@ go_gapic_library(
     grpc_service_config = "identity_grpc_service_config.json",
     importpath = "github.com/animeapis/api-go-client/identity/v1alpha1;identity",
     service_yaml = "identity_v1alpha1.yaml",
+    transport = "grpc+rest",
     metadata = True,
     deps = [
         ":identity_go_proto",
