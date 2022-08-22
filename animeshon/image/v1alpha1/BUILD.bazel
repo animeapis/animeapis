@@ -24,6 +24,8 @@ proto_library(
         "internal.proto",
     ],
     deps = [
+        "//graphql:graphql_proto",
+        "//openapi/v3:openapi_proto",
         "@com_google_googleapis//google/api:annotations_proto",
         "@com_google_googleapis//google/api:client_proto",
         "@com_google_googleapis//google/api:field_behavior_proto",
@@ -56,6 +58,8 @@ go_proto_library(
     importpath = "github.com/animeapis/go-genproto/image/v1alpha1",
     protos = [":image_proto"],
     deps = [
+        "//graphql:graphql_go_proto",
+        "//openapi/v3:openapi_go_proto",
         "@com_google_googleapis//google/api:annotations_go_proto",
         "@com_google_googleapis//google/api:httpbody_go_proto",
         "@com_google_googleapis//google/iam/v1:iam_go_proto",
@@ -150,11 +154,4 @@ proto_graphql(
 proto_openapi(
     name = "image_proto_openapi",
     protos = [":image_proto"],
-    options = {
-        "@com_animeshon_animeapis//:openapi_plugin": [
-            # "title='Image API'", # TODO: fix bazel plugin generator.
-            "title=animeshon.image",
-            "version=v1alpha1"
-        ],
-    },
 )

@@ -12,6 +12,9 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 
+import "graphql/options.proto";
+import "openapi/v3/annotations.proto";
+
 package animeshon.image.v1alpha1;
 
 option go_package = "github.com/animeapis/go-genproto/image/v1alpha1;image";
@@ -32,6 +35,10 @@ service Image {
         body: "body"
       }
     };
+    option (graphql.method) = {
+      field: "uploadImage"
+      operation: "mutation"
+    };
   }
 
   // Imports an image from a remote web address.
@@ -43,6 +50,10 @@ service Image {
         post: "/v1alpha1/{parent=organizations/*/albums/*}/images:import"
         body: "*"
       }
+    };
+    option (graphql.method) = {
+      field: "importImage"
+      operation: "mutation"
     };
   }
 
@@ -64,6 +75,10 @@ service Image {
         get: "/v1alpha1/{name=organizations/*/albums/*}"
       }
     };
+    option (graphql.method) = {
+      field: "getAlbum"
+      operation: "query"
+    };
   }
 
   // Lists image albums with pagination.
@@ -73,6 +88,10 @@ service Image {
       additional_bindings {
         get: "/v1alpha1/{parent=organizations/*}/albums"
       }
+    };
+    option (graphql.method) = {
+      field: "listAlbums"
+      operation: "query"
     };
   }
 
@@ -86,6 +105,10 @@ service Image {
         body: "*"
       }
     };
+    option (graphql.method) = {
+      field: "createAlbum"
+      operation: "mutation"
+    };
   }
 
   // Deletes an existing image album.
@@ -96,6 +119,10 @@ service Image {
         delete: "/v1alpha1/{name=organizations/*/albums/*}"
       }
     };
+    option (graphql.method) = {
+      field: "deleteAlbum"
+      operation: "mutation"
+    };
   }
   
   // Gets the settings of an image album.
@@ -105,6 +132,10 @@ service Image {
       additional_bindings {
         get: "/v1alpha1/{name=organizations/*/albums/*}:settings"
       }
+    };
+    option (graphql.method) = {
+      field: "getAlbumSettings"
+      operation: "query"
     };
   }
 
@@ -117,6 +148,10 @@ service Image {
         post: "/v1alpha1/{settings.name=organizations/*/albums/*}:settings"
         body: "*"
       }
+    };
+    option (graphql.method) = {
+      field: "updateAlbumSettings"
+      operation: "mutation"
     };
   }
 }
@@ -135,12 +170,20 @@ service ImageRouter {
         get: "/v1alpha1/{name=organizations/*/albums/*/images/*}:route"
       }
     };
+    option (graphql.method) = {
+      field: "getImageRoute"
+      operation: "query"
+    };
   }
 
   // Routes a raw request received by a CDN host to its target image.
   rpc RouteImage(RouteImageRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {
       get: "/v1alpha1/{host=*}/{path=**}"
+    };
+    option (graphql.method) = {
+      field: "routeImage"
+      operation: "query"
     };
   }
 }
@@ -355,3 +398,43 @@ message RouteImageRequest {
   // The requested path representing an opaque route.
   string path = 2 [(google.api.field_behavior) = REQUIRED];
 }
+
+// TODO: auto-generate openapi authentication security scheme.
+option (openapi.v3.document) = {
+  info: {
+    title: "Image API";
+    version: "v1alpha1";
+  }
+  components: {
+    security_schemes: {
+      additional_properties: [
+        {
+          name: "OAuth2";
+          value: {
+            security_scheme: {
+              type: "oauth2";
+              flows: {
+                client_credentials: {
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {};
+                }
+                authorization_code: {
+                  authorization_url: "https://accounts.animeshon.com/o/oauth2/auth";
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {
+                    additional_properties: [
+                      {
+                        name: "https://www.animeapis.com/auth/image",
+                        value: "View and manage images and albums."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+};
