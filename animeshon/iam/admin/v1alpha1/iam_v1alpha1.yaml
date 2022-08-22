@@ -4,4 +4,34 @@ name: iam.animeapis.com
 title: Identity and Access Management API
 
 apis:
-- name: animeshon.iam.admin.v1alpha1.IAM
+  - name: animeshon.iam.admin.v1alpha1.IAM
+  - name: google.iam.v1.IAMPolicy
+
+http:
+  rules:
+    - selector: google.iam.v1.IAMPolicy.GetIamPolicy
+      get: "/v1/{resource=users/*/serviceAccounts/*}:getIamPolicy"
+      additional_bindings:
+        - get: "/v1/{resource=organizations/*/serviceAccounts/*}:getIamPolicy"
+        - get: "/v1/{resource=roles/*}:getIamPolicy"
+        - get: "/v1/{resource=permissions/*}:getIamPolicy"
+    - selector: google.iam.v1.IAMPolicy.SetIamPolicy
+      post: "/v1/{resource=users/*/serviceAccounts/*}:setIamPolicy"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=organizations/*/serviceAccounts/*}:setIamPolicy"
+          body: "*"
+        - post: "/v1/{resource=roles/*}:setIamPolicy"
+          body: "*"
+        - post: "/v1/{resource=permissions/*}:setIamPolicy"
+          body: "*"
+    - selector: google.iam.v1.IAMPolicy.TestIamPermissions
+      post: "/v1/{resource=users/*/serviceAccounts/*}:testIamPermissions"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=organizations/*/serviceAccounts/*}:testIamPermissions"
+          body: "*"
+        - post: "/v1/{resource=roles/*}:testIamPermissions"
+          body: "*"
+        - post: "/v1/{resource=permissions/*}:testIamPermissions"
+          body: "*"

@@ -11,6 +11,9 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 
+import "graphql/options.proto";
+import "openapi/v3/annotations.proto";
+
 package animeshon.iam.admin.v1alpha1;
 
 option go_package = "github.com/animeapis/go-genproto/iam/admin/v1alpha1;admin";
@@ -28,6 +31,10 @@ service IAM {
         get: "/v1alpha1/{name=organizations/*/serviceAccounts/*}"
       }
     };
+    option (graphql.method) = {
+      field: "getServiceAccount"
+      operation: "query"
+    };
   }
 
   rpc ListServiceAccounts(ListServiceAccountsRequest) returns (ListServiceAccountsResponse) {
@@ -36,6 +43,10 @@ service IAM {
       additional_bindings {
         get: "/v1alpha1/{parent=organizations/*}/serviceAccounts"
       }
+    };
+    option (graphql.method) = {
+      field: "listServiceAccounts"
+      operation: "query"
     };
   }
 
@@ -48,6 +59,10 @@ service IAM {
         body: "*"
       }
     };
+    option (graphql.method) = {
+      field: "createServiceAccount"
+      operation: "mutation"
+    };
   }
 
   rpc UpdateServiceAccount(UpdateServiceAccountRequest) returns (ServiceAccount) {
@@ -59,6 +74,10 @@ service IAM {
         body: "*"
       }
     };
+    option (graphql.method) = {
+      field: "updateServiceAccount"
+      operation: "mutation"
+    };
   }
 
   rpc DeleteServiceAccount(DeleteServiceAccountRequest) returns (google.protobuf.Empty) {
@@ -67,6 +86,10 @@ service IAM {
       additional_bindings {
         delete: "/v1alpha1/{name=organizations/*/serviceAccounts/*}"
       }
+    };
+    option (graphql.method) = {
+      field: "deleteServiceAccount"
+      operation: "mutation"
     };
   }
 
@@ -81,11 +104,19 @@ service IAM {
     option (google.api.http) = {
       get: "/v1alpha1/{name=roles/*}"
     };
+    option (graphql.method) = {
+      field: "getRole"
+      operation: "query"
+    };
   }
 
   rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {
     option (google.api.http) = {
       get: "/v1alpha1/roles"
+    };
+    option (graphql.method) = {
+      field: "listRoles"
+      operation: "query"
     };
   }
 
@@ -94,6 +125,10 @@ service IAM {
       post: "/v1alpha1/{role.name=roles/*}"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "createRole"
+      operation: "mutation"
+    };
   }
 
   rpc UpdateRole(UpdateRoleRequest) returns (Role) {
@@ -101,11 +136,19 @@ service IAM {
       patch: "/v1alpha1/{role.name=roles/*}"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "updateRole"
+      operation: "mutation"
+    };
   }
 
   rpc DeleteRole(DeleteRoleRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=roles/*}"
+    };
+    option (graphql.method) = {
+      field: "deleteRole"
+      operation: "mutation"
     };
   }
 
@@ -120,11 +163,19 @@ service IAM {
     option (google.api.http) = {
       get: "/v1alpha1/{name=permissions/*}"
     };
+    option (graphql.method) = {
+      field: "getPermission"
+      operation: "query"
+    };
   }
 
   rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse) {
     option (google.api.http) = {
       get: "/v1alpha1/permissions"
+    };
+    option (graphql.method) = {
+      field: "listPermissions"
+      operation: "query"
     };
   }
 
@@ -133,6 +184,10 @@ service IAM {
       post: "/v1alpha1/{permission.name=permissions/*}"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "createPermission"
+      operation: "mutation"
+    };
   }
 
   rpc UpdatePermission(UpdatePermissionRequest) returns (Permission) {
@@ -140,11 +195,19 @@ service IAM {
       patch: "/v1alpha1/{permission.name=permissions/*}"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "updatePermission"
+      operation: "mutation"
+    };
   }
 
   rpc DeletePermission(DeletePermissionRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=permissions/*}"
+    };
+    option (graphql.method) = {
+      field: "deletePermission"
+      operation: "mutation"
     };
   }
 }
@@ -378,3 +441,43 @@ message DeletePermissionRequest {
     }
   ];
 }
+
+// TODO: auto-generate openapi authentication security scheme.
+option (openapi.v3.document) = {
+  info: {
+    title: "Identity and Access Management API";
+    version: "v1alpha1";
+  }
+  components: {
+    security_schemes: {
+      additional_properties: [
+        {
+          name: "OAuth2";
+          value: {
+            security_scheme: {
+              type: "oauth2";
+              flows: {
+                client_credentials: {
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {};
+                }
+                authorization_code: {
+                  authorization_url: "https://accounts.animeshon.com/o/oauth2/auth";
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {
+                    additional_properties: [
+                      {
+                        name: "https://www.animeapis.com/auth/iam",
+                        value: "View and manage roles, permissions, and service accounts."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+};
