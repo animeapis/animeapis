@@ -4,4 +4,24 @@ name: identity.animeapis.com
 title: Identity API
 
 apis:
-- name: animeshon.identity.v1alpha1.Identity
+  - name: animeshon.identity.v1alpha1.Identity
+  - name: google.iam.v1.IAMPolicy
+
+http:
+  rules:
+    - selector: google.iam.v1.IAMPolicy.GetIamPolicy
+      get: "/v1/{resource=users/*}:getIamPolicy"
+      additional_bindings:
+        - get: "/v1/{resource=groups/*}:getIamPolicy"
+    - selector: google.iam.v1.IAMPolicy.SetIamPolicy
+      post: "/v1/{resource=users/*}:setIamPolicy"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=groups/*}:setIamPolicy"
+          body: "*"
+    - selector: google.iam.v1.IAMPolicy.TestIamPermissions
+      post: "/v1/{resource=users/*}:testIamPermissions"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=groups/*}:testIamPermissions"
+          body: "*"

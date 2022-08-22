@@ -12,6 +12,9 @@ import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 import "google/type/date.proto";
 
+import "graphql/options.proto";
+import "openapi/v3/annotations.proto";
+
 package animeshon.identity.v1alpha1;
 
 option go_package = "github.com/animeapis/go-genproto/identity/v1alpha1;identity";
@@ -26,17 +29,29 @@ service Identity {
     option (google.api.http) = {
       get: "/v1alpha1/{name=users/*}:profile"
     };
+    option (graphql.method) = {
+      field: "getUserProfile"
+      operation: "query"
+    };
   }
 
   rpc GetUser(GetUserRequest) returns (User) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=users/*}"
     };
+    option (graphql.method) = {
+      field: "getUser"
+      operation: "query"
+    };
   }
 
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
     option (google.api.http) = {
       get: "/v1alpha1/users"
+    };
+    option (graphql.method) = {
+      field: "listUsers"
+      operation: "query"
     };
   }
 
@@ -45,6 +60,10 @@ service Identity {
       post: "/v1alpha1/users"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "createUser"
+      operation: "mutation"
+    };
   }
 
   rpc UpdateUser(UpdateUserRequest) returns (User) {
@@ -52,17 +71,29 @@ service Identity {
       patch: "/v1alpha1/{user.name=users/*}"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "updateUser"
+      operation: "mutation"
+    };
   }
 
   rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*}"
     };
+    option (graphql.method) = {
+      field: "deleteUser"
+      operation: "mutation"
+    };
   }
 
   rpc GetUserSettings(GetUserSettingsRequest) returns (UserSettings) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=users/*}:settings"
+    };
+    option (graphql.method) = {
+      field: "getUserSettings"
+      operation: "query"
     };
   }
 
@@ -71,11 +102,19 @@ service Identity {
       patch: "/v1alpha1/{settings.name=users/*}:settings"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "updateUserSettings"
+      operation: "mutation"
+    };
   }
 
   rpc GetUserNotifications(GetUserNotificationsRequest) returns (UserNotifications) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=users/*}:notifications"
+    };
+    option (graphql.method) = {
+      field: "getUserNotifications"
+      operation: "query"
     };
   }
 
@@ -84,11 +123,19 @@ service Identity {
       patch: "/v1alpha1/{notifications.name=users/*}:notifications"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "updateUserNotifications"
+      operation: "mutation"
+    };
   }
 
   rpc GetUserDefaults(GetUserDefaultsRequest) returns (UserDefaults) {
     option (google.api.http) = {
       get: "/v1alpha1/{name=users/*}:defaults"
+    };
+    option (graphql.method) = {
+      field: "getUserDefaults"
+      operation: "query"
     };
   }
 
@@ -96,11 +143,19 @@ service Identity {
     option (google.api.http) = {
       get: "/v1alpha1/{name=groups/*}"
     };
+    option (graphql.method) = {
+      field: "getGroup"
+      operation: "query"
+    };
   }
 
   rpc ListGroups(ListGroupsRequest) returns (ListGroupsResponse) {
     option (google.api.http) = {
       get: "/v1alpha1/groups"
+    };
+    option (graphql.method) = {
+      field: "listGroups"
+      operation: "query"
     };
   }
 
@@ -109,6 +164,10 @@ service Identity {
       post: "/v1alpha1/groups"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "createGroup"
+      operation: "mutation"
+    };
   }
 
   rpc UpdateGroup(UpdateGroupRequest) returns (Group) {
@@ -116,11 +175,19 @@ service Identity {
       patch: "/v1alpha1/{group.name=groups/*}"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "updateGroup"
+      operation: "mutation"
+    };
   }
 
   rpc DeleteGroup(DeleteGroupRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=groups/*}"
+    };
+    option (graphql.method) = {
+      field: "deleteGroup"
+      operation: "mutation"
     };
   }
 }
@@ -397,3 +464,43 @@ message DeleteGroupRequest {
   // The name of the group to delete.
   string name = 1;
 }
+
+// TODO: auto-generate openapi authentication security scheme.
+option (openapi.v3.document) = {
+  info: {
+    title: "Identity API";
+    version: "v1alpha1";
+  }
+  components: {
+    security_schemes: {
+      additional_properties: [
+        {
+          name: "OAuth2";
+          value: {
+            security_scheme: {
+              type: "oauth2";
+              flows: {
+                client_credentials: {
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {};
+                }
+                authorization_code: {
+                  authorization_url: "https://accounts.animeshon.com/o/oauth2/auth";
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {
+                    additional_properties: [
+                      {
+                        name: "https://www.animeapis.com/auth/identity",
+                        value: "View and manage users and groups."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+};
