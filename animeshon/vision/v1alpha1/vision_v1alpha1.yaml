@@ -4,4 +4,29 @@ name: vision.animeapis.com
 title: Vision API
 
 apis:
-- name: animeshon.vision.v1alpha1.Vision
+  - name: animeshon.vision.v1alpha1.Vision
+  - name: google.iam.v1.IAMPolicy
+
+http:
+  rules:
+    - selector: google.iam.v1.IAMPolicy.GetIamPolicy
+      get: "/v1/{resource=users/*/albums/*/images/*}:getIamPolicy"
+      additional_bindings:
+        - get: "/v1/{resource=organizations/*/albums/*/images/*}:getIamPolicy"
+        - get: "/v1/{resource=users/*/imageAnnotations/*}:getIamPolicy"
+    - selector: google.iam.v1.IAMPolicy.SetIamPolicy
+      post: "/v1/{resource=users/*/albums/*/images/*}:setIamPolicy"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=organizations/*/albums/*/images/*}:setIamPolicy"
+          body: "*"
+        - post: "/v1/{resource=users/*/imageAnnotations/*}:setIamPolicy"
+          body: "*"
+    - selector: google.iam.v1.IAMPolicy.TestIamPermissions
+      post: "/v1/{resource=users/*/albums/*/images/*}:testIamPermissions"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=organizations/*/albums/*/images/*}:testIamPermissions"
+          body: "*"
+        - post: "/v1/{resource=users/*/imageAnnotations/*}:testIamPermissions"
+          body: "*"

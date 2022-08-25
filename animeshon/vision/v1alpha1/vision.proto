@@ -6,10 +6,15 @@ import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
+import "google/iam/v1/iam_policy.proto";
+import "google/iam/v1/policy.proto";
 import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
+
+import "graphql/options.proto";
+import "openapi/v3/annotations.proto";
 
 package animeshon.vision.v1alpha1;
 
@@ -30,14 +35,9 @@ service ImageAnnotator {
         body: "*"
       }
     };
-  }
-
-  rpc ListImageAnalyses(ListImageAnalysesRequest) returns (ListImageAnalysesResponse) {
-    option (google.api.http) = {
-      get: "/v1alpha1/{parent=users/*/albums/*/images/*}/analyses"
-      additional_bindings {
-        get: "/v1alpha1/{parent=organizations/*/albums/*/images/*}/analyses"
-      }
+    option (graphql.method) = {
+      field: "analyzeImage"
+      operation: "mutation"
     };
   }
 
@@ -49,14 +49,55 @@ service ImageAnnotator {
         get: "/v1alpha1/{name=organizations/*/albums/*/images/*/analyses/*}"
       }
     };
+    option (graphql.method) = {
+      field: "getImageAnalysis"
+      operation: "query"
+    };
   }
   
+  rpc ListImageAnalyses(ListImageAnalysesRequest) returns (ListImageAnalysesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*/albums/*/images/*}/analyses"
+      additional_bindings {
+        get: "/v1alpha1/{parent=organizations/*/albums/*/images/*}/analyses"
+      }
+    };
+    option (graphql.method) = {
+      field: "listImageAnalyses"
+      operation: "query"
+    };
+  }
+
   rpc DeleteImageAnalysis(DeleteImageAnalysisRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*/albums/*/images/*/analyses/*}"
       additional_bindings {
         delete: "/v1alpha1/{name=organizations/*/albums/*/images/*/analyses/*}"
       }
+    };
+    option (graphql.method) = {
+      field: "deleteImageAnalysis"
+      operation: "mutation"
+    };
+  }
+
+  rpc GetImageAnnotation(GetImageAnnotationRequest) returns (ImageAnnotation) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{name=users/*/imageAnnotations/*}"
+    };
+    option (graphql.method) = {
+      field: "getImageAnnotation"
+      operation: "query"
+    };
+  }
+
+  rpc ListImageAnnotations(ListImageAnnotationsRequest) returns (ListImageAnnotationsResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/{parent=users/*}/imageAnnotations"
+    };
+    option (graphql.method) = {
+      field: "listImageAnnotations"
+      operation: "query"
     };
   }
 
@@ -65,17 +106,9 @@ service ImageAnnotator {
       post: "/v1alpha1/{parent=users/*}/imageAnnotations"
       body: "*"
     };
-  }
-
-  rpc ListImageAnnotations(ListImageAnnotationsRequest) returns (ListImageAnnotationsResponse) {
-    option (google.api.http) = {
-      get: "/v1alpha1/{parent=users/*}/imageAnnotations"
-    };
-  }
-
-  rpc GetImageAnnotation(GetImageAnnotationRequest) returns (ImageAnnotation) {
-    option (google.api.http) = {
-      get: "/v1alpha1/{name=users/*/imageAnnotations/*}"
+    option (graphql.method) = {
+      field: "createImageAnnotation"
+      operation: "mutation"
     };
   }
 
@@ -84,11 +117,19 @@ service ImageAnnotator {
       patch: "/v1alpha1/{annotation.name=users/*/imageAnnotations/*}"
       body: "*"
     };
+    option (graphql.method) = {
+      field: "updateImageAnnotation"
+      operation: "mutation"
+    };
   }
 
   rpc DeleteImageAnnotation(DeleteImageAnnotationRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1alpha1/{name=users/*/imageAnnotations/*}"
+    };
+    option (graphql.method) = {
+      field: "deleteImageAnnotation"
+      operation: "mutation"
     };
   }
 }
@@ -228,3 +269,43 @@ message DeleteImageAnnotationRequest {
   // The image annotation to delete.
   string name = 1;
 }
+
+// TODO: auto-generate openapi authentication security scheme.
+option (openapi.v3.document) = {
+  info: {
+    title: "Vision API";
+    version: "v1alpha1";
+  }
+  components: {
+    security_schemes: {
+      additional_properties: [
+        {
+          name: "OAuth2";
+          value: {
+            security_scheme: {
+              type: "oauth2";
+              flows: {
+                client_credentials: {
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {};
+                }
+                authorization_code: {
+                  authorization_url: "https://accounts.animeshon.com/o/oauth2/auth";
+                  token_url: "https://accounts.animeshon.com/o/oauth2/token";
+                  scopes: {
+                    additional_properties: [
+                      {
+                        name: "https://www.animeapis.com/auth/vision",
+                        value: "View and manage image annotations."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+};

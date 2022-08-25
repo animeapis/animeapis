@@ -27,10 +27,14 @@ proto_library(
         "internal.proto",
     ],
     deps = [
+        "//graphql:graphql_proto",
+        "//openapi/v3:openapi_proto",
         "@com_google_googleapis//google/api:annotations_proto",
         "@com_google_googleapis//google/api:client_proto",
         "@com_google_googleapis//google/api:field_behavior_proto",
         "@com_google_googleapis//google/api:resource_proto",
+        "@com_google_googleapis//google/iam/v1:iam_policy_proto",
+        "@com_google_googleapis//google/iam/v1:policy_proto",
         "@com_google_googleapis//google/longrunning:operations_proto",
         "@com_google_googleapis//google/type:color_proto",
         "@com_google_protobuf//:empty_proto",
@@ -57,7 +61,10 @@ go_proto_library(
     importpath = "github.com/animeapis/go-genproto/vision/v1alpha1",
     protos = [":vision_proto"],
     deps = [
+        "//graphql:graphql_go_proto",
+        "//openapi/v3:openapi_go_proto",
         "@com_google_googleapis//google/api:annotations_go_proto",
+        "@com_google_googleapis//google/iam/v1:iam_go_proto",
         "@com_google_googleapis//google/longrunning:longrunning_go_proto",
         "@com_google_googleapis//google/type:color_go_proto",
     ],
@@ -73,9 +80,10 @@ go_gapic_library(
     metadata = True,
     deps = [
         ":vision_go_proto",
-        "@com_google_googleapis//google/longrunning:longrunning_go_proto",
         "@com_google_cloud_go//longrunning:go_default_library",
         "@com_google_cloud_go//longrunning/autogen:go_default_library",
+        "@com_google_googleapis//google/iam/v1:iam_go_proto",
+        "@com_google_googleapis//google/longrunning:longrunning_go_proto",
     ],
 )
 
