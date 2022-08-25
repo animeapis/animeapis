@@ -4,4 +4,24 @@ name: tracker.animeapis.com
 title: Tracker API
 
 apis:
-- name: animeshon.tracker.v1alpha1.Tracker
+  - name: animeshon.tracker.v1alpha1.Tracker
+  - name: google.iam.v1.IAMPolicy
+
+http:
+  rules:
+    - selector: google.iam.v1.IAMPolicy.GetIamPolicy
+      get: "/v1/{resource=users/*/trackers/*}:getIamPolicy"
+      additional_bindings:
+        - get: "/v1/{resource=audiences/*/trackers/*}:getIamPolicy"
+    - selector: google.iam.v1.IAMPolicy.SetIamPolicy
+      post: "/v1/{resource=users/*/trackers/*}:setIamPolicy"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=audiences/*/trackers/*}:setIamPolicy"
+          body: "*"
+    - selector: google.iam.v1.IAMPolicy.TestIamPermissions
+      post: "/v1/{resource=users/*/trackers/*}:testIamPermissions"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=audiences/*/trackers/*}:testIamPermissions"
+          body: "*"
