@@ -4,4 +4,24 @@ name: library.animeapis.com
 title: Library API
 
 apis:
-- name: animeshon.library.v1alpha1.Library
+  - name: animeshon.library.v1alpha1.Library
+  - name: google.iam.v1.IAMPolicy
+
+http:
+  rules:
+    - selector: google.iam.v1.IAMPolicy.GetIamPolicy
+      get: "/v1/{resource=users/*/playlists/*}:getIamPolicy"
+      additional_bindings:
+        - get: "/v1/{resource=audiences/*/playlists/*}:getIamPolicy"
+    - selector: google.iam.v1.IAMPolicy.SetIamPolicy
+      post: "/v1/{resource=users/*/playlists/*}:setIamPolicy"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=audiences/*/playlists/*}:setIamPolicy"
+          body: "*"
+    - selector: google.iam.v1.IAMPolicy.TestIamPermissions
+      post: "/v1/{resource=users/*/playlists/*}:testIamPermissions"
+      body: "*"
+      additional_bindings:
+        - post: "/v1/{resource=audiences/*/playlists/*}:testIamPermissions"
+          body: "*"
