@@ -142,11 +142,6 @@ message Playlist {
   Type type = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
-message BatchCreatePlaylistItemsResponse {
-  // The list of items added to the playlist
-  repeated PlaylistItem items = 1 [(google.api.field_behavior) = REQUIRED];
-}
-
 message PlaylistItem {
   // The id of the playlist.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
@@ -258,7 +253,12 @@ message BatchCreatePlaylistItemsRequest {
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The playlist items to create.
-  repeated PlaylistItem item = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated PlaylistItem items = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchCreatePlaylistItemsResponse {
+  // The list of items added to the playlist
+  repeated PlaylistItem items = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeletePlaylistItemRequest {
