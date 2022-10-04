@@ -7,8 +7,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 def rules_toolchains(**kwargs):
   http_file(
     name = "protoc_gen_graphql",
-    sha256 = "1ff14d309f5f7ac76b667d9e9eb747e9ecd59bb8060f3cf1a9c6fe952d07016b",
-    urls = ["https://storage.googleapis.com/animeapis-bazel-build-binaries/opendoor-labs/protoc-gen-graphql/7b4f2fe/protoc-gen-graphql-linux-amd64"],
+    sha256 = "ea6ca1bdbfc71863103f7b2f989917a4f84698ae59347329319c31ba097af40f",
+    urls = ["https://github.com/animeapis/protoc-gen-graphql/releases/download/v0.0.1/protoc-gen-graphql-linux-amd64"],
     executable = True,
   )
 

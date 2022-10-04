@@ -23,7 +23,7 @@ proto_library(
 go_proto_library(
     name = "graphql_go_proto",
     compilers = ["@io_bazel_rules_go//proto:go_grpc"],
-    importpath = "github.com/opendoor-labs/protoc-gen-graphql/protobuf/graphql",
+    importpath = "github.com/animeapis/protoc-gen-graphql/protobuf/graphql",
     protos = [":graphql_proto"],
     deps = [],
 )
