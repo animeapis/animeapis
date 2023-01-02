@@ -97,6 +97,21 @@ service TrackerService {
     };
   }
 
+  rpc ComputeTracker(ComputeTrackerRequest) returns (ComputeTrackerResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{name=users/*/trackers/*}:compute"
+      body: "*"
+      additional_bindings {
+        post: "/v1alpha1/{name=audiences/*/trackers/*}:compute"
+        body: "*"
+      }
+    };
+    option (graphql.method) = {
+      field: "computeTracker"
+      operation: "query"
+    };
+  }
+
   rpc ImportTrackers(ImportTrackersRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1alpha1/{parent=users/*}/trackers:import"
@@ -311,6 +326,25 @@ message Audience {
   repeated string members = 2;
 }
 
+// A progress indicator tree is dynamically generated from all activities
+// associated with a specific resource including all of its children resources.
+message ProgressIndicatorTree {
+  message ProgressIndicator {
+    int32 MinValue = 1;
+    int32 MaxValue = 2;
+    int32 Value = 3;
+    float Ratio = 4;
+    int32 Threshold = 5;
+  }
+
+  message Node {
+    ProgressIndicator indicator = 1;
+    map<string, Node> nodes = 2;
+  }
+
+  Node root = 1;
+}
+
 message GetTrackerRequest {
   // The name of the tracker to retrieve.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
@@ -373,7 +407,14 @@ message DeleteActivityRequest {
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-// Selecting what provider we want to import from
+message ComputeTrackerRequest {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ComputeTrackerResponse {
+  ProgressIndicatorTree tree = 1;
+}
+
 message ImportTrackersRequest {
   string parent = 1 [(google.api.field_behavior) = REQUIRED];
 
