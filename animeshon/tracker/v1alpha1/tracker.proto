@@ -330,11 +330,11 @@ message Audience {
 // associated with a specific resource including all of its children resources.
 message ProgressIndicatorTree {
   message ProgressIndicator {
-    int32 MinValue = 1;
-    int32 MaxValue = 2;
-    int32 Value = 3;
-    float Ratio = 4;
-    int32 Threshold = 5;
+    int32 min_value = 1;
+    int32 max_value = 2;
+    int32 value = 3;
+    float ratio = 4;
+    int32 threshold = 5;
   }
 
   message Node {
